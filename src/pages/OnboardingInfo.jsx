@@ -1,0 +1,175 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../components/ToastProvider.jsx";
+import { saveBusinessInfo } from "../api/authApi.js";
+import { ArrowRight } from 'lucide-react';
+import InputField from "../includes/InputField.jsx";
+import Button from "../includes/Button.jsx";
+
+const BUSINESS_TYPES = [
+    "Restaurant", "Hotel", "Cafe", "Bakery", "Gym",
+    "Salon", "Clinic", "Retail Store", "Auto Service", "Other"
+];
+
+export default function OnboardingInfo() {
+    const navigate = useNavigate();
+    const { addToast } = useToast();
+
+    const isGoogleUser = localStorage.getItem("isGoogleUser") === "true";  // ← check karo
+
+    const [userName, setUserName] = useState("");
+    const [businessName, setBusinessName] = useState("");
+    const [businessType, setBusinessType] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [customBusinessType, setCustomBusinessType] = useState("");
+
+    const validate = () => {
+        const newErrors = {};
+        if (!isGoogleUser && !userName.trim()) newErrors.userName = "Name is required";
+
+        if (!businessName.trim()) newErrors.businessName = "Business name is required";
+
+        if (!businessType) newErrors.businessType = "Please select a business type";
+
+        if (businessType === "Other" && !customBusinessType.trim()) {
+            newErrors.customBusinessType = "Please specify your business type";
+        }
+
+        return newErrors;
+    };
+
+    const handleSubmit = async () => {
+        const validationErrors = validate();
+        setErrors(validationErrors);
+        if (Object.keys(validationErrors).length > 0) return;
+
+        setLoading(true);
+        try {
+            console.log('username: ', userName);
+            await saveBusinessInfo({
+                userName: isGoogleUser ? null : userName,
+                businessName,
+                businessType: businessType === "Other" ? customBusinessType : businessType,
+            });
+            addToast("Setup complete!", "success");
+            navigate("/");
+        } catch (err) {
+            addToast(err.response?.data?.message || "Failed to save info", "error");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-h-screen w-screen flex items-center justify-center !bg-gray-50">
+            <div className="!bg-white p-10 rounded-xl shadow-lg w-[480px]">
+
+                {/* Progress Indicator */}
+                <div className="flex items-center gap-2 mb-8">
+                    <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">✓</span>
+                        </div>
+                        <span className="text-sm text-gray-400">Connect Platform</span>
+                    </div>
+                    <div className="flex-1 h-px bg-gray-200 mx-2" />
+                    <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-full !bg-indigo-600 flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">2</span>
+                        </div>
+                        <span className="text-sm font-semibold text-indigo-600">Business Info</span>
+                    </div>
+                </div>
+
+                <h2 className="text-2xl font-bold text-black mb-1">Tell us about your business</h2>
+                <p className="text-gray-500 text-sm mb-6">
+                    This helps us generate better AI replies for your reviews
+                </p>
+
+                {!isGoogleUser && (
+                    <InputField
+                        label="Your Name"
+                        placeholder="e.g. John Doe"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        error={errors.userName}
+                    />
+                )}
+
+                <InputField
+                    label="Business Name"
+                    placeholder="e.g. Pizza House"
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
+                    error={errors.businessName}
+                />
+
+                {/* Business Type */}
+                <div className="mb-6">
+                    <label className="text-sm font-medium text-gray-700 mb-3 block">
+                        Business Type
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                        {BUSINESS_TYPES.map((type, index) => {
+                            const icons = ["🍕","🏨","☕","🥐","💪","✂️","🏥","🛍️","🔧","➕"];
+                            const isSelected = businessType === type;
+                            return (
+                                <button
+                                    key={type}
+                                    type="button"
+                                    onClick={() => {
+                                        setBusinessType(type);
+                                        if (type !== "Other") setCustomBusinessType("");
+                                    }}
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg border-2 transition-all text-left ${
+                                        isSelected
+                                            ? "!bg-indigo-50 border-indigo-500"
+                                            : "bg-white border-gray-200 hover:border-indigo-300"
+                                    }`}
+                                >
+                                    <span className="text-base">{icons[index]}</span>
+                                    <span className={`text-sm font-medium flex-1 ${isSelected ? "text-indigo-600" : "text-gray-700"}`}>
+                        {type}
+                    </span>
+                                    <span className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                                        isSelected ? "bg-indigo-600 border-indigo-600" : "border-gray-300"
+                                    }`}>
+                        {isSelected && (
+                            <svg width="8" height="8" viewBox="0 0 10 10">
+                                <polyline points="2,5 4,7 8,3" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                            </svg>
+                        )}
+                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                    {errors.businessType && <p className="text-red-500 text-sm mt-2">{errors.businessType}</p>}
+                </div>
+
+                {businessType === "Other" && (
+                    <InputField
+                        label=""
+                        placeholder="e.g. Photography Studio"
+                        value={customBusinessType}
+                        onChange={(e) => setCustomBusinessType(e.target.value)}
+                        error={errors.customBusinessType}
+                    />
+                )}
+
+                <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    loading={loading}
+                    disabled={loading || (!isGoogleUser && !userName) || !businessName || !businessType || (businessType === "Other" && !customBusinessType.trim())}
+                    onClick={handleSubmit}
+                >
+                    Complete Setup <ArrowRight size={18} />
+                </Button>
+
+            </div>
+        </div>
+    );
+}
