@@ -1,18 +1,19 @@
 import axios from "axios"
+import { BACKEND_URL } from "../constants/urls.js";
 
 export const reviewsApi = axios.create({
-    baseURL: "wonderful-illumination-production.up.railway.app/api/reviews"
+    baseURL: `${BACKEND_URL}/api/reviews`
 })
 
 export const authApi = axios.create({
-    baseURL: "wonderful-illumination-production.up.railway.app/api/auth",
+    baseURL: `${BACKEND_URL}/api/auth`,
     headers: {
         "Content-Type": "application/json",
     },
 })
 
 export const authProtectedApi = axios.create({
-    baseURL: "wonderful-illumination-production.up.railway.app/api/auth",
+    baseURL: `${BACKEND_URL}/api/auth`,
     headers: {
         "Content-Type": "application/json",
     },

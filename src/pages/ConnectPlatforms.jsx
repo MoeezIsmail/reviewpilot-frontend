@@ -6,8 +6,7 @@ import Button from "../includes/Button.jsx";
 import axios from "axios";
 import PlatformCard from "../components/PlatformCard.jsx";
 import PLATFORMS from "../utils/connectPlatformUtils.jsx";
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+import { BACKEND_URL } from "../constants/urls.js";
 
 export default function ConnectPlatforms() {
     const { addToast } = useToast();
