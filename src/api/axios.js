@@ -1,18 +1,18 @@
 import axios from "axios"
 
 export const reviewsApi = axios.create({
-    baseURL: "http://localhost:5000/api/reviews"
+    baseURL: "wonderful-illumination-production.up.railway.app/api/reviews"
 })
 
 export const authApi = axios.create({
-    baseURL: "http://localhost:5000/api/auth",
+    baseURL: "wonderful-illumination-production.up.railway.app/api/auth",
     headers: {
         "Content-Type": "application/json",
     },
 })
 
 export const authProtectedApi = axios.create({
-    baseURL: "http://localhost:5000/api/auth",
+    baseURL: "wonderful-illumination-production.up.railway.app/api/auth",
     headers: {
         "Content-Type": "application/json",
     },
