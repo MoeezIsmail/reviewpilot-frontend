@@ -20,7 +20,6 @@ const useOtpForm = (addToast) => {
     };
 
     const handleSendOTP = async () => {
-        console.log('OTP')
         const emailError = validateEmail();
         if (emailError) { setErrors({ email: emailError }); return; }
         setErrors({});

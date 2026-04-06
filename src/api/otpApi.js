@@ -1,6 +1,7 @@
 import { authApi } from "./axios";
 
 export const sendOTPRequest = async (email) => {
+    console.log('setotp reuest: ', email);
     return await authApi.post('/send-otp', { email });
 };
 
