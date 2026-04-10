@@ -40,9 +40,17 @@ export const ReviewsProvider = ({ children }) => {
                 const data = await fetchReviews(user._id);
                 setReviewsData(data);
             } catch (err) {
-                console.log('error: ', err);
-                addToast("Failed to fetch reviews", "error");
-                setError("Failed to fetch reviews");
+                const message = err.response?.data?.message;
+
+                if (message === "Business location not found. Please reconnect Google.") {
+                    addToast("Please reconnect your Google Business account.", "error");
+                    // Settings page pe bhejo
+                    window.location.href = "/settings";
+                } else {
+                    addToast("Failed to fetch reviews", "error");
+                }
+
+                setError(message || "Failed to fetch reviews");
             } finally {
                 setLoading(false);
             }
