@@ -35,6 +35,8 @@ export default function ConnectPlatforms() {
             addToast("Session expired. Try again.", "error");
         } else if (error) {
             addToast("Connection failed. Try again.", "error");
+        } else if (error === "no_location") {
+            addToast("No business registered to this account. Please connect to another account!", "error");
         }
     }, []);
 
