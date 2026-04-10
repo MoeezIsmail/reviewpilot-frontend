@@ -49,7 +49,7 @@ export const ReviewsProvider = ({ children }) => {
         };
 
         if (user) {
-            // loadReviews();
+            loadReviews();
         }
     }, [user]);
 
