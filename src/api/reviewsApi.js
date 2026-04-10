@@ -3,7 +3,7 @@ import { reviewsApi } from "./axios.js";
 export const fetchReviews = async (id, pageToken = null) => {
 
     const res = await reviewsApi.get(`/${id}`)
-
+    console.log('res: ', res.data);
     return res.data
 }
 
