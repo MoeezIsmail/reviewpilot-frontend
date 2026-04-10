@@ -33,10 +33,10 @@ export default function ConnectPlatforms() {
             addToast("No Google Business found on this account. Please use a business account.", "error");
         } else if (error === "state_expired") {
             addToast("Session expired. Try again.", "error");
-        } else if (error) {
-            addToast("Connection failed. Try again.", "error");
         } else if (error === "no_location") {
             addToast("No business registered to this account. Please connect to another account!", "error");
+        } else if (error) {
+            addToast("Connection failed. Try again.", "error");
         }
     }, []);
 
