@@ -18,19 +18,18 @@ export default function ConnectPlatforms() {
     const hasRun = useRef(false);
 
     useEffect(() => {
-        if (hasRun.current) return;
-        hasRun.current = true;
+        if (!user && user !== null) return;
 
         const google = searchParams.get("google");
         const error = searchParams.get("error");
 
-        if (!google && !error) {
-            const profile = user?.platforms?.google?.accessToken;
-            if (profile) {
-                navigate("/");
-                return;
-            }
+        if (!google && !error && user?.platforms?.google?.accessToken) {
+            navigate("/");
+            return;
         }
+
+        if (hasRun.current) return;
+        hasRun.current = true;
 
         if (google === "success") {
             setGoogleConnected(true);
@@ -48,7 +47,7 @@ export default function ConnectPlatforms() {
         } else if (error) {
             addToast("Connection failed. Try again.", "error");
         }
-    }, []);
+    }, [user]);
 
     const handleConnectGoogle = async () => {
         try {

@@ -17,6 +17,11 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchProfile = async () => {
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
             try {
                 const res = await getProfile();
                 setUser(res.data.message);

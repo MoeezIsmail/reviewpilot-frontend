@@ -28,16 +28,23 @@ const Dashboard = () => {
         }
     }, [reviewsData]);
 
+    useEffect(() => {
+        if (isAnyPlatformConnected === false) {
+            addToast('No platform connected!', 'error');
+            navigate('/connect-platforms');
+        }
+    }, [isAnyPlatformConnected]);
+
     if (!reviewsData) return <div>Loading...</div>;
 
-    if (!isAnyPlatformConnected) {
-        navigate('/connect-platforms');
-
-        if (hasRun.current) return;
-        hasRun.current = true;
-
-        addToast('No platform connected!', 'error');
-    }
+    // if (!isAnyPlatformConnected) {
+    //     navigate('/connect-platforms');
+    //
+    //     if (hasRun.current) return;
+    //     hasRun.current = true;
+    //
+    //     addToast('No platform connected!', 'error');
+    // }
 
     return (
         <div className="space-y-6">
