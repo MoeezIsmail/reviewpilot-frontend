@@ -35,6 +35,7 @@ export default function ConnectPlatforms() {
             setGoogleConnected(true);
             localStorage.setItem("isGoogleUser", "true");
             addToast("Google Business connected!", "success");
+            navigate('/');
         }
 
         // ← Errors handle karo
