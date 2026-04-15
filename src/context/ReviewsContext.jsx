@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import { useAuth } from "./AuthContext.jsx";
 import { fetchReviews, fetchAiReply } from "../api/reviewsApi.js";
 import { useToast } from "../components/ToastProvider.jsx";
+import {useNavigate} from "react-router-dom";
 
 const ReviewsContext = createContext();
 
@@ -12,6 +13,7 @@ export const ReviewsProvider = ({ children }) => {
         accountId: null,      // ← new
         locationId: null,     // ← new
     });
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -26,7 +28,6 @@ export const ReviewsProvider = ({ children }) => {
     };
 
     console.log(isAnyPlatformConnected(user));
-    return;
 
     useEffect(() => {
         const loadReviews = async () => {
@@ -45,7 +46,7 @@ export const ReviewsProvider = ({ children }) => {
                 if (message === "Business location not found. Please reconnect Google.") {
                     addToast("Please reconnect your Google Business account.", "error");
                     // Settings page pe bhejo
-                    window.location.href = "/settings";
+                    navigate("/settings");
                 } else {
                     addToast("Failed to fetch reviews", "error");
                 }
