@@ -21,7 +21,8 @@ const AuthSuccess = () => {
 
         console.log('token:', token)
         console.log('isNew:', isNewUser)
-        console.log('isAnyPlatformConnected:', isAnyPlatformConnected)
+        console.log('isAnyPlatformConnected:', !isAnyPlatformConnected)
+        console.log('isAnyPlatformConnected with out ! :', isAnyPlatformConnected)
         console.log('isAnyPlatformConnected DB:', user?.platform?.google?.accessToken)
 
         if (token) {
