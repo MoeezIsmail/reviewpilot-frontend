@@ -7,7 +7,7 @@ import NotFound from "./NotFound.jsx";
 const AuthSuccess = () => {
     const { addToast } = useToast();
     const [searchParams] = useSearchParams();
-    const { saveToken } = useAuth();
+    const { saveToken, user } = useAuth();
     const navigate = useNavigate();
     const hasRun = useRef(false);
 
@@ -18,6 +18,10 @@ const AuthSuccess = () => {
         const token = searchParams.get("token");
         const isNewUser = searchParams.get("isNewUser") === "true";
         const isAnyPlatformConnected = searchParams.get("isAnyPlatformConnected") === "true";
+        const platform = user?.platform?.google?.accessToken;
+
+        console.log('is: ',isAnyPlatformConnected);
+        console.log('platform: ',platform);
 
         if (token) {
             saveToken(token);
