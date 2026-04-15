@@ -39,7 +39,7 @@ const AuthSuccess = () => {
         //     addToast("Error: please tru again!", 'error');
         //     navigate("/auth?error=google_failed");
         // }
-    }, []);
+    }, [user]);
 
     return (
         <div className="min-h-screen flex items-center justify-center">
