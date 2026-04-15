@@ -7,9 +7,11 @@ import axios from "axios";
 import PlatformCard from "../components/PlatformCard.jsx";
 import PLATFORMS from "../utils/connectPlatformUtils.jsx";
 import { BACKEND_URL } from "../constants/urls.js";
+import {useAuth} from "../context/AuthContext.jsx";
 
 export default function ConnectPlatforms() {
     const { addToast } = useToast();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [googleConnected, setGoogleConnected] = useState(false);
@@ -21,6 +23,14 @@ export default function ConnectPlatforms() {
 
         const google = searchParams.get("google");
         const error = searchParams.get("error");
+
+        if (!google && !error) {
+            const profile = user?.platforms?.google?.accessToken;
+            if (profile) {
+                navigate("/");
+                return;
+            }
+        }
 
         if (google === "success") {
             setGoogleConnected(true);

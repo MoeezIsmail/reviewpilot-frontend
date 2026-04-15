@@ -21,13 +21,14 @@ const AuthSuccess = () => {
 
         if (token) {
             saveToken(token);
+            localStorage.setItem("isGoogleUser", "true");
 
             if (isNewUser || !isAnyPlatformConnected) {
                 addToast("Welcome to ReviewPilot!", 'success');
                 navigate("/connect-platforms");
             } else {
-                navigate("/");
                 addToast("Pleasure to see you back!", 'success');
+                navigate("/");
             }
         } else {
             addToast("Error: please tru again!", 'error');
