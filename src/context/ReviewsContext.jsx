@@ -22,10 +22,8 @@ export const ReviewsProvider = ({ children }) => {
     const [aiReplies, setAiReplies] = useState({});
 
     const isAnyPlatformConnected = (user) => {
-        return !!(
-            user?.platforms?.google?.accessToken ||
-            user?.platforms?.yelp?.accessToken
-        );
+        return user?.platforms?.google?.accessToken || user?.platforms?.yelp?.accessToken;
+
     };
 
     useEffect(() => {
