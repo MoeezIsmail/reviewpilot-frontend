@@ -24,7 +24,7 @@ export default function ConnectPlatforms() {
         const error = searchParams.get("error");
 
         if (!google && !error && user?.platforms?.google?.accessToken) {
-            navigate("/");
+            // navigate("/");
             return;
         }
 
