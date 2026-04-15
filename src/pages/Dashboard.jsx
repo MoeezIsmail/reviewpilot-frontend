@@ -28,12 +28,10 @@ const Dashboard = () => {
         }
     }, [reviewsData]);
 
-    console.log('is ANy platfoerm :', isAnyPlatformConnected);
-
     useEffect(() => {
         if (isAnyPlatformConnected === false) {
             addToast('No platform connected!', 'error');
-            // navigate('/connect-platforms');
+            navigate('/connect-platforms');
         }
     }, [isAnyPlatformConnected]);
 

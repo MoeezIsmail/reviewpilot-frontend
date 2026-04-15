@@ -23,9 +23,12 @@ export default function ConnectPlatforms() {
         const google = searchParams.get("google");
         const error = searchParams.get("error");
 
-        if (!google && !error && user?.platforms?.google?.accessToken) {
-            // navigate("/");
-            return;
+        if (!google && !error) {
+            const profile = user?.platforms?.google?.accessToken;
+            if (profile) {
+                navigate("/");
+                return;
+            }
         }
 
         if (hasRun.current) return;
@@ -47,7 +50,7 @@ export default function ConnectPlatforms() {
         } else if (error) {
             addToast("Connection failed. Try again.", "error");
         }
-    }, [user]);
+    }, []);
 
     const handleConnectGoogle = async () => {
         try {

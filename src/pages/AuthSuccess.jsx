@@ -19,29 +19,22 @@ const AuthSuccess = () => {
         const isNewUser = searchParams.get("isNewUser") === "true";
         const isAnyPlatformConnected = searchParams.get("isAnyPlatformConnected") === "true";
 
-        console.log('token:', token)
-        console.log('isNew:', isNewUser)
-        console.log('isAnyPlatformConnected:', !isAnyPlatformConnected)
-        console.log('isAnyPlatformConnected with out ! :', isAnyPlatformConnected)
-        console.log('isAnyPlatformConnected DB:', user?.platform?.google?.accessToken)
-
         if (token) {
             saveToken(token);
             localStorage.setItem("isGoogleUser", "true");
 
             if (isNewUser || !isAnyPlatformConnected) {
                 addToast("Welcome to ReviewPilot!", 'success');
-                // navigate("/connect-platforms");
+                navigate("/connect-platforms");
+            } else {
+                addToast("Pleasure to see you back!", 'success');
+                navigate("/");
             }
-                // else {
-            //     addToast("Pleasure to see you back!", 'success');
-            //     navigate("/");
-            // }
         } else {
             addToast("Error: please tru again!", 'error');
             navigate("/auth?error=google_failed");
         }
-    }, [user]);
+    }, []);
 
     return (
         <div className="min-h-screen flex items-center justify-center">
