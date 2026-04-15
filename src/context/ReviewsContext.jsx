@@ -23,8 +23,10 @@ export const ReviewsProvider = ({ children }) => {
 
     const isAnyPlatformConnected = (user) => {
         return user?.platforms?.google?.accessToken || user?.platforms?.yelp?.accessToken;
-
     };
+
+    console.log(isAnyPlatformConnected(user));
+    return;
 
     useEffect(() => {
         const loadReviews = async () => {
