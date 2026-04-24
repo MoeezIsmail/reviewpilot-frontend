@@ -1,96 +1,125 @@
 import React, { useMemo } from "react";
 import { Star } from "lucide-react";
 
-// Utility function to parse relative date strings
-const parseRelativeDate = (relativeDate) => {
-    // Match formats like "5 minutes ago", "1 hour ago", "2 days ago", "1 year ago"
-    const regex = /(\d+)\s*(minute|hour|day|month|year)s?\s*(ago)|(\w+\sago)/;
-    const match = relativeDate.match(regex);
-
-    if (match) {
-        const currentDate = new Date();
-        if (match[4]) {
-            // If it's something like "a year ago"
-            const unit = match[4].split(" ")[1]; // Get "year", "month", etc.
-            return adjustDateByUnit(currentDate, unit, 1); // "a year ago" -> 1 year ago
-        } else {
-            // If it's something like "5 minutes ago"
-            const value = parseInt(match[1], 10);
-            const unit = match[2];
-            return adjustDateByUnit(currentDate, unit, value);
-        }
+// ─── Google Business Profile API format handle karo ──────────
+const parseReviewDate = (review) => {
+    // Google Business Profile API → createTime field
+    if (review.createTime) {
+        return new Date(review.createTime).getTime();
     }
-
-    return new Date(); // In case the date format doesn't match, return the current date
+    // SerpAPI fallback → date field (relative string)
+    if (review.date) {
+        return new Date().getTime(); // fallback
+    }
+    return 0;
 };
 
-// Helper function to adjust the current date by the given unit
-const adjustDateByUnit = (currentDate, unit, value) => {
-    if (unit === "minute") {
-        currentDate.setMinutes(currentDate.getMinutes() - value);
-    } else if (unit === "hour") {
-        currentDate.setHours(currentDate.getHours() - value);
-    } else if (unit === "day") {
-        currentDate.setDate(currentDate.getDate() - value);
-    } else if (unit === "month") {
-        currentDate.setMonth(currentDate.getMonth() - value);
-    } else if (unit === "year") {
-        currentDate.setFullYear(currentDate.getFullYear() - value);
+const formatDate = (review) => {
+    if (review.createTime) {
+        return new Date(review.createTime).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
     }
-    return currentDate;
+    return review.date || "";
 };
 
-// Function to sort reviews
+const getReviewerName = (review) => {
+    // Google Business Profile API
+    if (review.reviewer?.displayName) return review.reviewer.displayName;
+    // SerpAPI fallback
+    if (review.user?.name) return review.user.name;
+    return "Anonymous";
+};
+
+const getReviewText = (review) => {
+    // Google Business Profile API
+    if (review.comment) return review.comment;
+    // SerpAPI fallback
+    if (review.snippet) return review.snippet;
+    return "";
+};
+
+const getRating = (review) => {
+    // Google Business Profile API → starRating is string
+    if (review.starRating) {
+        const map = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
+        return map[review.starRating] || 0;
+    }
+    // SerpAPI fallback → rating is number
+    return review.rating || 0;
+};
+
+// Sort reviews by date
 const sortReviewsByDate = (reviews) => {
-    return reviews
+    if (!reviews || !reviews.length) return [];
+    return [...reviews]
         .map((review) => ({
             ...review,
-            parsedDate: parseRelativeDate(review.date).getTime(), // Convert to timestamp for proper comparison
+            parsedDate: parseReviewDate(review),
         }))
-        .sort((a, b) => b.parsedDate - a.parsedDate); // Sort by most recent
+        .sort((a, b) => b.parsedDate - a.parsedDate);
 };
 
 const RecentReviews = ({ reviews }) => {
-    // Sort reviews and limit to the top 4 latest
     const latestReviews = useMemo(() => {
         const sortedReviews = sortReviewsByDate(reviews);
         return sortedReviews.slice(0, 4);
     }, [reviews]);
 
+    if (!latestReviews.length) {
+        return (
+            <div className="bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-lg font-semibold mb-4">Recent Reviews</h2>
+                <p className="text-gray-400 text-sm">No reviews yet.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-lg font-semibold mb-4">Recent Reviews</h2>
             <div className="space-y-4">
-                {latestReviews.map((r, i) => (
-                    <div
-                        key={i}
-                        className={`p-4 rounded-lg border ${
-                            r.rating > 2
-                                ? "bg-green-50 border-green-200"
-                                : "bg-red-50 border-red-200"
-                        }`}
-                    >
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <span className="font-medium block">{r.user.name}</span>
-                                <span className="text-xs text-gray-400">{r.date}</span>
+                {latestReviews.map((review, i) => {
+                    const rating = getRating(review);
+                    return (
+                        <div
+                            key={i}
+                            className={`p-4 rounded-lg border ${
+                                rating > 2
+                                    ? "bg-green-50 border-green-200"
+                                    : "bg-red-50 border-red-200"
+                            }`}
+                        >
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <span className="font-medium block">
+                                        {getReviewerName(review)}
+                                    </span>
+                                    <span className="text-xs text-gray-400">
+                                        {formatDate(review)}
+                                    </span>
+                                </div>
+                                <div className="flex gap-1">
+                                    {[...Array(5)].map((_, index) => (
+                                        <Star
+                                            key={index}
+                                            className={`w-4 h-4 ${
+                                                index < rating
+                                                    ? "text-yellow-400 fill-yellow-400"
+                                                    : "text-gray-300"
+                                            }`}
+                                        />
+                                    ))}
+                                </div>
                             </div>
-                            <div className="flex gap-1">
-                                {[...Array(5)].map((_, index) => (
-                                    <Star
-                                        key={index}
-                                        className={`w-4 h-4 ${
-                                            index < r.rating
-                                                ? "text-yellow-400 fill-yellow-400"
-                                                : "text-gray-300"
-                                        }`}
-                                    />
-                                ))}
-                            </div>
+                            <p className="text-sm text-gray-600 mt-2">
+                                {getReviewText(review)}
+                            </p>
                         </div>
-                        <p className="text-sm text-gray-600 mt-2">{r.snippet}</p>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

@@ -21,30 +21,21 @@ const Dashboard = () => {
 
     console.log('reviewsData: ', reviewsData);
 
-    // useEffect(() => {
-    //     if (reviewsData && reviewsData.reviews) {
-    //         const newStats = calculateStats(reviewsData.reviews);
-    //         setStats(newStats);
-    //     }
-    // }, [reviewsData]);
+    useEffect(() => {
+        if (reviewsData && reviewsData.reviews) {
+            const newStats = calculateStats(reviewsData.reviews);
+            setStats(newStats);
+        }
+    }, [reviewsData]);
 
-    // useEffect(() => {
-    //     if (isAnyPlatformConnected === false) {
-    //         addToast('No platform connected!', 'error');
-    //         navigate('/connect-platforms');
-    //     }
-    // }, [isAnyPlatformConnected]);
+    useEffect(() => {
+        if (isAnyPlatformConnected === false) {
+            addToast('No platform connected!', 'error');
+            navigate('/connect-platforms');
+        }
+    }, [isAnyPlatformConnected]);
 
-    // if (!reviewsData) return <div>Loading...</div>;
-
-    // if (!isAnyPlatformConnected) {
-    //     navigate('/connect-platforms');
-    //
-    //     if (hasRun.current) return;
-    //     hasRun.current = true;
-    //
-    //     addToast('No platform connected!', 'error');
-    // }
+    if (!reviewsData) return <div>Loading...</div>;
 
     return (
         <div className="space-y-6">
