@@ -7,6 +7,7 @@ import calculateStats from "../utils/reviewAnalytics.js";
 import {useNavigate} from "react-router-dom";
 import {useToast} from "../components/ToastProvider.jsx";
 import { RefreshCw } from 'lucide-react';
+import Button from "../includes/Button.jsx";
 
 const Dashboard = () => {
     const { reviewsData, isAnyPlatformConnected, refreshReviews, loading  } = useReviews();
@@ -41,16 +42,10 @@ const Dashboard = () => {
     return (
         <div className="space-y-6">
             <DashboardCards stats={stats} />
+            <Button  disabled={loading} onClick={refreshReviews} loading={loading} children={`${loading ? "Refreshing..." : "Refresh Reviews"}`}/>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <RecentReviews reviews={reviewsData?.reviews} />
-                <button
-                    onClick={refreshReviews}
-                    disabled={loading}
-                    className="flex items-center gap-2 text-sm text-indigo-600 hover:underline"
-                >
-                    <RefreshCw size={14} />
-                    {loading ? "Refreshing..." : "Refresh Reviews"}
-                </button>
                 <ReplyPerformance />
             </div>
         </div>
