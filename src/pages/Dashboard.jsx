@@ -42,7 +42,10 @@ const Dashboard = () => {
     return (
         <div className="space-y-6">
             <DashboardCards stats={stats} />
-            <Button  disabled={loading} onClick={refreshReviews} loading={loading} children={`${loading ? "Refreshing..." : "Refresh Reviews"}`}/>
+
+            <div className="flex justify-end w-full">
+                <Button  disabled={loading} onClick={refreshReviews} loading={loading} children={`${loading ? "Refreshing..." : "Refresh Reviews"}`}/>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <RecentReviews reviews={reviewsData?.reviews} />

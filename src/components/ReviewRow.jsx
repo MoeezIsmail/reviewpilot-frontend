@@ -7,12 +7,12 @@ const ReviewRow = ({ review }) => {
     const { aiReplies, generateAiReply, reviewsData } = useReviews();
     const { addToast } = useToast();
 
-    const aiData = aiReplies[review.review_id] || {};
+    const aiData = aiReplies[review.reviewId] || {};
     const hasResponse = !!review.response?.snippet || !!aiData.reply;
     const loading = aiData.loading || false;
 
     const handleAutoReply = () => {
-        generateAiReply(review.review_id, review.snippet);
+        generateAiReply(review.reviewId, review.snippet);
     };
 
     const handleApprove = async (reviewId, aiReply) => {
@@ -35,10 +35,10 @@ const ReviewRow = ({ review }) => {
 
     return (
         <tr className={bg}>
-            <td className="p-3 w-36">{review.user.name}</td>
-            <td className="p-3 text-center w-24">⭐ {review.rating}</td>
-            <td className="p-3 w-2/5">{review.snippet}</td>
-            <td className="p-3 w-1/4">{review.response?.snippet || aiData.reply || ""}</td>
+            <td className="p-3 w-36">{review.name}</td>
+            <td className="p-3 text-center w-24">⭐ {review.starRating}</td>
+            <td className="p-3 w-2/5">{review.comment}</td>
+            <td className="p-3 w-1/4">{review.reviewReply?.comment || aiData.reply || ""}</td>
             <td className="p-3">
                 <ReviewActions
                     review={review}

@@ -5,7 +5,7 @@ import {useAuth} from "../context/AuthContext.jsx";
 import Lottie from "lottie-react";
 import loader from "../assets/loading.json";
 
-const ReviewsTable = ({reviews}) => {
+const ReviewsTable = () => {
     const [filter, setFilter] = useState("all"); // all / replied / pending
     const [search, setSearch] = useState("");
 
@@ -26,7 +26,7 @@ const ReviewsTable = ({reviews}) => {
         };
     }, [reviewsData.nextPageToken, loading, user?._id, loadNextPage]);
 
-    const filteredReviews = reviews
+    const filteredReviews = reviewsData.reviews
         ?.filter((r) => {
             // Combine server reply + locally generated reply
             const reply = r.aiReply?.trim() || aiReplies[r.review_id]?.reply?.trim() || "";
