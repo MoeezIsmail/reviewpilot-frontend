@@ -14,6 +14,7 @@ export const ReviewsProvider = ({ children }) => {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [hasFetched, setHasFetched] = useState(false);
 
     const { user } = useAuth();
     const { addToast } = useToast();
@@ -34,10 +35,13 @@ export const ReviewsProvider = ({ children }) => {
                 return;
             }
 
+            if (hasFetched) return;
+
             try {
                 setLoading(true);
                 const data = await fetchReviews(user._id);
                 setReviewsData(data);
+                setHasFetched(true);
             } catch (err) {
                 const message = err.response?.data?.message;
 
@@ -55,10 +59,9 @@ export const ReviewsProvider = ({ children }) => {
             }
         };
 
-        if (user) {
-            loadReviews();
-        }
-    }, [user]);
+        if (user) loadReviews();
+
+    }, [user, hasFetched]);
 
     const loadNextPage = async (userId) => {
         if (reviewsData.nextPageToken) {
@@ -107,6 +110,10 @@ export const ReviewsProvider = ({ children }) => {
         }
     };
 
+    const refreshReviews = async () => {
+        setHasFetched(false);
+    };
+
     return (
         <ReviewsContext.Provider value={{
             reviewsData,
@@ -115,6 +122,7 @@ export const ReviewsProvider = ({ children }) => {
             loadNextPage,
             aiReplies,
             generateAiReply,
+            refreshReviews,
             isAnyPlatformConnected: isAnyPlatformConnected(user)
         }}>
             {children}

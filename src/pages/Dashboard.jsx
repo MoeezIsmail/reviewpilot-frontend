@@ -42,6 +42,14 @@ const Dashboard = () => {
             <DashboardCards stats={stats} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <RecentReviews reviews={reviewsData?.reviews} />
+                <button
+                    onClick={refreshReviews}
+                    disabled={loading}
+                    className="flex items-center gap-2 text-sm text-indigo-600 hover:underline"
+                >
+                    <RefreshCw size={14} />
+                    {loading ? "Refreshing..." : "Refresh Reviews"}
+                </button>
                 <ReplyPerformance />
             </div>
         </div>
