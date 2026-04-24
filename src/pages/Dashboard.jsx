@@ -6,9 +6,10 @@ import { useReviews } from "../context/ReviewsContext.jsx";
 import calculateStats from "../utils/reviewAnalytics.js";
 import {useNavigate} from "react-router-dom";
 import {useToast} from "../components/ToastProvider.jsx";
+import { RefreshCw } from 'lucide-react';
 
 const Dashboard = () => {
-    const { reviewsData, isAnyPlatformConnected, refreshReviews  } = useReviews();
+    const { reviewsData, isAnyPlatformConnected, refreshReviews, loading  } = useReviews();
     const navigate = useNavigate();
     const {addToast} = useToast();
     const [stats, setStats] = useState({
@@ -44,11 +45,11 @@ const Dashboard = () => {
                 <RecentReviews reviews={reviewsData?.reviews} />
                 <button
                     onClick={refreshReviews}
-                    // disabled={loading}
+                    disabled={loading}
                     className="flex items-center gap-2 text-sm text-indigo-600 hover:underline"
                 >
-                    <RefreshCw size={14} />
-                    {/*{loading ? "Refreshing..." : "Refresh Reviews"}*/}
+                    <Refresh    Cw size={14} />
+                    {loading ? "Refreshing..." : "Refresh Reviews"}
                 </button>
                 <ReplyPerformance />
             </div>
