@@ -44,11 +44,11 @@ const Dashboard = () => {
                 <RecentReviews reviews={reviewsData?.reviews} />
                 <button
                     onClick={refreshReviews}
-                    disabled={loading}
+                    // disabled={loading}
                     className="flex items-center gap-2 text-sm text-indigo-600 hover:underline"
                 >
                     <RefreshCw size={14} />
-                    {loading ? "Refreshing..." : "Refresh Reviews"}
+                    {/*{loading ? "Refreshing..." : "Refresh Reviews"}*/}
                 </button>
                 <ReplyPerformance />
             </div>
