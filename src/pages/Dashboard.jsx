@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 import {useToast} from "../components/ToastProvider.jsx";
 
 const Dashboard = () => {
-    const { reviewsData, isAnyPlatformConnected  } = useReviews();
+    const { reviewsData, isAnyPlatformConnected, refreshReviews  } = useReviews();
     const navigate = useNavigate();
     const {addToast} = useToast();
     const [stats, setStats] = useState({
