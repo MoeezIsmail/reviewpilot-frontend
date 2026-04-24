@@ -35,7 +35,7 @@ const ReviewRow = ({ review }) => {
 
     return (
         <tr className={bg}>
-            <td className="p-3 w-36">{review.name}</td>
+            <td className="p-3 w-36">{'review.name'}</td>
             <td className="p-3 text-center w-24">⭐ {review.starRating}</td>
             <td className="p-3 w-2/5">{review.comment}</td>
             <td className="p-3 w-1/4">{review.reviewReply?.comment || aiData.reply || ""}</td>

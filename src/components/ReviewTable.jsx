@@ -36,8 +36,7 @@ const ReviewsTable = () => {
             return true; // all
         })
         ?.filter((r) =>
-            r.user.name.toLowerCase().includes(search.toLowerCase()) ||
-            r.snippet.toLowerCase().includes(search.toLowerCase())
+            r.comment.toLowerCase().includes(search.toLowerCase())
         );
 
     return (
