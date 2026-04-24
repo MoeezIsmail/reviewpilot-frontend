@@ -48,7 +48,7 @@ const Dashboard = () => {
                     disabled={loading}
                     className="flex items-center gap-2 text-sm text-indigo-600 hover:underline"
                 >
-                    <Refresh    Cw size={14} />
+                    <RefreshCw size={14} />
                     {loading ? "Refreshing..." : "Refresh Reviews"}
                 </button>
                 <ReplyPerformance />
