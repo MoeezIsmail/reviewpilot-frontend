@@ -42,6 +42,10 @@ const ReviewCard = ({ review }) => {
     return (
         <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-3">
 
+            <div className={`w-full bg-red-400 text-yellow-200`}>
+                {review};
+            </div>
+
             {/* Header — Avatar + Name + Rating + Badge */}
             <div className="flex justify-between items-start">
                 <div className="flex items-center gap-3">
