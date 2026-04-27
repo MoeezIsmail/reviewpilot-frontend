@@ -65,6 +65,7 @@ const ReviewCard = ({ review }) => {
     const avatarColor = getAvatarColor(reviewerName);
     const initials = getInitials(reviewerName);
     const profilePic = getReviewerProfileImage(review);
+    console.log('profile pic: ', profilePic)
 
     const handleAutoReply = () => {
         generateAiReply(reviewId, getReviewText(review));
