@@ -14,7 +14,7 @@ const calculateStats = (reviews) => {
     };
 
     reviews.forEach((r) => {
-        const numericRating = ratingMap[r.starRating] || 0;
+        const numericRating = ratingMap[r.starRating];
 
         ratingSum += numericRating;
 
