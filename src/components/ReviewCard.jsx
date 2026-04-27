@@ -15,7 +15,8 @@ const ReviewCard = ({ review }) => {
     const aiData = aiReplies[reviewId] || {};
     const existingReply = review.reviewReply?.comment || review.response?.snippet || "";
     const hasResponse = !!existingReply || !!aiData.reply;
-    const loading = aiData.loading || false;
+    const isAiReplyGenerated = aiData.loading || false;
+    const isAiReplyPosted = aiData.loading || false;
     const rating = getRating(review.starRating);
     const reviewerName = getReviewerName(review);
     const avatarColor = getAvatarColor(reviewerName);
@@ -30,7 +31,7 @@ const ReviewCard = ({ review }) => {
         if (!hasResponse) return;
         const replyText = aiData.reply || existingReply;
         try {
-            await postReply(reviewId, replyText, reviewsData.accountId, reviewsData.locationId);
+            await postReply(reviewId, replyText, rating, reviewsData.accountId, reviewsData.locationId);
             addToast("Reply posted to Google!", "success");
         } catch (err) {
             console.error(err);
@@ -105,7 +106,7 @@ const ReviewCard = ({ review }) => {
                             : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     }`}
                     size={'sm'}
-                    children={`${loading ? "..." : "Approve"}`}
+                    children={`${isAiReplyPosted ? "..." : "Post"}`}
                 />
 
                 <Button
@@ -122,14 +123,14 @@ const ReviewCard = ({ review }) => {
 
                 <Button
                     onClick={handleAutoReply}
-                    disabled={loading || isReplied}
+                    disabled={isAiReplyGenerated || isReplied}
                     className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
-                        !loading && !isReplied
+                        !isAiReplyGenerated && !isReplied
                             ? "!bg-indigo-50 text-indigo-600 hover:!bg-indigo-100 cursor-pointer"
                             : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     }`}
                     size={'sm'}
-                    children={loading ? "Generating..." : "AI Reply"}
+                    children={isAiReplyGenerated ? "Generating..." : "AI Reply"}
                 />
             </div>
 
