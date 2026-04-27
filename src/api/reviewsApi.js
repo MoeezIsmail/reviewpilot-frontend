@@ -13,7 +13,7 @@ export const fetchAiReply = async (reviewId, reviewText) => {
 };
 
 export const postReply = async (reviewId, reply, accountId, locationId) => {
-    const res = await reviewsApi.post(`/${reviewId}/approve-reply`, {
+    const res = await reviewsApi.post(`/${reviewId}/post-reply`, {
         reply,
         accountId,
         locationId,
