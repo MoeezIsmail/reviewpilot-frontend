@@ -2,6 +2,7 @@ const calculateStats = (reviews) => {
     const total = reviews.length;
     let positive = 0;
     let negative = 0;
+    let average = 0;
     let ratingSum = 0;
 
     const ratingMap = {
@@ -18,7 +19,8 @@ const calculateStats = (reviews) => {
         ratingSum += numericRating;
 
         if (numericRating >= 4) positive++;
-        else negative++;
+        else if (numericRating === 3) average++;
+        else negative++
     });
 
     return {
@@ -26,6 +28,7 @@ const calculateStats = (reviews) => {
         averageRating: total ? (ratingSum / total).toFixed(1) : 0,
         positiveReviews: positive,
         negativeReviews: negative,
+        averageReviews: average,
     };
 };
 

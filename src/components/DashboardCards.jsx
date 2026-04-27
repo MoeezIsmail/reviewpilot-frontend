@@ -6,11 +6,12 @@ const DashboardCards = ({ stats }) => {
         { label: "Total Reviews", icon: MessageSquare, value: stats?.totalReviews },
         { label: "Average Rating", icon: Star, value: stats?.averageRating },
         { label: "Positive Reviews", icon: ThumbsUp, value: stats?.positiveReviews },
+        { label: "Average Reviews", icon: ThumbsUp, value: stats?.averageReviews },
         { label: "Negative Reviews", icon: ThumbsDown, value: stats?.negativeReviews }
     ];
 
     return (
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 xl:grid-cols-5 gap-6">
 
             {statsName.map((s, i) => (
                 <div

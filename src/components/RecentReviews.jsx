@@ -87,9 +87,9 @@ const RecentReviews = ({ reviews }) => {
                         <div
                             key={i}
                             className={`p-4 rounded-lg border ${
-                                rating > 2
-                                    ? "bg-green-50 border-green-200"
-                                    : "bg-red-50 border-red-200"
+                                rating >= 4 ? "bg-green-50 border-green-200" : rating === 3
+                                        ? "bg-yellow-50 border-amber-200"
+                                        : "bg-red-50 border-red-200"
                             }`}
                         >
                             <div className="flex justify-between items-center">
