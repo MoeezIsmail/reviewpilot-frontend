@@ -34,6 +34,10 @@ const getReviewerName = (review) => {
     return review.reviewer?.displayName || review.user?.name || "Anonymous";
 };
 
+const getReviewerProfileImage = (review) => {
+    return review.reviwer?.profilePhotoUrl || getInitials(getReviewerName(review))
+}
+
 const getReviewText = (review) => {
     return review.comment || review.snippet || "";
 };
@@ -60,6 +64,7 @@ const ReviewCard = ({ review }) => {
     const reviewerName = getReviewerName(review);
     const avatarColor = getAvatarColor(reviewerName);
     const initials = getInitials(reviewerName);
+    const profilePic = getReviewerProfileImage(review);
 
     const handleAutoReply = () => {
         generateAiReply(reviewId, getReviewText(review));
@@ -89,7 +94,7 @@ const ReviewCard = ({ review }) => {
                         className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0"
                         style={{ backgroundColor: avatarColor.bg, color: avatarColor.text }}
                     >
-                        {initials}
+                        <img src={profilePic} alt={initials}/>
                     </div>
                     <div>
                         <p className="font-medium text-sm text-gray-900">{reviewerName}</p>
