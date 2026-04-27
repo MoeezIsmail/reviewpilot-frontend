@@ -4,6 +4,7 @@ import { postReply } from "../api/reviewsApi.js";
 import { useToast } from "./ToastProvider.jsx";
 import {getInitials, getRating, getReviewerName, getReviewText, formatDate} from "../utils/reviewUtils.jsx";
 import {getAvatarColor, getReviewerProfileImage} from "../utils/avatarUtils.jsx";
+import Button from "../includes/Button.jsx";
 
 
 const ReviewCard = ({ review }) => {
@@ -94,7 +95,7 @@ const ReviewCard = ({ review }) => {
 
             {/* Actions */}
             <div className="flex gap-2">
-                <button
+                <Button
                     onClick={handleApprove}
                     disabled={!hasResponse || isReplied}
                     className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
@@ -102,22 +103,22 @@ const ReviewCard = ({ review }) => {
                             ? "bg-green-100 text-green-700 hover:bg-green-200 cursor-pointer"
                             : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     }`}
-                >
-                    {loading ? "..." : "Approve"}
-                </button>
+                    size={'sm'}
+                    children={`${loading ? "..." : "Approve"}`}
+                />
 
-                <button
+                <Button
                     disabled={!hasResponse}
                     className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
                         hasResponse
                             ? "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
                             : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     }`}
-                >
-                    Edit
-                </button>
+                    size={'sm'}
+                    children={'Edit'}
+                />
 
-                <button
+                <Button
                     onClick={handleAutoReply}
                     disabled={loading || isReplied}
                     className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
@@ -125,9 +126,9 @@ const ReviewCard = ({ review }) => {
                             ? "!bg-indigo-50 text-indigo-600 hover:!bg-indigo-100 cursor-pointer"
                             : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     }`}
-                >
-                    {loading ? "Generating..." : "AI Reply"}
-                </button>
+                    size={'sm'}
+                    children={loading ? "Generating..." : "AI Reply"}
+                />
             </div>
 
         </div>
