@@ -5,6 +5,9 @@ import { useToast } from "./ToastProvider.jsx";
 import {getInitials, getRating, getReviewerName, getReviewText, formatDate} from "../utils/reviewUtils.jsx";
 import {getAvatarColor, getReviewerProfileImage} from "../utils/avatarUtils.jsx";
 import Button from "../includes/Button.jsx";
+import Lottie from "lottie-react";
+import aiLoader from "../assets/ai-loader.json";
+import ai from "../assets/ai-technology.png";
 
 
 const ReviewCard = ({ review }) => {
@@ -96,6 +99,7 @@ const ReviewCard = ({ review }) => {
             {/* Actions */}
             <div className="flex gap-2">
                 <Button
+                    variant="success"
                     onClick={handleApprove}
                     disabled={!hasResponse || isReplied}
                     className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
@@ -109,6 +113,7 @@ const ReviewCard = ({ review }) => {
 
                 <Button
                     disabled={!hasResponse}
+                    variant="gray"
                     className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
                         hasResponse
                             ? "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
@@ -118,17 +123,16 @@ const ReviewCard = ({ review }) => {
                     children={'Edit'}
                 />
 
-                <Button
-                    onClick={handleAutoReply}
-                    disabled={loading || isReplied}
-                    className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
-                        !loading && !isReplied
-                            ? "!bg-indigo-50 text-indigo-600 hover:!bg-indigo-100 cursor-pointer"
-                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    }`}
-                    size={'sm'}
-                    children={loading ? "Generating..." : "AI Reply"}
-                />
+                <div
+                    className={`p-4 text-white rounded-lg cursor-pointer ${hasResponse || loading ? 'opacity-40 !cursor-not-allowed' : 'cursor-pointer'}`}
+                    onClick={() => !hasResponse && !loading && handleAutoReply()}
+                >
+                    {loading ? (
+                        <Lottie animationData={aiLoader} loop={true} className="w-10 h-10"/>
+                    ) : (
+                        <img src={ai} alt="AI reply" className="w-10 h-8" title="AI Reply"/>
+                    )}
+                </div>
             </div>
 
         </div>
