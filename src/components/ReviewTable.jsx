@@ -1,125 +1,115 @@
-import {useState, useEffect} from "react";
-import ReviewRow from "./ReviewRow";
-import {useReviews} from "../context/ReviewsContext.jsx";
-import {useAuth} from "../context/AuthContext.jsx";
+import { useState, useEffect } from "react";
+import ReviewCard from "./ReviewCard.jsx";
+import { useReviews } from "../context/ReviewsContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+import { RefreshCw } from "lucide-react";
 import Lottie from "lottie-react";
 import loader from "../assets/loading.json";
 
 const ReviewsTable = () => {
-    const [filter, setFilter] = useState("all"); // all / replied / pending
+    const [filter, setFilter] = useState("all");
     const [search, setSearch] = useState("");
 
-    const {reviewsData, loadNextPage, loading, setReviewsData, aiReplies} = useReviews();
-    const {user} = useAuth();
+    const { reviewsData, loadNextPage, loading, aiReplies, refreshReviews } = useReviews();
+    const { user } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
-            const bottom = document.documentElement.scrollHeight === document.documentElement.scrollTop + window.innerHeight;
+            const bottom = document.documentElement.scrollHeight ===
+                document.documentElement.scrollTop + window.innerHeight;
             if (bottom && !loading && reviewsData.nextPageToken) {
                 loadNextPage(user._id);
             }
         };
-
         window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, [reviewsData.nextPageToken, loading, user?._id, loadNextPage]);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [reviewsData.nextPageToken, loading, user?._id]);
 
     const filteredReviews = reviewsData.reviews
         ?.filter((r) => {
-            // Combine server reply + locally generated reply
-            const reply = r.aiReply?.trim() || aiReplies[r.review_id]?.reply?.trim() || "";
-
+            const reviewId = r.name || r.review_id;
+            const reply = r.reviewReply?.comment || r.response?.snippet ||
+                aiReplies[reviewId]?.reply || "";
             if (filter === "replied") return reply !== "";
             if (filter === "pending") return reply === "";
-            return true; // all
+            return true;
         })
-        ?.filter((r) =>
-            r.comment.toLowerCase().includes(search.toLowerCase())
-        );
+        ?.filter((r) => {
+            const text = r.comment || r.snippet || "";
+            const name = r.reviewer?.displayName || r.user?.name || "";
+            return text.toLowerCase().includes(search.toLowerCase()) ||
+                name.toLowerCase().includes(search.toLowerCase());
+        });
 
     return (
-        <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
-            <div className="py-6 px-4 flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
 
-                {/* Search input */}
-                <input
-                    placeholder="Search by customer or review..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="border bg-gray-50 border-gray-300 rounded-lg p-2 w-2/5 focus:border-indigo-600"
-                />
-
-                {/* Filter buttons */}
+            {/* Toolbar */}
+            <div className="flex items-center justify-between">
                 <div className="flex gap-2">
-                    <button
-                        className={`px-4 py-1 rounded-lg font-medium ${
-                            filter === "all" ? "!bg-indigo-600 text-white" : "!bg-gray-200"
-                        }`}
-                        onClick={() => setFilter("all")}
-                    >
-                        All
-                    </button>
-                    <button
-                        className={`px-4 py-1 rounded-lg font-medium ${
-                            filter === "replied" ? "!bg-indigo-600 text-white" : "!bg-gray-200"
-                        }`}
-                        onClick={() => setFilter("replied")}
-                    >
-                        Replied
-                    </button>
-                    <button
-                        className={`px-4 py-1 rounded-lg font-medium ${
-                            filter === "pending" ? "!bg-indigo-600 text-white" : "!bg-gray-200"
-                        }`}
-                        onClick={() => setFilter("pending")}
-                    >
-                        Pending
-                    </button>
+                    {["all", "replied", "pending"].map((f) => (
+                        <button
+                            key={f}
+                            onClick={() => setFilter(f)}
+                            className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition-all ${
+                                filter === f
+                                    ? "!bg-indigo-600 text-white"
+                                    : "!bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
+                            }`}
+                        >
+                            {f}
+                        </button>
+                    ))}
                 </div>
 
-                {/* Reviews table */}
-                <table className="w-full text-sm border-collapse rounded-lg relative">
-                    <thead className="bg-gray-600 text-white sticky top-0">
-                    <tr>
-                        <th className="p-3 text-left rounded-tl-lg">Customer</th>
-                        <th className="p-3">Rating</th>
-                        <th className="p-3 text-left">Review</th>
-                        <th className="p-3 text-left">AI Reply</th>
-                        <th className="p-3 rounded-tr-lg">Actions</th>
-                    </tr>
-                    </thead>
-
-                    <tbody className="divide-y divide-gray-200">
-                    {filteredReviews?.length > 0 ? (
-                        filteredReviews?.map((review, i) => (
-                            <ReviewRow key={i} review={review}/>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="6" className="text-center py-4 text-gray-500">
-                                <Lottie animationData={loader} loop={true} className="w-full h-72"/>
-                            </td>
-                        </tr>
-                    )}
-                    </tbody>
-                </table>
-
-                {/* Load More Button */}
-                {reviewsData?.nextPageToken && (
-                    <div className="flex justify-center mt-4">
-                        <button
-                            onClick={() => loadNextPage(user._id)}
-                            disabled={loading}
-                            className={`px-4 py-2 rounded-lg text-white ${loading ? '!bg-gray-400' : '!bg-indigo-600'}`}
-                        >
-                            {loading ? "Loading..." : "Load More Reviews"}
-                        </button>
-                    </div>
-                )}
-
+                <div className="flex items-center gap-3">
+                    <input
+                        placeholder="Search reviews..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="border border-gray-200 bg-white rounded-lg px-3 py-1.5 text-sm focus:border-indigo-400 focus:outline-none w-52"
+                    />
+                    <button
+                        onClick={refreshReviews}
+                        disabled={loading}
+                        className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline disabled:opacity-50"
+                    >
+                        <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+                        {loading ? "Loading..." : "Refresh"}
+                    </button>
+                </div>
             </div>
+
+            {/* Reviews */}
+            {filteredReviews?.length > 0 ? (
+                <div className="flex flex-col gap-3">
+                    {filteredReviews.map((review, i) => (
+                        <ReviewCard key={review.name || i} review={review} />
+                    ))}
+                </div>
+            ) : (
+                <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-64">
+                    {loading
+                        ? <Lottie animationData={loader} loop={true} className="w-40 h-40" />
+                        : <p className="text-gray-400 text-sm">No reviews found.</p>
+                    }
+                </div>
+            )}
+
+            {/* Load More */}
+            {reviewsData?.nextPageToken && (
+                <div className="flex justify-center">
+                    <button
+                        onClick={() => loadNextPage(user._id)}
+                        disabled={loading}
+                        className={`px-6 py-2 rounded-lg text-sm font-medium text-white ${
+                            loading ? "!bg-gray-400" : "!bg-indigo-600 hover:!bg-indigo-700"
+                        }`}
+                    >
+                        {loading ? "Loading..." : "Load More"}
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
