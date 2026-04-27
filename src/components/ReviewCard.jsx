@@ -15,7 +15,7 @@ const ReviewCard = ({ review }) => {
     const existingReply = review.reviewReply?.comment || review.response?.snippet || "";
     const hasResponse = !!existingReply || !!aiData.reply;
     const loading = aiData.loading || false;
-    const rating = getRating(review);
+    const rating = getRating(review.starRating);
     const reviewerName = getReviewerName(review);
     const avatarColor = getAvatarColor(reviewerName);
     const initials = getInitials(reviewerName);
@@ -53,7 +53,7 @@ const ReviewCard = ({ review }) => {
                     </div>
                     <div>
                         <p className="font-medium text-sm text-gray-900">{reviewerName}</p>
-                        <p className="text-xs text-gray-400">{formatDate(review)} · Google</p>
+                        <p className="text-xs text-gray-400">{formatDate(review.createTime)} · Google</p>
                     </div>
                 </div>
 
