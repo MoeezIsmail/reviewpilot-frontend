@@ -5,9 +5,9 @@ const calculateStats = (reviews) => {
     let ratingSum = 0;
 
     reviews.forEach((r) => {
-        ratingSum += r.rating;
+        ratingSum += r.starRating;
 
-        if (r.rating >= 4) positive++;
+        if (r.starRating >= 4) positive++;
         else negative++;
     });
 
