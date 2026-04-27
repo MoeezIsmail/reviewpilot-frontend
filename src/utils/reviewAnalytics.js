@@ -4,11 +4,20 @@ const calculateStats = (reviews) => {
     let negative = 0;
     let ratingSum = 0;
 
-    reviews.forEach((r) => {
-        console.log('rating: ', r.starRating);
-        ratingSum += r.starRating;
+    const ratingMap = {
+        ONE: 1,
+        TWO: 2,
+        THREE: 3,
+        FOUR: 4,
+        FIVE: 5,
+    };
 
-        if (r.starRating >= 4) positive++;
+    reviews.forEach((r) => {
+        const numericRating = ratingMap[r.starRating] || 0;
+
+        ratingSum += numericRating;
+
+        if (numericRating >= 4) positive++;
         else negative++;
     });
 
