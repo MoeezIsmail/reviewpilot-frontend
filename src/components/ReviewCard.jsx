@@ -2,54 +2,9 @@ import ReviewActions from "./ReviewActions";
 import { useReviews } from "../context/ReviewsContext.jsx";
 import { postReply } from "../api/reviewsApi.js";
 import { useToast } from "./ToastProvider.jsx";
+import {getInitials, getRating, getReviewerName, getReviewText, formatDate} from "../utils/reviewUtils.jsx";
+import {getAvatarColor, getReviewerProfileImage} from "../utils/avatarUtils.jsx";
 
-const getInitials = (name) => {
-    if (!name) return "?";
-    return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
-};
-
-const avatarColors = [
-    { bg: "#EEF2FF", text: "#4F46E5" },
-    { bg: "#FEF3C7", text: "#92400E" },
-    { bg: "#E6F1FB", text: "#185FA5" },
-    { bg: "#D1FAE5", text: "#065F46" },
-    { bg: "#FCE7F3", text: "#9D174D" },
-];
-
-const getAvatarColor = (name) => {
-    if (!name) return avatarColors[0];
-    const index = name.charCodeAt(0) % avatarColors.length;
-    return avatarColors[index];
-};
-
-const getRating = (review) => {
-    if (review.starRating) {
-        const map = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
-        return map[review.starRating] || 0;
-    }
-    return review.rating || 0;
-};
-
-const getReviewerName = (review) => {
-    return review.reviewer?.displayName || review.user?.name || "Anonymous";
-};
-
-const getReviewerProfileImage = (review) => {
-    return review.reviwer?.profilePhotoUrl || getInitials(getReviewerName(review))
-}
-
-const getReviewText = (review) => {
-    return review.comment || review.snippet || "";
-};
-
-const formatDate = (review) => {
-    if (review.createTime) {
-        return new Date(review.createTime).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric'
-        });
-    }
-    return review.date || "";
-};
 
 const ReviewCard = ({ review }) => {
     const { aiReplies, generateAiReply, reviewsData } = useReviews();
@@ -65,7 +20,6 @@ const ReviewCard = ({ review }) => {
     const avatarColor = getAvatarColor(reviewerName);
     const initials = getInitials(reviewerName);
     const profilePic = getReviewerProfileImage(review);
-    console.log('profile pic: ', profilePic)
 
     const handleAutoReply = () => {
         generateAiReply(reviewId, getReviewText(review));

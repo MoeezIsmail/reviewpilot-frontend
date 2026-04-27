@@ -52,6 +52,7 @@ const Sidebar = ({ setActivePage }) => {
                 })}
 
             </nav>
+            
 
         </aside>
     )
