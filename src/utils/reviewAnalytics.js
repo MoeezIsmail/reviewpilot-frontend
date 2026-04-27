@@ -5,6 +5,7 @@ const calculateStats = (reviews) => {
     let ratingSum = 0;
 
     reviews.forEach((r) => {
+        console.log('rating: ', r.starRating);
         ratingSum += r.starRating;
 
         if (r.starRating >= 4) positive++;
