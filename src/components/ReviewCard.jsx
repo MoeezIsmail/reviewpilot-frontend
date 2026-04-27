@@ -42,97 +42,93 @@ const ReviewCard = ({ review }) => {
     return (
         <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-3">
 
-            <div className={`w-full bg-red-400 text-yellow-200`}>
-                {review}
+            {/* Header — Avatar + Name + Rating + Badge */}
+            <div className="flex justify-between items-start">
+                <div className="flex items-center gap-3">
+                    <div
+                        className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0"
+                        style={{ backgroundColor: avatarColor.bg, color: avatarColor.text }}
+                    >
+                        <img src={profilePic} alt={initials}/>
+                    </div>
+                    <div>
+                        <p className="font-medium text-sm text-gray-900">{reviewerName}</p>
+                        <p className="text-xs text-gray-400">{formatDate(review)} · Google</p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    {/* Stars */}
+                    <div className="flex gap-0.5">
+                        {[...Array(5)].map((_, i) => (
+                            <span key={i} className={`text-sm ${i < rating ? "text-yellow-400" : "text-gray-200"}`}>★</span>
+                        ))}
+                    </div>
+                    {/* Status Badge */}
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                        isReplied
+                            ? "bg-green-100 text-green-700"
+                            : hasResponse
+                                ? "bg-indigo-100 text-indigo-700"
+                                : "bg-yellow-100 text-yellow-700"
+                    }`}>
+                        {isReplied ? "Replied" : hasResponse ? "Ready" : "Pending"}
+                    </span>
+                </div>
             </div>
 
-            {/*/!* Header — Avatar + Name + Rating + Badge *!/*/}
-            {/*<div className="flex justify-between items-start">*/}
-            {/*    <div className="flex items-center gap-3">*/}
-            {/*        <div*/}
-            {/*            className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0"*/}
-            {/*            style={{ backgroundColor: avatarColor.bg, color: avatarColor.text }}*/}
-            {/*        >*/}
-            {/*            <img src={profilePic} alt={initials}/>*/}
-            {/*        </div>*/}
-            {/*        <div>*/}
-            {/*            <p className="font-medium text-sm text-gray-900">{reviewerName}</p>*/}
-            {/*            <p className="text-xs text-gray-400">{formatDate(review)} · Google</p>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
+            {/* Review Text */}
+            <p className="text-sm text-gray-600 leading-relaxed">{getReviewText(review)}</p>
 
-            {/*    <div className="flex items-center gap-2">*/}
-            {/*        /!* Stars *!/*/}
-            {/*        <div className="flex gap-0.5">*/}
-            {/*            {[...Array(5)].map((_, i) => (*/}
-            {/*                <span key={i} className={`text-sm ${i < rating ? "text-yellow-400" : "text-gray-200"}`}>★</span>*/}
-            {/*            ))}*/}
-            {/*        </div>*/}
-            {/*        /!* Status Badge *!/*/}
-            {/*        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${*/}
-            {/*            isReplied*/}
-            {/*                ? "bg-green-100 text-green-700"*/}
-            {/*                : hasResponse*/}
-            {/*                    ? "bg-indigo-100 text-indigo-700"*/}
-            {/*                    : "bg-yellow-100 text-yellow-700"*/}
-            {/*        }`}>*/}
-            {/*            {isReplied ? "Replied" : hasResponse ? "Ready" : "Pending"}*/}
-            {/*        </span>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+            {/* AI Reply Box */}
+            {(aiData.reply || existingReply) && (
+                <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-indigo-500">
+                    <p className="text-xs text-gray-400 mb-1 font-medium">
+                        {existingReply ? "Reply" : "AI Reply"}
+                    </p>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                        {aiData.reply || existingReply}
+                    </p>
+                </div>
+            )}
 
-            {/*/!* Review Text *!/*/}
-            {/*<p className="text-sm text-gray-600 leading-relaxed">{getReviewText(review)}</p>*/}
+            {/* Actions */}
+            <div className="flex gap-2">
+                <button
+                    onClick={handleApprove}
+                    disabled={!hasResponse || isReplied}
+                    className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
+                        hasResponse && !isReplied
+                            ? "bg-green-100 text-green-700 hover:bg-green-200 cursor-pointer"
+                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    }`}
+                >
+                    {loading ? "..." : "Approve"}
+                </button>
 
-            {/*/!* AI Reply Box *!/*/}
-            {/*{(aiData.reply || existingReply) && (*/}
-            {/*    <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-indigo-500">*/}
-            {/*        <p className="text-xs text-gray-400 mb-1 font-medium">*/}
-            {/*            {existingReply ? "Reply" : "AI Reply"}*/}
-            {/*        </p>*/}
-            {/*        <p className="text-sm text-gray-600 leading-relaxed">*/}
-            {/*            {aiData.reply || existingReply}*/}
-            {/*        </p>*/}
-            {/*    </div>*/}
-            {/*)}*/}
+                <button
+                    disabled={!hasResponse}
+                    className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
+                        hasResponse
+                            ? "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
+                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    }`}
+                >
+                    Edit
+                </button>
 
-            {/*/!* Actions *!/*/}
-            {/*<div className="flex gap-2">*/}
-            {/*    <button*/}
-            {/*        onClick={handleApprove}*/}
-            {/*        disabled={!hasResponse || isReplied}*/}
-            {/*        className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${*/}
-            {/*            hasResponse && !isReplied*/}
-            {/*                ? "bg-green-100 text-green-700 hover:bg-green-200 cursor-pointer"*/}
-            {/*                : "bg-gray-100 text-gray-400 cursor-not-allowed"*/}
-            {/*        }`}*/}
-            {/*    >*/}
-            {/*        {loading ? "..." : "Approve"}*/}
-            {/*    </button>*/}
-
-            {/*    <button*/}
-            {/*        disabled={!hasResponse}*/}
-            {/*        className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${*/}
-            {/*            hasResponse*/}
-            {/*                ? "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"*/}
-            {/*                : "bg-gray-100 text-gray-400 cursor-not-allowed"*/}
-            {/*        }`}*/}
-            {/*    >*/}
-            {/*        Edit*/}
-            {/*    </button>*/}
-
-            {/*    <button*/}
-            {/*        onClick={handleAutoReply}*/}
-            {/*        disabled={loading || isReplied}*/}
-            {/*        className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${*/}
-            {/*            !loading && !isReplied*/}
-            {/*                ? "!bg-indigo-50 text-indigo-600 hover:!bg-indigo-100 cursor-pointer"*/}
-            {/*                : "bg-gray-100 text-gray-400 cursor-not-allowed"*/}
-            {/*        }`}*/}
-            {/*    >*/}
-            {/*        {loading ? "Generating..." : "AI Reply"}*/}
-            {/*    </button>*/}
-            {/*</div>*/}
+                <button
+                    onClick={handleAutoReply}
+                    disabled={loading || isReplied}
+                    className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
+                        !loading && !isReplied
+                            ? "!bg-indigo-50 text-indigo-600 hover:!bg-indigo-100 cursor-pointer"
+                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    }`}
+                >
+                    {loading ? "Generating..." : "AI Reply"}
+                </button>
+            </div>
 
         </div>
     );

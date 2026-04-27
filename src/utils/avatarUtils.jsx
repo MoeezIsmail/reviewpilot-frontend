@@ -15,7 +15,5 @@ export const getAvatarColor = (name) => {
 };
 
 export const getReviewerProfileImage = (review) => {
-    console.log('AVATAR review: ', review);
-    console.log('Profile Photo: ', review.reviewer?.profilePhotoUrl);
-    return review.reviewer?.profilePhotoUrl || getInitials(getReviewerName(review))
+   return review.reviewer?.profilePhotoUrl || getInitials(getReviewerName(review))
 }
