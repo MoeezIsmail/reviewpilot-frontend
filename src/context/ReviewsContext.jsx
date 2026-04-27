@@ -91,6 +91,9 @@ export const ReviewsProvider = ({ children }) => {
                 [reviewId]: { loading: true, reply: "" }
             }));
 
+            console.log('reviewId: ', reviewId);
+            console.log('reviewText: ', reviewText)
+
             const reply = await fetchAiReply(reviewId, reviewText);
 
             setAiReplies((prev) => ({
