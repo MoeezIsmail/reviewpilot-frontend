@@ -11,7 +11,7 @@ const ReviewCard = ({ review }) => {
     const { aiReplies, generateAiReply, reviewsData } = useReviews();
     const { addToast } = useToast();
 
-    const reviewId = review.name || review.review_id;
+    const reviewId = review.reviewId;
     const aiData = aiReplies[reviewId] || {};
     const existingReply = review.reviewReply?.comment || review.response?.snippet || "";
     const hasResponse = !!existingReply || !!aiData.reply;

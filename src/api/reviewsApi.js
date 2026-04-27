@@ -8,7 +8,6 @@ export const fetchReviews = async (id, pageToken = null) => {
 }
 
 export const fetchAiReply = async (reviewId, reviewText) => {
-    console.log('url: ', reviewsApi.post(`/${reviewId}/ai-reply`))
     const res = await reviewsApi.post(`/${reviewId}/ai-reply`, { reviewText });
     return res.data.reply;
 };
