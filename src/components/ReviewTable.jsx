@@ -52,15 +52,18 @@ const ReviewsTable = () => {
                 name.toLowerCase().includes(search.toLowerCase());
         });
 
+    let existingReply;
+
     const pendingRepliesCount = reviewsData.reviews.filter((review) => {
         const reviewId = review.reviewId || review.name;
 
         const aiReply = aiReplies[reviewId]?.reply;
 
-        const existingReply = review.reviewReply?.comment || review.response?.snippet;
+        existingReply = review.reviewReply?.comment || review.response?.snippet;
 
         return !!aiReply && !existingReply;
     }).length;
+
     const isPosted = !!existingReply || aiData.posted;
 
     return (
