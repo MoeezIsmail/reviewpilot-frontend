@@ -9,7 +9,7 @@ const InputField = ({
                         className = "",
                     }) => {
     return (
-        <div className={`mb-4 ${className}`}>
+        <div className={`${className}`}>
             {label && (
                 <label className="text-sm font-medium text-gray-700 mb-1 block">
                     {label}
