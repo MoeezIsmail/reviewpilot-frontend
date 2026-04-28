@@ -12,7 +12,7 @@ const ReviewsTable = () => {
     const [filter, setFilter] = useState("all");
     const [search, setSearch] = useState("");
 
-    const {reviewsData, loadNextPage, loading, aiReplies, refreshReviews, postAllReplies, isPostingAll} = useReviews();
+    const { reviewsData, loadNextPage, loading, aiReplies, replyStatus, refreshReviews, postAllReplies, isPostingAll } = useReviews();
     const {user} = useAuth();
 
     useEffect(() => {
@@ -56,15 +56,8 @@ const ReviewsTable = () => {
 
     const pendingRepliesCount = reviewsData.reviews.filter((review) => {
         const reviewId = review.reviewId || review.name;
-
-        const aiReply = aiReplies[reviewId]?.reply;
-
-        existingReply = review.reviewReply?.comment || review.response?.snippet;
-
-        return !!aiReply && !existingReply;
+        return replyStatus[reviewId] === "ready";  // ← sirf "ready" wale
     }).length;
-
-    const isPosted = !!existingReply || aiData.posted;
 
     return (
         <div className="flex flex-col gap-4">
