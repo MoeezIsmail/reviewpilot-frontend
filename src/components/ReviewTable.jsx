@@ -1,45 +1,66 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import ReviewCard from "./ReviewCard.jsx";
-import { useReviews } from "../context/ReviewsContext.jsx";
-import { useAuth } from "../context/AuthContext.jsx";
-import { RefreshCw } from "lucide-react";
+import {useReviews} from "../context/ReviewsContext.jsx";
+import {useAuth} from "../context/AuthContext.jsx";
+import {RefreshCw} from "lucide-react";
 import Lottie from "lottie-react";
 import loader from "../assets/loading.json";
+import Button from "../includes/Button.jsx";
+import InputField from "../includes/InputField.jsx";
 
 const ReviewsTable = () => {
     const [filter, setFilter] = useState("all");
     const [search, setSearch] = useState("");
 
-    const { reviewsData, loadNextPage, loading, aiReplies, refreshReviews } = useReviews();
-    const { user } = useAuth();
+    const {reviewsData, loadNextPage, loading, aiReplies, refreshReviews, postAllReplies} = useReviews();
+    const {user} = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
-            const bottom = document.documentElement.scrollHeight ===
-                document.documentElement.scrollTop + window.innerHeight;
+
+            const bottom = document.documentElement.scrollHeight === document.documentElement.scrollTop + window.innerHeight;
+
             if (bottom && !loading && reviewsData.nextPageToken) {
                 loadNextPage(user._id);
             }
         };
+
         window.addEventListener("scroll", handleScroll);
+
         return () => window.removeEventListener("scroll", handleScroll);
     }, [reviewsData.nextPageToken, loading, user?._id]);
 
     const filteredReviews = reviewsData.reviews
         ?.filter((r) => {
             const reviewId = r.name || r.review_id;
+
             const reply = r.reviewReply?.comment || r.response?.snippet ||
                 aiReplies[reviewId]?.reply || "";
+
             if (filter === "replied") return reply !== "";
+
             if (filter === "pending") return reply === "";
+
             return true;
         })
         ?.filter((r) => {
             const text = r.comment || r.snippet || "";
+
             const name = r.reviewer?.displayName || r.user?.name || "";
+
             return text.toLowerCase().includes(search.toLowerCase()) ||
                 name.toLowerCase().includes(search.toLowerCase());
         });
+
+    const pendingRepliesCount = reviewsData.reviews.filter((review) => {
+        const reviewId = review.reviewId || review.name;
+
+        const aiReply = aiReplies[reviewId]?.reply;
+
+        const existingReply = review.reviewReply?.comment || review.response?.snippet;
+
+        return !!aiReply && !existingReply;
+    }).length;
 
     return (
         <div className="flex flex-col gap-4">
@@ -63,18 +84,28 @@ const ReviewsTable = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <input
+                    {pendingRepliesCount > 0 && (
+                        <Button
+                            onClick={postAllReplies}
+                            disabled={loading}
+                            children={`Post All (${pendingRepliesCount})`}
+                            variant={'success'}
+                        />
+
+                    )}
+
+                    <InputField
                         placeholder="Search reviews..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="border border-gray-200 bg-white rounded-lg px-3 py-1.5 text-sm focus:border-indigo-400 focus:outline-none w-52"
                     />
+
                     <button
                         onClick={refreshReviews}
                         disabled={loading}
                         className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline disabled:opacity-50"
                     >
-                        <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+                        <RefreshCw size={14} className={loading ? "animate-spin" : ""}/>
                         {loading ? "Loading..." : "Refresh"}
                     </button>
                 </div>
@@ -84,13 +115,13 @@ const ReviewsTable = () => {
             {filteredReviews?.length > 0 ? (
                 <div className="flex flex-col gap-3">
                     {filteredReviews.map((review, i) => (
-                        <ReviewCard key={review.name || i} review={review} />
+                        <ReviewCard key={review.name || i} review={review}/>
                     ))}
                 </div>
             ) : (
                 <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-64">
                     {loading
-                        ? <Lottie animationData={loader} loop={true} className="w-40 h-40" />
+                        ? <Lottie animationData={loader} loop={true} className="w-40 h-40"/>
                         : <p className="text-gray-400 text-sm">No reviews found.</p>
                     }
                 </div>

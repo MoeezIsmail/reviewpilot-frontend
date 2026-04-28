@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useAuth } from "./AuthContext.jsx";
-import { fetchReviews, fetchAiReply } from "../api/reviewsApi.js";
+import {fetchReviews, fetchAiReply, postReply} from "../api/reviewsApi.js";
 import { useToast } from "../components/ToastProvider.jsx";
 
 const ReviewsContext = createContext();
@@ -114,6 +114,44 @@ export const ReviewsProvider = ({ children }) => {
         setHasFetched(false);
     };
 
+    const postAllReplies = async () => {
+        const reviewsToPost = reviewsData.reviews.filter((review) => {
+            const reviewId = review.reviewId || review.name;
+            const aiReply = aiReplies[reviewId]?.reply;
+            const existingReply = review.reviewReply?.comment || review.response?.snippet;
+            return !!aiReply && !existingReply; // sirf wo jo AI reply generated ho but posted nahi
+        });
+
+        if (!reviewsToPost.length) {
+            addToast("No pending AI replies to post.", "error");
+            return;
+        }
+
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const review of reviewsToPost) {
+            const reviewId = review.reviewId || review.name;
+            const aiReply = aiReplies[reviewId]?.reply;
+            try {
+                await postReply(
+                    reviewId,
+                    aiReply,
+                    review.starRating,
+                    reviewsData.accountId,
+                    reviewsData.locationId
+                );
+                successCount++;
+            } catch (err) {
+                console.error('Failed to post reply for:', reviewId, err);
+                failCount++;
+            }
+        }
+
+        if (successCount > 0) addToast(`${successCount} replies posted successfully!`, "success");
+        if (failCount > 0) addToast(`${failCount} replies failed to post.`, "error");
+    };
+
     return (
         <ReviewsContext.Provider value={{
             reviewsData,
@@ -123,6 +161,7 @@ export const ReviewsProvider = ({ children }) => {
             aiReplies,
             generateAiReply,
             refreshReviews,
+            postAllReplies,
             isAnyPlatformConnected: isAnyPlatformConnected(user)
         }}>
             {children}

@@ -1,13 +1,13 @@
 const InputField = ({
-                                       label,
-                                       type = "text",
-                                       placeholder,
-                                       value,
-                                       onChange,
-                                       onKeyDown,
-                                       error,
-                                       className = "",
-                                   }) => {
+                        label,
+                        type = "text",
+                        placeholder,
+                        value,
+                        onChange,
+                        onKeyDown,
+                        error,
+                        className = "",
+                    }) => {
     return (
         <div className={`mb-4 ${className}`}>
             {label && (

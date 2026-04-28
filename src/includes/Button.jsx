@@ -1,13 +1,13 @@
 const Button = ({
-                                   children,
-                                   onClick,
-                                   disabled = false,
-                                   variant = "primary",   // "primary" | "success" | "danger" | "gray" | "outline"
-                                   size = "md",           // "sm" | "md" | "lg"
-                                   loading = false,
-                                   className = "",
-                                   type = "button",
-                                   fullWidth = false,
+                    children,
+                    onClick,
+                    disabled = false,
+                    variant = "primary",   // "primary" | "success" | "danger" | "gray" | "outline"
+                    size = "md",           // "sm" | "md" | "lg"
+                    loading = false,
+                    className = "",
+                    type = "button",
+                    fullWidth = false,
                                }) => {
     const variants = {
         primary: "!bg-indigo-600 text-white hover:!bg-indigo-700",
