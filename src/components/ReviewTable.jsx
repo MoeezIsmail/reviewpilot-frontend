@@ -12,7 +12,7 @@ const ReviewsTable = () => {
     const [filter, setFilter] = useState("all");
     const [search, setSearch] = useState("");
 
-    const {reviewsData, loadNextPage, loading, aiReplies, refreshReviews, postAllReplies} = useReviews();
+    const {reviewsData, loadNextPage, loading, aiReplies, refreshReviews, postAllReplies, isPostingAll} = useReviews();
     const {user} = useAuth();
 
     useEffect(() => {
@@ -61,6 +61,7 @@ const ReviewsTable = () => {
 
         return !!aiReply && !existingReply;
     }).length;
+    const isPosted = !!existingReply || aiData.posted;
 
     return (
         <div className="flex flex-col gap-4">
@@ -87,7 +88,7 @@ const ReviewsTable = () => {
                     {pendingRepliesCount > 0 && (
                         <Button
                             onClick={postAllReplies}
-                            disabled={loading}
+                            disabled={isPostingAll}
                             children={`Post All (${pendingRepliesCount})`}
                             variant={'success'}
                         />

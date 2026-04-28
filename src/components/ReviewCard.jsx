@@ -8,7 +8,7 @@ import Button from "../includes/Button.jsx";
 
 
 const ReviewCard = ({ review }) => {
-    const { aiReplies, generateAiReply, reviewsData } = useReviews();
+    const { aiReplies, generateAiReply, reviewsData, isPostingAll} = useReviews();
     const { addToast } = useToast();
 
     const reviewId = review.reviewId;
@@ -22,6 +22,7 @@ const ReviewCard = ({ review }) => {
     const avatarColor = getAvatarColor(reviewerName);
     const initials = getInitials(reviewerName);
     const profilePic = getReviewerProfileImage(review);
+    const isPosted = !!existingReply || aiData.posted;
 
     const handleAutoReply = () => {
         generateAiReply(reviewId, getReviewText(review));
@@ -99,14 +100,14 @@ const ReviewCard = ({ review }) => {
                 <Button
                     variant="success"
                     onClick={handleApprove}
-                    disabled={!hasResponse || isReplied}
+                    disabled={!hasResponse || isReplied || isPosted || isPostingAll}
                     className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all ${
                         hasResponse && !isReplied
                             ? "bg-green-100 text-green-700 hover:bg-green-200 cursor-pointer"
                             : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     }`}
                     size={'sm'}
-                    children={`${isAiReplyPosted ? "..." : "Post"}`}
+                    children={`${isPostingAll ? "Posting..." : isPosted ? "Posted" : "Post"}`}
                 />
 
                 <Button

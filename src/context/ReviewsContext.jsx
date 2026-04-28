@@ -15,6 +15,7 @@ export const ReviewsProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [hasFetched, setHasFetched] = useState(false);
+    const [isPostingAll, setIsPostingAll] = useState(false);
 
     const { user } = useAuth();
     const { addToast } = useToast();
@@ -127,6 +128,8 @@ export const ReviewsProvider = ({ children }) => {
             return;
         }
 
+        setIsPostingAll(true);
+
         let successCount = 0;
         let failCount = 0;
 
@@ -141,12 +144,20 @@ export const ReviewsProvider = ({ children }) => {
                     reviewsData.accountId,
                     reviewsData.locationId
                 );
+
+                setAiReplies((prev) => ({
+                    ...prev,
+                    [reviewId]: { ...prev[reviewId], posted: true }
+                }));
+
                 successCount++;
             } catch (err) {
                 console.error('Failed to post reply for:', reviewId, err);
                 failCount++;
             }
         }
+
+        setIsPostingAll(false);
 
         if (successCount > 0) addToast(`${successCount} replies posted successfully!`, "success");
         if (failCount > 0) addToast(`${failCount} replies failed to post.`, "error");
@@ -162,6 +173,7 @@ export const ReviewsProvider = ({ children }) => {
             generateAiReply,
             refreshReviews,
             postAllReplies,
+            isPostingAll,
             isAnyPlatformConnected: isAnyPlatformConnected(user)
         }}>
             {children}
