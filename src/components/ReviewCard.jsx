@@ -1,4 +1,8 @@
 import Button from "../includes/Button.jsx";
+import {useReviews} from "../context/ReviewsContext.jsx";
+import {useToast} from "./ToastProvider.jsx";
+import {formatDate, getInitials, getRating, getReviewerName, getReviewText} from "../utils/reviewUtils.jsx";
+import {getAvatarColor, getReviewerProfileImage} from "../utils/avatarUtils.jsx";
 
 const ReviewCard = ({ review }) => {
     const { aiReplies, generateAiReply, reviewsData, isPostingAll, replyStatus, postSingleReply } = useReviews();
