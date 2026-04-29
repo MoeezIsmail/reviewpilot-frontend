@@ -111,5 +111,5 @@ button:focus-visible {
 }
 
 .custom-scroll::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #4f46e5, #4338ca);
+  background: linear-gradient(180deg, #8d88ea, #4338ca);
 }
