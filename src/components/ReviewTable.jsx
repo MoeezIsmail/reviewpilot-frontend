@@ -140,13 +140,13 @@ const ReviewsTable = () => {
 
             {/* Reviews */}
             {filteredReviews?.length > 0 ? (
-                <div className="flex flex-col gap-3 max-h-[80vh] overflow-y-auto pr-2 custom-scroll scroll-smooth">
+                <div className="flex flex-col gap-3 max-h-[75vh] overflow-y-auto pr-2 custom-scroll scroll-smooth">
                     {filteredReviews.map((review, i) => (
                         <ReviewCard key={review.name || i} review={review}/>
                     ))}
                 </div>
             ) : (
-                <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-full">
+                <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-screen">
                     {loading
                         ? <Lottie animationData={loader} loop={true} className="w-40 h-40"/>
                         : <p className="text-gray-400 text-sm">No reviews found.</p>
