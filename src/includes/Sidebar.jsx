@@ -51,14 +51,14 @@ const Sidebar = ({ setActivePage }) => {
                         >
                             {/* Glow Layer */}
                             {isActive && (
-                                <div className="absolute inset-0 rounded-xl bg-indigo-600 blur-md opacity-20 -z-10"></div>
+                                <div className="absolute inset-0 rounded-xl bg-indigo-600 blur-md opacity-10 -z-10"></div>
                             )}
 
                             {/* Left Accent Line */}
                             <div className={`
                                 absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full
                                 transition-all duration-300
-                                ${isActive ? "bg-white opacity-100" : "opacity-0 group-hover:opacity-40 bg-indigo-400"}
+                                ${isActive ? "bg-indigo-400 opacity-100" : "opacity-0 group-hover:opacity-40 bg-indigo-400"}
                             `} />
 
                             {/* Icon */}
@@ -87,7 +87,7 @@ const Sidebar = ({ setActivePage }) => {
                         w-full flex items-center gap-3 px-4 py-3 rounded-xl
                         text-red-500 transition-all duration-300
                         hover:bg-white hover:shadow-md hover:scale-[1.01]
-                        active:scale-[0.98] hover:!border-red-100 !bg-red-50
+                        active:scale-[0.98] hover:!border-red-500 !bg-red-50
                     "
                 >
                     <LogOut size={18} className="transition group-hover:rotate-6" />
