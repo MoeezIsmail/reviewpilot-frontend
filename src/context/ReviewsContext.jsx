@@ -236,6 +236,16 @@ export const ReviewsProvider = ({ children }) => {
         };
     };
 
+    // ─── Update AI Reply (Edit ke baad) ──────────────────────
+    const updateAiReply = (reviewId, newReply) => {
+        setAiReplies((prev) => ({
+            ...prev,
+            [reviewId]: { ...prev[reviewId], reply: newReply }
+        }));
+        // Status "ready" pe rakhо — taake post ho sake
+        setReplyStatus((prev) => ({ ...prev, [reviewId]: "ready" }));
+    };
+
     return (
         <ReviewsContext.Provider value={{
             reviewsData,
@@ -250,6 +260,7 @@ export const ReviewsProvider = ({ children }) => {
             postAllReplies,
             isPostingAll,
             getReplyPerformanceStats,
+            updateAiReply,
             isAnyPlatformConnected: isAnyPlatformConnected(user),
         }}>
             {children}

@@ -1,41 +1,61 @@
-import Button from "../includes/Button.jsx";
-import {useReviews} from "../context/ReviewsContext.jsx";
-import {useToast} from "./ToastProvider.jsx";
-import {formatDate, getInitials, getRating, getReviewerName, getReviewText} from "../utils/reviewUtils.jsx";
-import {getAvatarColor, getReviewerProfileImage} from "../utils/avatarUtils.jsx";
+import { useReviews } from "../../context/ReviewsContext.jsx";
+import { formatDate, getInitials, getRating, getReviewerName, getReviewText } from "../../utils/reviewUtils.jsx";
+import { getAvatarColor, getReviewerProfileImage } from "../../utils/avatarUtils.jsx";
+import ReviewReplyBox from "./ReviewReplyBox.jsx";
+import ReviewActions from "./ReviewActions.jsx";
 
+// ─── Status Config ────────────────────────────────────────────
+const STATUS_CONFIG = {
+    idle:       { label: "Pending",    bg: "bg-yellow-100", text: "text-yellow-700" },
+    generating: { label: "Generating", bg: "bg-blue-100",   text: "text-blue-700"   },
+    ready:      { label: "Ready",      bg: "bg-indigo-100", text: "text-indigo-700" },
+    posting:    { label: "Posting...", bg: "bg-orange-100", text: "text-orange-700" },
+    posted:     { label: "Posted",     bg: "bg-green-100",  text: "text-green-700"  },
+    failed:     { label: "Failed",     bg: "bg-red-100",    text: "text-red-700"    },
+};
+
+// ─── Avatar Component ─────────────────────────────────────────
+const ReviewerAvatar = ({ profilePic, initials, avatarColor }) => (
+    <div
+        className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 overflow-hidden"
+        style={{ backgroundColor: avatarColor.bg, color: avatarColor.text }}
+    >
+        {profilePic
+            ? <img src={profilePic} alt={initials} className="w-full h-full object-cover" />
+            : initials
+        }
+    </div>
+);
+
+// ─── Star Rating Component ────────────────────────────────────
+const StarRating = ({ rating }) => (
+    <div className="flex gap-0.5">
+        {[...Array(5)].map((_, i) => (
+            <span key={i} className={`text-sm ${i < rating ? "text-yellow-400" : "text-gray-200"}`}>
+                ★
+            </span>
+        ))}
+    </div>
+);
+
+// ─── Main ReviewCard ──────────────────────────────────────────
 const ReviewCard = ({ review }) => {
-    const { aiReplies, generateAiReply, reviewsData, isPostingAll, replyStatus, postSingleReply } = useReviews();
-    const { addToast } = useToast();
+    const { aiReplies, generateAiReply, isPostingAll, replyStatus, postSingleReply } = useReviews();
 
     const reviewId = review.reviewId || review.name;
     const aiData = aiReplies[reviewId] || {};
     const status = replyStatus[reviewId] || "idle";
 
     const existingReply = review.reviewReply?.comment || "";
+    const replyText = aiData.reply || existingReply;
+    const isPosted = status === "posted";
+
     const rating = getRating(review.starRating);
     const reviewerName = getReviewerName(review);
     const avatarColor = getAvatarColor(reviewerName);
     const initials = getInitials(reviewerName);
     const profilePic = getReviewerProfileImage(review);
-
-    const replyText = aiData.reply || existingReply;
-    const hasReply = !!replyText;
-
-    const handleAutoReply = () => generateAiReply(reviewId, getReviewText(review));
-    const handleApprove = () => postSingleReply(reviewId, replyText);
-
-    // ─── Status based UI ─────────────────────────────────────
-    const statusConfig = {
-        idle:       { label: "Pending",    bg: "bg-yellow-100", text: "text-yellow-700" },
-        generating: { label: "Generating", bg: "bg-blue-100",   text: "text-blue-700"   },
-        ready:      { label: "Ready",      bg: "bg-indigo-100", text: "text-indigo-700" },
-        posting:    { label: "Posting...", bg: "bg-orange-100", text: "text-orange-700" },
-        posted:     { label: "Posted",     bg: "bg-green-100",  text: "text-green-700"  },
-        failed:     { label: "Failed",     bg: "bg-red-100",    text: "text-red-700"    },
-    };
-
-    const currentStatus = statusConfig[status] || statusConfig.idle;
+    const currentStatus = STATUS_CONFIG[status] || STATUS_CONFIG.idle;
 
     return (
         <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-3">
@@ -43,27 +63,21 @@ const ReviewCard = ({ review }) => {
             {/* Header */}
             <div className="flex justify-between items-start">
                 <div className="flex items-center gap-3">
-                    <div
-                        className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 overflow-hidden"
-                        style={{ backgroundColor: avatarColor.bg, color: avatarColor.text }}
-                    >
-                        {profilePic
-                            ? <img src={profilePic} alt={initials} className="w-full h-full object-cover" />
-                            : initials
-                        }
-                    </div>
+                    <ReviewerAvatar
+                        profilePic={profilePic}
+                        initials={initials}
+                        avatarColor={avatarColor}
+                    />
                     <div>
                         <p className="font-medium text-sm text-gray-900">{reviewerName}</p>
-                        <p className="text-xs text-gray-400">{formatDate(review.createTime)} · Google</p>
+                        <p className="text-xs text-gray-400">
+                            {formatDate(review.createTime)} · Google
+                        </p>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <div className="flex gap-0.5">
-                        {[...Array(5)].map((_, i) => (
-                            <span key={i} className={`text-sm ${i < rating ? "text-yellow-400" : "text-gray-200"}`}>★</span>
-                        ))}
-                    </div>
+                    <StarRating rating={rating} />
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${currentStatus.bg} ${currentStatus.text}`}>
                         {currentStatus.label}
                     </span>
@@ -71,44 +85,27 @@ const ReviewCard = ({ review }) => {
             </div>
 
             {/* Review Text */}
-            <p className="text-sm text-gray-600 leading-relaxed">{getReviewText(review)}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">
+                {getReviewText(review)}
+            </p>
 
-            {/* Reply Box */}
-            {hasReply && (
-                <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-indigo-500">
-                    <p className="text-xs text-gray-400 mb-1 font-medium">
-                        {status === "posted" ? "✓ Posted Reply" : "AI Reply"}
-                    </p>
-                    <p className="text-sm text-gray-600 leading-relaxed">{replyText}</p>
-                </div>
-            )}
+            {/* Reply Box — with Edit */}
+            <ReviewReplyBox
+                reviewId={reviewId}
+                replyText={replyText}
+                status={status}
+                isPosted={isPosted}
+            />
 
             {/* Actions */}
-            <div className="flex gap-2">
-                <Button
-                    variant="success"
-                    size="sm"
-                    onClick={handleApprove}
-                    disabled={status !== "ready" || isPostingAll}
-                    loading={status === "posting"}
-                    children={status === "posting" ? "Posting..." : status === "posted" ? "Posted ✓" : "Post"}
-                />
+            <ReviewActions
+                status={status}
+                hasReply={!!replyText}
+                isPostingAll={isPostingAll}
+                onPost={() => postSingleReply(reviewId, replyText)}
+                onAiReply={() => generateAiReply(reviewId, getReviewText(review))}
+            />
 
-                <Button
-                    variant="gray"
-                    size="sm"
-                    disabled={!hasReply || status === "posted" || status === "posting"}
-                    children={'Edit'}
-                />
-
-                <Button
-                    size="sm"
-                    onClick={handleAutoReply}
-                    disabled={status === "generating" || status === "posted" || status === "posting" || isPostingAll}
-                    className="!bg-indigo-50 text-indigo-600 hover:!bg-indigo-100"
-                    children={status === "generating" ? "Generating..." : "AI Reply"}
-                />
-            </div>
         </div>
     );
 };
