@@ -14,7 +14,7 @@ const Sidebar = ({ setActivePage }) => {
     ]
 
     return (
-        <aside className="w-64 h-screen flex flex-col bg-gradient-to-b from-white to-indigo-50 border-r border-gray-200">
+        <aside className="w-64 h-screen flex flex-col bg-gradient-to-b from-white to-indigo-100 border-r border-gray-200">
 
             {/* Logo */}
             <div className="flex p-6 items-center gap-3 border-b border-gray-100">
@@ -44,8 +44,8 @@ const Sidebar = ({ setActivePage }) => {
                                 transition-all duration-300 ease-out
                                 
                                 ${isActive
-                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-[1.02]"
-                                : "text-gray-600 hover:bg-white hover:shadow-md hover:scale-[1.01]"
+                                ? "!bg-white shadow-lg shadow-indigo-200 scale-[1.02]"
+                                : "!text-gray-600 hover:!bg-white hover:!shadow-md hover:scale-[1.01]"
                             }
                             `}
                         >
@@ -87,7 +87,7 @@ const Sidebar = ({ setActivePage }) => {
                         w-full flex items-center gap-3 px-4 py-3 rounded-xl
                         text-red-500 transition-all duration-300
                         hover:bg-white hover:shadow-md hover:scale-[1.01]
-                        active:scale-[0.98]
+                        active:scale-[0.98] hover:!border-red-100 !bg-red-50
                     "
                 >
                     <LogOut size={18} className="transition group-hover:rotate-6" />
