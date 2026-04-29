@@ -17,13 +17,11 @@ const ReviewReplyBox = ({ reviewId, replyText, status, isPosted }) => {
     return (
         <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-indigo-500">
 
-            {/* Header */}
             <div className="flex justify-between items-center mb-1">
                 <p className="text-xs text-gray-400 font-medium">
                     {isPosted ? "✓ Posted Reply" : "AI Reply"}
                 </p>
 
-                {/* Edit button — sirf tab dikhe jab posted nahi */}
                 {!isPosted && !isEditing && (
                     <Button
                         onClick={startEditing}
@@ -33,7 +31,6 @@ const ReviewReplyBox = ({ reviewId, replyText, status, isPosted }) => {
                 )}
             </div>
 
-            {/* Edit Mode */}
             {isEditing ? (
                 <div className="flex flex-col gap-2">
                     <textarea
@@ -66,7 +63,6 @@ const ReviewReplyBox = ({ reviewId, replyText, status, isPosted }) => {
                     </div>
                 </div>
             ) : (
-                // View Mode
                 <p className="text-sm text-gray-600 leading-relaxed">{replyText}</p>
             )}
 

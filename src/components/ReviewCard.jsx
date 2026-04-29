@@ -90,12 +90,12 @@ const ReviewCard = ({ review }) => {
             </p>
 
             {/* Reply Box — with Edit */}
-            <ReviewReplyBox
-                reviewId={reviewId}
-                replyText={replyText}
-                status={status}
-                isPosted={isPosted}
-            />
+            {/*<ReviewReplyBox*/}
+            {/*    reviewId={reviewId}*/}
+            {/*    replyText={replyText}*/}
+            {/*    status={status}*/}
+            {/*    isPosted={isPosted}*/}
+            {/*/>*/}
 
             {/* Actions */}
             <ReviewActions
