@@ -23,8 +23,8 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                 </p>
 
                 {!isPosted && !isEditing && (
-                    <div onClick={startEditing} className="flex items-center justify-center !text-gray-500 hover:!text-gray-700 px-2 py-1 rounded border border-gray-200 hover:bg-gray-200">
-                        <Pencil size={24}/>
+                    <div onClick={startEditing} className="flex items-center justify-center !text-gray-500 hover:!text-gray-700 p-2 rounded-full border border-gray-200 hover:bg-gray-200">
+                        <Pencil size={18}/>
                     </div>
                 )}
         </div>
@@ -57,7 +57,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                     <button
                         onClick={saveEdit}
                         disabled={!editedText.trim()}
-                        className="flex items-center justify-center !text-green-500 hover:!text-green-700 hover:bg-green-200 px-2 py-1 rounded-full border border-green-200 disabled:opacity-50"
+                        className="flex items-center justify-center !text-green-500 hover:!text-green-700 hover:!bg-green-200 p-2 rounded-full !border !border-green-200 disabled:opacity-50"
                     >
                         <Check size={24}/>
                     </button>
