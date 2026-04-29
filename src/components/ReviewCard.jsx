@@ -1,6 +1,6 @@
-import { useReviews } from "../../context/ReviewsContext.jsx";
-import { formatDate, getInitials, getRating, getReviewerName, getReviewText } from "../../utils/reviewUtils.jsx";
-import { getAvatarColor, getReviewerProfileImage } from "../../utils/avatarUtils.jsx";
+import { useReviews } from "../context/ReviewsContext.jsx";
+import { formatDate, getInitials, getRating, getReviewerName, getReviewText } from "../utils/reviewUtils.jsx";
+import { getAvatarColor, getReviewerProfileImage } from "../utils/avatarUtils.jsx";
 import ReviewReplyBox from "./ReviewReplyBox.jsx";
 import ReviewActions from "./ReviewActions.jsx";
 
@@ -90,12 +90,12 @@ const ReviewCard = ({ review }) => {
             </p>
 
             {/* Reply Box — with Edit */}
-            {/*<ReviewReplyBox*/}
-            {/*    reviewId={reviewId}*/}
-            {/*    replyText={replyText}*/}
-            {/*    status={status}*/}
-            {/*    isPosted={isPosted}*/}
-            {/*/>*/}
+            <ReviewReplyBox
+                reviewId={reviewId}
+                replyText={replyText}
+                status={status}
+                isPosted={isPosted}
+            />
 
             {/* Actions */}
             <ReviewActions
