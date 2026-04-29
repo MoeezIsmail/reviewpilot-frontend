@@ -1,10 +1,10 @@
 import { LayoutDashboard, Star, BarChart3, Settings, LogOut } from "lucide-react"
-import { NavLink } from "react-router-dom"
-import {useAuth} from "../context/AuthContext.jsx";
+import { NavLink, useLocation } from "react-router-dom"
+import { useAuth } from "../context/AuthContext.jsx"
 
 const Sidebar = ({ setActivePage }) => {
-
-    const {signOut} = useAuth();
+    const { signOut } = useAuth()
+    const location = useLocation()
 
     const nav = [
         { name: "Dashboard", icon: LayoutDashboard, path: "/" },
@@ -14,58 +14,84 @@ const Sidebar = ({ setActivePage }) => {
     ]
 
     return (
-        <aside className="w-64 h-screen flex flex-col bg-gradient-to-b from-white to-indigo-50 border-r border-gray-200 shadow-sm">
+        <aside className="w-64 h-screen flex flex-col bg-gradient-to-b from-white to-indigo-50 border-r border-gray-200">
 
             {/* Logo */}
-            <div className="flex p-6 items-center gap-3 border-b">
-                <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+            <div className="flex p-6 items-center gap-3 border-b border-gray-100">
+                <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-200">
                     RP
                 </div>
-                <div className="font-bold text-xl text-indigo-600 tracking-wide">
+                <div className="font-semibold text-lg text-indigo-600 tracking-wide">
                     ReviewPilot
                 </div>
             </div>
 
             {/* Nav */}
-            <nav className="flex-1 px-3 py-4 space-y-2">
+            <nav className="flex-1 px-3 py-5 space-y-2">
 
                 {nav.map((item, i) => {
                     const Icon = item.icon
+                    const isActive = location.pathname === item.path
 
                     return (
                         <NavLink
                             key={i}
                             to={item.path}
                             end
-                            className={({ isActive }) =>
-                                `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 relative
+                            onClick={() => setActivePage(item.name)}
+                            className={`
+                                group relative flex items-center gap-3 px-4 py-3 rounded-xl
+                                transition-all duration-300 ease-out
                                 
                                 ${isActive
-                                    ? "bg-indigo-600 text-white shadow-md"
-                                    : "text-gray-600 hover:bg-indigo-100"
-                                }`
+                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-[1.02]"
+                                : "text-gray-600 hover:bg-white hover:shadow-md hover:scale-[1.01]"
                             }
-                            onClick={() => setActivePage(item.name)}
+                            `}
                         >
-                            {/* Active Indicator */}
-                            <span className={`absolute left-0 top-0 h-full w-1 rounded-r-full 
-                                ${location.pathname === item.path ? "bg-white" : "bg-transparent"}`} />
+                            {/* Glow Layer */}
+                            {isActive && (
+                                <div className="absolute inset-0 rounded-xl bg-indigo-600 blur-md opacity-20 -z-10"></div>
+                            )}
 
-                            <Icon size={18} className="group-hover:scale-110 transition" />
-                            <span className="font-medium">{item.name}</span>
+                            {/* Left Accent Line */}
+                            <div className={`
+                                absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full
+                                transition-all duration-300
+                                ${isActive ? "bg-white opacity-100" : "opacity-0 group-hover:opacity-40 bg-indigo-400"}
+                            `} />
+
+                            {/* Icon */}
+                            <Icon
+                                size={18}
+                                className={`
+                                    transition-all duration-300
+                                    ${isActive ? "scale-110" : "group-hover:scale-110"}
+                                `}
+                            />
+
+                            {/* Text */}
+                            <span className="font-medium tracking-tight">
+                                {item.name}
+                            </span>
                         </NavLink>
                     )
                 })}
             </nav>
 
             {/* Footer */}
-            <div className="p-4 border-t">
+            <div className="p-4 border-t border-gray-100">
                 <button
                     onClick={signOut}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-100 transition"
+                    className="
+                        w-full flex items-center gap-3 px-4 py-3 rounded-xl
+                        text-red-500 transition-all duration-300
+                        hover:bg-white hover:shadow-md hover:scale-[1.01]
+                        active:scale-[0.98]
+                    "
                 >
-                    <LogOut size={18} />
-                    <span className="font-medium !text-red-400 hover:!text-red-600">Sign Out</span>
+                    <LogOut size={18} className="transition group-hover:rotate-6" />
+                    <span className="font-medium">Sign Out</span>
                 </button>
             </div>
 
