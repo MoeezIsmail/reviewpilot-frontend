@@ -7,6 +7,7 @@ const useEditReply = (reviewId, initialReply) => {
     const [editedText, setEditedText] = useState(initialReply || "");
 
     const startEditing = () => {
+        console.log("Editing!")
         setEditedText(initialReply || "");
         setIsEditing(true);
     };
