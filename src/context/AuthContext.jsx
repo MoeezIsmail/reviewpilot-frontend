@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
 import { getProfile } from "../api/authApi.js";
 
 const AuthContext = createContext();
@@ -14,6 +13,11 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', t);
         setToken(t);
     };
+
+    const signOut = () => {
+        localStorage.setItem('token', null);
+        setToken(null);
+    }
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -38,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     return (
-        <AuthContext.Provider value={{ user, setUser, loading, error, saveToken }}>
+        <AuthContext.Provider value={{ user, setUser, loading, error, saveToken, signOut }}>
             {children}
         </AuthContext.Provider>
     );
