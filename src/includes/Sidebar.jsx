@@ -4,7 +4,7 @@ import {useAuth} from "../context/AuthContext.jsx";
 
 const Sidebar = ({ setActivePage }) => {
 
-    const [signOut] = useAuth();
+    const {signOut} = useAuth();
 
     const nav = [
         { name: "Dashboard", icon: LayoutDashboard, path: "/" },
