@@ -1,4 +1,4 @@
-import Button from "../../includes/Button.jsx";
+import Button from "../includes/Button.jsx";
 
 const ReviewActions = ({
                            status,
