@@ -17,10 +17,8 @@ export const ReviewsProvider = ({ children }) => {
     const [hasFetched, setHasFetched] = useState(false);
     const [isPostingAll, setIsPostingAll] = useState(false);
     const [aiReplies, setAiReplies] = useState({});
-
-    // ─── Reply Status Tracking ────────────────────────────────
-    // { [reviewId]: "idle" | "generating" | "ready" | "posting" | "posted" | "failed" }
     const [replyStatus, setReplyStatus] = useState({});
+    const [isGeneratingAll, setIsGeneratingAll] = useState(false);
 
     const { user } = useAuth();
     const { addToast } = useToast();
@@ -246,6 +244,46 @@ export const ReviewsProvider = ({ children }) => {
         setReplyStatus((prev) => ({ ...prev, [reviewId]: "ready" }));
     };
 
+    const generateAllReplies = async () => {
+        const pendingReviews = reviewsData.reviews.filter((review) => {
+            const reviewId = review.reviewId || review.name;
+            const status = replyStatus[reviewId];
+            return status === "idle" || status === "failed";
+        });
+
+        if (!pendingReviews.length) {
+            addToast("No pending reviews to generate replies for.", "error");
+            return;
+        }
+
+        setIsGeneratingAll(true);
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const review of pendingReviews) {
+            const reviewId = review.reviewId || review.name;
+            const reviewText = review.comment || review.snippet || "";
+
+            setReplyStatus((prev) => ({ ...prev, [reviewId]: "generating" }));
+            setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
+
+            try {
+                const reply = await fetchAiReply(reviewId, reviewText);
+                setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: false, reply } }));
+                setReplyStatus((prev) => ({ ...prev, [reviewId]: "ready" }));
+                successCount++;
+            } catch (err) {
+                setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: false, reply: "" } }));
+                setReplyStatus((prev) => ({ ...prev, [reviewId]: "failed" }));
+                failCount++;
+            }
+        }
+
+        setIsGeneratingAll(false);
+        if (successCount > 0) addToast(`${successCount} AI replies generated!`, "success");
+        if (failCount > 0) addToast(`${failCount} replies failed.`, "error");
+    };
+
     return (
         <ReviewsContext.Provider value={{
             reviewsData,
@@ -261,6 +299,8 @@ export const ReviewsProvider = ({ children }) => {
             isPostingAll,
             getReplyPerformanceStats,
             updateAiReply,
+            generateAllReplies,
+            isGeneratingAll,
             isAnyPlatformConnected: isAnyPlatformConnected(user),
         }}>
             {children}

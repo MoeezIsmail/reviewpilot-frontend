@@ -12,7 +12,18 @@ const ReviewsTable = () => {
     const [filter, setFilter] = useState("all");
     const [search, setSearch] = useState("");
 
-    const { reviewsData, loadNextPage, loading, aiReplies, replyStatus, refreshReviews, postAllReplies, isPostingAll } = useReviews();
+    const {
+        reviewsData,
+        loadNextPage,
+        loading,
+        aiReplies,
+        replyStatus,
+        refreshReviews,
+        postAllReplies,
+        isPostingAll,
+        generateAllReplies,
+        isGeneratingAll} = useReviews();
+
     const {user} = useAuth();
 
     useEffect(() => {
@@ -59,28 +70,31 @@ const ReviewsTable = () => {
         return replyStatus[reviewId] === "ready";  // ← sirf "ready" wale
     }).length;
 
+    const pendingGenerateCount = reviewsData.reviews.filter((review) => {
+        const reviewId = review.reviewId || review.name;
+        const status = replyStatus[reviewId];
+        return status === "idle" || status === "failed";
+    }).length;
+
     return (
         <div className="flex flex-col gap-4">
 
             {/* Toolbar */}
-            <div className="flex items-center justify-between">
-                <div className="flex gap-2">
-                    {["all", "replied", "pending"].map((f) => (
-                        <button
-                            key={f}
-                            onClick={() => setFilter(f)}
-                            className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition-all ${
-                                filter === f
-                                    ? "!bg-indigo-600 text-white"
-                                    : "!bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
-                            }`}
-                        >
-                            {f}
-                        </button>
-                    ))}
-                </div>
-
+            <div className="flex flex-col items-center gap-4">
                 <div className="flex items-center gap-3">
+                    {pendingGenerateCount > 0 && (
+                        <Button
+                            onClick={generateAllReplies}
+                            disabled={isGeneratingAll || isPostingAll}
+                            variant="primary"
+                        >
+                            {isGeneratingAll
+                                ? `Generating...`
+                                : `Generate All (${pendingGenerateCount})`
+                            }
+                        </Button>
+                    )}
+
                     {pendingRepliesCount > 0 && (
                         <Button
                             onClick={postAllReplies}
@@ -105,6 +119,22 @@ const ReviewsTable = () => {
                         <RefreshCw size={14} className={loading ? "animate-spin" : ""}/>
                         {loading ? "Loading..." : "Refresh"}
                     </button>
+                </div>
+
+                <div className="flex gap-2">
+                    {["all", "replied", "pending"].map((f) => (
+                        <button
+                            key={f}
+                            onClick={() => setFilter(f)}
+                            className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition-all ${
+                                filter === f
+                                    ? "!bg-indigo-600 text-white"
+                                    : "!bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
+                            }`}
+                        >
+                            {f}
+                        </button>
+                    ))}
                 </div>
             </div>
 
