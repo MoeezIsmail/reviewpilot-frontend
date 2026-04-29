@@ -80,7 +80,7 @@ const ReviewsTable = () => {
         <div className="flex flex-col gap-4">
 
             {/* Toolbar */}
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3">
                     {pendingGenerateCount > 0 && (
                         <Button
