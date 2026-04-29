@@ -46,18 +46,18 @@ const ReviewReplyBox = ({ reviewId, replyText, status, isPosted }) => {
                             {editedText.length} characters
                         </span>
                         <div className="flex gap-2">
-                            <button
+                            <div
                                 onClick={cancelEditing}
-                                className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 px-2 py-1 rounded border border-gray-200 hover:bg-gray-100"
+                                className="flex items-center justify-center !text-red-500 hover:!text-white-700 px-2 py-1 rounded border border-red-200 hover:bg-gray-100"
                             >
-                                <X size={11} /> Cancel
-                            </button>
+                                <X size={24} />
+                            </div>
                             <button
                                 onClick={saveEdit}
                                 disabled={!editedText.trim()}
-                                className="flex items-center gap-1 text-xs text-white !bg-indigo-600 hover:!bg-indigo-700 px-2 py-1 rounded disabled:opacity-50"
+                                className="flex items-center justify-center !text-green-500 hover:!bg-green-700 px-2 py-1 rounded disabled:opacity-50"
                             >
-                                <Check size={11} /> Save
+                                <Check size={24} />
                             </button>
                         </div>
                     </div>
