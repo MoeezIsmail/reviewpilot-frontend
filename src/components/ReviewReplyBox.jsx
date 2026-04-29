@@ -23,7 +23,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                 </p>
 
                 {!isPosted && !isEditing && (
-                    <div onClick={startEditing} className="flex items-center justify-center !text-gray-500 hover:!text-gray-700 p-2 rounded-full border border-gray-200 hover:bg-gray-200">
+                    <div onClick={startEditing} className="flex cursor-pointer items-center justify-center !text-gray-500 hover:!text-gray-700 p-2 rounded-full border border-gray-200 hover:bg-gray-200">
                         <Pencil size={18}/>
                     </div>
                 )}

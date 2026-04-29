@@ -1,33 +1,32 @@
-import { LayoutDashboard, Star, BarChart3, Settings } from "lucide-react"
+import { LayoutDashboard, Star, BarChart3, Settings, LogOut } from "lucide-react"
 import { NavLink } from "react-router-dom"
 
-const Sidebar = ({ setActivePage }) => {
+const Sidebar = ({ setActivePage, onSignOut }) => {
 
     const nav = [
         { name: "Dashboard", icon: LayoutDashboard, path: "/" },
         { name: "Reviews", icon: Star, path: "/reviews" },
-        // { name: "Records", icon: Star, path: "/" },
         { name: "Analytics", icon: BarChart3, path: "/analytics" },
         { name: "Settings", icon: Settings, path: "/settings" }
     ]
 
     return (
-        <aside className="w-64 bg-white shadow-md border-r border-gray-300 h-screen">
+        <aside className="w-64 h-screen flex flex-col bg-gradient-to-b from-white to-indigo-50 border-r border-gray-200 shadow-sm">
 
-            <div className="flex p-6 items-center gap-2">
-                <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">
+            {/* Logo */}
+            <div className="flex p-6 items-center gap-3 border-b">
+                <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
                     RP
                 </div>
-
-                <div className="font-bold text-xl text-indigo-600">
+                <div className="font-bold text-xl text-indigo-600 tracking-wide">
                     ReviewPilot
                 </div>
             </div>
 
-            <nav className="px-4 space-y-2">
+            {/* Nav */}
+            <nav className="flex-1 px-3 py-4 space-y-2">
 
                 {nav.map((item, i) => {
-
                     const Icon = item.icon
 
                     return (
@@ -36,23 +35,36 @@ const Sidebar = ({ setActivePage }) => {
                             to={item.path}
                             end
                             className={({ isActive }) =>
-                                `flex items-center gap-3 p-3 rounded-lg transition font-medium
-                ${
-                                    isActive
-                                        ? "bg-indigo-600 !text-white"
-                                        : "!text-gray-700 hover:bg-indigo-100"
+                                `group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 relative
+                                
+                                ${isActive
+                                    ? "bg-indigo-600 text-white shadow-md"
+                                    : "text-gray-600 hover:bg-indigo-100"
                                 }`
                             }
                             onClick={() => setActivePage(item.name)}
                         >
-                            <Icon size={18} />
-                            <span>{item.name}</span>
+                            {/* Active Indicator */}
+                            <span className={`absolute left-0 top-0 h-full w-1 rounded-r-full 
+                                ${location.pathname === item.path ? "bg-white" : "bg-transparent"}`} />
+
+                            <Icon size={18} className="group-hover:scale-110 transition" />
+                            <span className="font-medium">{item.name}</span>
                         </NavLink>
                     )
                 })}
-
             </nav>
-            
+
+            {/* Footer */}
+            <div className="p-4 border-t">
+                <button
+                    onClick={onSignOut}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-100 transition"
+                >
+                    <LogOut size={18} />
+                    <span className="font-medium !text-red-400 hover:!text-red-600">Sign Out</span>
+                </button>
+            </div>
 
         </aside>
     )
