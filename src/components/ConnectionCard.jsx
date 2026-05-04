@@ -1,12 +1,14 @@
 const ConnectionCard = ({
-                                           icon,
-                                           name,
-                                           description,
-                                           connected,
-                                           connectedAt,
-                                           onConnect,
-                                           comingSoon = false,
-                                       }) => {
+                            icon,
+                            name,
+                            description,
+                            connected,
+                            connectedAt,
+                            onConnect,
+                            onDisconnect,
+                            disconnecting,
+                            comingSoon = false,
+                        }) => {
     const formatDate = (dateStr) => {
         if (!dateStr) return null;
         return new Date(dateStr).toLocaleDateString('en-US', {
@@ -21,7 +23,7 @@ const ConnectionCard = ({
                     "border-gray-200"
         }`}>
             <div className="flex items-center gap-4">
-                <img src={icon} className="w-8 h-8" alt={name} />
+                <img src={icon} className="w-8 h-8" alt={name}/>
                 <div>
                     <div className="flex items-center gap-2">
                         <p className="font-semibold text-sm text-black">{name}</p>
@@ -50,7 +52,10 @@ const ConnectionCard = ({
                     Soon
                 </button>
             ) : connected ? (
-                <button className="border border-red-200 text-red-500 text-sm px-4 py-2 rounded-lg hover:bg-red-50 transition-all">
+                <button
+                    onClick={onDisconnect}
+                    disabled={disconnecting}
+                    className="border border-red-200 text-red-500 text-sm px-4 py-2 rounded-lg hover:bg-red-50 transition-all">
                     Disconnect
                 </button>
             ) : (

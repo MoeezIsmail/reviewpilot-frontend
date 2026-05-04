@@ -5,7 +5,7 @@ import ConnectionCard from "../components/ConnectionCard.jsx";
 import useSettings from "../hooks/useSettings.js";
 
 const Settings = () => {
-    const { connections, loading, handleConnectGoogle } = useSettings();
+    const { connections, loading, handleConnectGoogle, handleDisconnect, disconnecting } = useSettings();
     const { addToast } = useToast();
     const [searchParams] = useSearchParams();
 
@@ -58,6 +58,8 @@ const Settings = () => {
                             connected={connections.google.connected}
                             connectedAt={connections.google.connectedAt}
                             onConnect={handleConnectGoogle}
+                            onDisconnect={() => handleDisconnect("google")}
+                            disconnecting={disconnecting === "google"}
                         />
                         <ConnectionCard
                             icon="https://www.yelp.com/favicon.ico"
