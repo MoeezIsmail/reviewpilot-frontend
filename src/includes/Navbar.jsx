@@ -5,7 +5,7 @@ const Navbar = ({pageTitle}) => {
     const {user} = useAuth();
 
     return (
-        <header className={`px-4 py-2`}>
+        <header>
             <div className="flex items-center justify-between bg-indigo-600 !text-white px-6 py-4 border-b border-gray-300 rounded-lg">
                 <h1 className="text-lg font-semibold">
                     {pageTitle || "Dashboard"}
