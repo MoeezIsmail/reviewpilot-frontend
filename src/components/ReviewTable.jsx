@@ -105,7 +105,7 @@ const ReviewsTable = () => {
             />
 
             {/* Reviews */}
-            {filteredReviews?.length > 0 ? (<div className="flex flex-col gap-3 max-h-[70vh] overflow-y-auto pr-2">
+            {filteredReviews?.length > 0 ? (<div className="flex flex-col gap-3 max-h-[68vh] overflow-y-auto pr-2">
                     {filteredReviews.map((review, i) => (<ReviewCard key={review.name || i} review={review}/>))}
                 </div>) : (
                 <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-96">
