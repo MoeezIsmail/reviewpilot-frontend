@@ -14,7 +14,7 @@ const Sidebar = ({ setActivePage }) => {
     ]
 
     return (
-        <aside className="w-64 h-screen m-4 flex flex-col border-r border-gray-200 rounded-lg bg-indigo-600 !text-white">
+        <aside className="w-64 h-screen flex flex-col bg-gradient-to-b from-white to-indigo-50 border-r border-gray-200">
 
             {/* Logo */}
             <div className="flex p-6 items-center gap-3 border-b border-gray-100">
