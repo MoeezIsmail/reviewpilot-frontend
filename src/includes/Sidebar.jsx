@@ -58,7 +58,7 @@ const Sidebar = ({ setActivePage }) => {
                             <div className={`
                                 absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full
                                 transition-all duration-300
-                                ${isActive ? "bg-indigo-400 opacity-100" : "opacity-0 group-hover:opacity-40 bg-indigo-600"}
+                                ${isActive ? "bg-indigo-600 opacity-100" : "opacity-0 group-hover:opacity-40 bg-indigo-600"}
                             `} />
 
                             {/* Icon */}
