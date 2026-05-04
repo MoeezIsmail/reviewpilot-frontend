@@ -64,7 +64,8 @@ const ReviewsTable = () => {
         return status === "idle" || status === "failed";
     }).length;
 
-    return (<div className="flex flex-col gap-4">
+    return (
+        <div className="flex flex-col gap-4">
 
             {/* Top Toolbar — Bulk Actions + Refresh */}
             <div className="flex items-center justify-end gap-3">
@@ -104,7 +105,7 @@ const ReviewsTable = () => {
             />
 
             {/* Reviews */}
-            {filteredReviews?.length > 0 ? (<div className="flex flex-col gap-3 max-h-[74vh] overflow-y-auto pr-2">
+            {filteredReviews?.length > 0 ? (<div className="flex flex-col gap-3 max-h-[70vh] overflow-y-auto pr-2">
                     {filteredReviews.map((review, i) => (<ReviewCard key={review.name || i} review={review}/>))}
                 </div>) : (
                 <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-96">
@@ -122,7 +123,8 @@ const ReviewsTable = () => {
                         {loading ? "Loading..." : "Load More"}
                     </button>
                 </div>)}
-        </div>);
+        </div>
+    );
 };
 
 export default ReviewsTable;
