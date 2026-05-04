@@ -14,10 +14,10 @@ const Sidebar = ({ setActivePage }) => {
     ]
 
     return (
-        <aside className="w-64 h-screen flex flex-col border-r border-gray-200 rounded-lg">
+        <aside className="w-64 h-screen m-4 flex flex-col border-r border-gray-200 rounded-lg bg-indigo-600 !text-white">
 
             {/* Logo */}
-            <div className="flex p-6 items-center gap-3 border-b border-gray-100 bg-gradient-to-b from-white to-indigo-50">
+            <div className="flex p-6 items-center gap-3 border-b border-gray-100">
                 <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-200">
                     RP
                 </div>
@@ -27,7 +27,7 @@ const Sidebar = ({ setActivePage }) => {
             </div>
 
             {/* Nav */}
-            <nav className="flex-1 px-3 py-5 space-y-2 bg-indigo-600">
+            <nav className="flex-1 px-3 py-5 space-y-2">
 
                 {nav.map((item, i) => {
                     const Icon = item.icon
@@ -80,7 +80,7 @@ const Sidebar = ({ setActivePage }) => {
             </nav>
 
             {/* Footer */}
-            <div className="p-4 border-t border-gray-100 bg-red-300">
+            <div className="p-4 border-t border-gray-100">
                 <button
                     onClick={signOut}
                     className="
