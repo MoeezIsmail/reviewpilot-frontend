@@ -45,7 +45,7 @@ const Layout = () => {
 
                 <Navbar pageTitle={activePage} />
 
-                <main className="p-6 overflow-y-auto bg-gray-100 h-screen">
+                <main className="p-4 overflow-y-auto bg-gray-100 h-screen">
                     <Outlet />
                 </main>
 
