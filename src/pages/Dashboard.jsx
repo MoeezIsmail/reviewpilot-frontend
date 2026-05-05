@@ -6,11 +6,12 @@ import { useReviews } from "../context/ReviewsContext.jsx";
 import calculateStats from "../utils/reviewAnalytics.js";
 import {useNavigate} from "react-router-dom";
 import {useToast} from "../components/ToastProvider.jsx";
-import { RefreshCw } from 'lucide-react';
 import Button from "../includes/Button.jsx";
+import {useAuth} from "../context/AuthContext.jsx";
 
 const Dashboard = () => {
     const { reviewsData, isAnyPlatformConnected, refreshReviews, loading  } = useReviews();
+    const { loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const {addToast} = useToast();
     const [stats, setStats] = useState({
@@ -19,23 +20,19 @@ const Dashboard = () => {
         positiveReviews: 0,
         negativeReviews: 0,
     });
-    const hasRun = useRef(false);
-
-    console.log('reviewsData: ', reviewsData);
 
     useEffect(() => {
-        if (reviewsData && reviewsData.reviews) {
-            const newStats = calculateStats(reviewsData.reviews);
-            setStats(newStats);
+        if (reviewsData?.reviews) {
+            setStats(calculateStats(reviewsData.reviews));
         }
     }, [reviewsData]);
 
     useEffect(() => {
-        if (isAnyPlatformConnected === false) {
+        if (!authLoading && isAnyPlatformConnected === false) {
             addToast('No platform connected!', 'error');
-            navigate('/connect-platforms');
+            navigate('/settings');
         }
-    }, [isAnyPlatformConnected]);
+    }, [isAnyPlatformConnected, authLoading]);
 
     if (!reviewsData) return <div>Loading...</div>;
 

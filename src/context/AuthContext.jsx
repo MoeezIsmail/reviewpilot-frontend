@@ -19,10 +19,22 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
     }
 
+    const clearAuth = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isGoogleUser');
+        setToken(null);
+        setUser(null);
+    };
+
+    const updateUser = (updatedUser) => {
+        setUser(updatedUser);
+    };
+
     useEffect(() => {
         const fetchProfile = async () => {
             if (!token) {
                 setLoading(false);
+                setUser(null);
                 return;
             }
 
@@ -31,10 +43,10 @@ export const AuthProvider = ({ children }) => {
                 setUser(res.data.message);
             } catch (err) {
                 setError("Failed to fetch profile, please try again.");
-                localStorage.removeItem("token");
+                clearAuth();
+            } finally {
+                setLoading(false);
             }
-
-            setLoading(false);
         }
 
         fetchProfile();
@@ -42,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     return (
-        <AuthContext.Provider value={{ user, setUser, loading, error, saveToken, signOut }}>
+        <AuthContext.Provider value={{ user, setUser, updateUser, loading, error, saveToken, signOut, clearAuth }}>
             {children}
         </AuthContext.Provider>
     );

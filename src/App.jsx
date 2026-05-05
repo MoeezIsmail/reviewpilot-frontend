@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route, Outlet} from "react-router-dom"
+import {BrowserRouter, Routes, Route, Outlet, Navigate} from "react-router-dom"
 import Dashboard from "./pages/Dashboard"
 import Reviews from "./pages/Reviews"
 import Sidebar from "./includes/Sidebar.jsx";
@@ -19,16 +19,13 @@ axios.interceptors.response.use(
     response => response,
     error => {
         if (error.response && error.response.status === 401) {
-
             const token = localStorage.getItem("token")
 
             if (token) {
                 localStorage.removeItem("token")
                 window.location.href = "/auth"
             }
-
         }
-
         return Promise.reject(error)
     }
 )
@@ -38,7 +35,6 @@ const Layout = () => {
 
     return (
         <div className="flex h-screen w-screen bg-gray-100">
-
             <Sidebar setActivePage={setActivePage} />
 
             <div className="flex flex-col flex-1">
@@ -48,27 +44,40 @@ const Layout = () => {
                 <main className="p-4 overflow-y-auto bg-gray-100 h-screen">
                     <Outlet />
                 </main>
-
             </div>
-
         </div>
     )
 }
+
+const OnboardingGuard = () => {
+    const { user, loading } = useAuth();
+
+    if (loading) return null;
+
+    // Onboarding complete hai → dashboard pe bhejo
+    if (user?.onboardingCompleted) {
+        return <Navigate to="/" replace />;
+    }
+
+    return <Outlet />;
+};
 
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route element={<PublicRoute />}>
-                    <Route path="/auth/success" element={<AuthSuccess />} />
                     <Route path="/auth" element={<Auth />} />
                 </Route>
 
+                <Route path="/auth/success" element={<AuthSuccess />} />
 
                 <Route element={<ProtectedRoute />}>
 
-                    <Route path="/connect-platforms" element={<ConnectPlatforms />} />  {/* ← Protected, no layout */}
-                    <Route path="/onboarding" element={<OnboardingInfo />} />
+                    <Route element={<OnboardingGuard />}>
+                        <Route path="/connect-platforms" element={<ConnectPlatforms />} />
+                        <Route path="/onboarding" element={<OnboardingInfo />} />
+                    </Route>
 
                     <Route element={<Layout />}>
                         <Route path="/" element={<Dashboard />} />
@@ -76,6 +85,7 @@ const App = () => {
                         <Route path="/analytics" element={<Analytics />} />
                         <Route path="/settings" element={<Settings />} />
                     </Route>
+
                 </Route>
             </Routes>
         </BrowserRouter>

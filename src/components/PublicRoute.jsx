@@ -1,14 +1,20 @@
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const PublicRoute = () => {
-    const token = localStorage.getItem("token")
+    const { user, loading } = useAuth();
 
-    // Agar user login hai → dashboard redirect
-    if (token) {
-        return <Navigate to="/" replace />
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
     }
 
-    return <Outlet />
-}
+    if (user) return <Navigate to="/" replace />;
 
-export default PublicRoute
+    return <Outlet />;
+};
+
+export default PublicRoute;

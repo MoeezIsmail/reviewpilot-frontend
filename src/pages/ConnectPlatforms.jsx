@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from "react";
-import { useToast } from "../components/ToastProvider.jsx";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import {useEffect, useRef, useState} from "react";
+import {useToast} from "../components/ToastProvider.jsx";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {ArrowRight, CheckCircle2} from 'lucide-react';
 import Button from "../includes/Button.jsx";
 import axios from "axios";
 import PlatformCard from "../components/PlatformCard.jsx";
 import PLATFORMS from "../utils/connectPlatformUtils.jsx";
-import { BACKEND_URL } from "../constants/urls.js";
+import {BACKEND_URL} from "../constants/urls.js";
 import {useAuth} from "../context/AuthContext.jsx";
 
 export default function ConnectPlatforms() {
-    const { addToast } = useToast();
-    const { user } = useAuth();
+    const {addToast} = useToast();
+    const {user} = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [googleConnected, setGoogleConnected] = useState(false);
@@ -23,12 +23,9 @@ export default function ConnectPlatforms() {
         const google = searchParams.get("google");
         const error = searchParams.get("error");
 
-        if (!google && !error) {
-            const profile = user?.platforms?.google?.accessToken;
-            if (profile) {
-                navigate("/");
-                return;
-            }
+        if (user?.onboardingCompleted && !google && !error) {
+            navigate("/");
+            return;
         }
 
         if (hasRun.current) return;
@@ -50,16 +47,16 @@ export default function ConnectPlatforms() {
         } else if (error) {
             addToast("Connection failed. Try again.", "error");
         }
-    }, []);
+    }, [user]);
 
     const handleConnectGoogle = async () => {
         try {
             const token = localStorage.getItem("token");
             await axios.post(
                 `${BACKEND_URL}/api/auth/google/init`,
-                { from: 'connect-platforms' },
+                {from: 'connect-platforms'},
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {Authorization: `Bearer ${token}`},
                     withCredentials: true,
                 }
             );
@@ -89,7 +86,7 @@ export default function ConnectPlatforms() {
                             Connect Platform
                         </span>
                     </div>
-                    <div className="flex-1 h-px bg-gray-200 mx-2" />
+                    <div className="flex-1 h-px bg-gray-200 mx-2"/>
                     <div className="flex items-center gap-2">
                         <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center">
                             <span className="text-gray-400 text-xs font-bold">2</span>
@@ -121,7 +118,7 @@ export default function ConnectPlatforms() {
                     disabled={!googleConnected}
                     onClick={() => navigate("/onboarding")}
                 >
-                    Continue <ArrowRight size={18} />
+                    Continue <ArrowRight size={18}/>
                 </Button>
 
                 <p className="text-xs text-gray-400 text-center mt-4">

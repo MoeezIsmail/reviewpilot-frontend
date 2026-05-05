@@ -3,9 +3,11 @@ import { useToast } from "../components/ToastProvider.jsx";
 import {disconnectPlatform, getConnectionStatus} from "../api/settingsApi.js";
 import { BACKEND_URL } from "../constants/urls.js";
 import axios from "axios";
+import {useAuth} from "../context/AuthContext.jsx";
 
 const useSettings = () => {
     const { addToast } = useToast();
+    const { user, updateUser } = useAuth();
 
     const [connections, setConnections] = useState({
         google: { connected: false, connectedAt: null },
@@ -64,6 +66,16 @@ const useSettings = () => {
                 ...prev,
                 [platform]: { connected: false, connectedAt: null },
             }));
+
+            if (user) {
+                updateUser({
+                    ...user,
+                    platforms: {
+                        ...user.platforms,
+                        [platform]: null,
+                    }
+                });
+            }
 
             addToast(`${platform === "google" ? "Google" : "Yelp"} disconnected successfully.`, "success");
         } catch (err) {
