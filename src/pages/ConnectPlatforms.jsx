@@ -11,20 +11,20 @@ import {useAuth} from "../context/AuthContext.jsx";
 
 export default function ConnectPlatforms() {
     const {addToast} = useToast();
-    const {user} = useAuth();
+    const {user, loading} = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [googleConnected, setGoogleConnected] = useState(false);
     const hasRun = useRef(false);
 
     useEffect(() => {
-        if (!user && user !== null) return;
+        if (loading) return;
 
         const google = searchParams.get("google");
         const error = searchParams.get("error");
 
         if (user?.onboardingCompleted && !google && !error) {
-            navigate("/");
+            navigate("/", { replace: true });
             return;
         }
 
@@ -47,7 +47,7 @@ export default function ConnectPlatforms() {
         } else if (error) {
             addToast("Connection failed. Try again.", "error");
         }
-    }, [user]);
+    }, [user, loading]);
 
     const handleConnectGoogle = async () => {
         try {

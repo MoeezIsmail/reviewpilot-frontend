@@ -13,7 +13,7 @@ const Dashboard = () => {
     const { reviewsData, isAnyPlatformConnected, refreshReviews, loading  } = useReviews();
     const { loading: authLoading } = useAuth();
     const navigate = useNavigate();
-    const {addToast} = useToast();
+    const { addToast } = useToast();
     const [stats, setStats] = useState({
         totalReviews: 0,
         averageRating: 0,
@@ -28,11 +28,14 @@ const Dashboard = () => {
     }, [reviewsData]);
 
     useEffect(() => {
-        if (!authLoading && isAnyPlatformConnected === false) {
-            addToast('No platform connected!', 'error');
+        if (authLoading || loading) return;
+
+        if (isAnyPlatformConnected === false) {
+            addToast('Please connect a platform first.', 'error');
             navigate('/settings');
         }
-    }, [isAnyPlatformConnected, authLoading]);
+
+    }, [isAnyPlatformConnected, authLoading, loading]);
 
     if (!reviewsData) return <div>Loading...</div>;
 

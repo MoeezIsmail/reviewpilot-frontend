@@ -19,21 +19,21 @@ const AuthSuccess = () => {
         const isNewUser = searchParams.get("isNewUser") === "true";
         const isAnyPlatformConnected = searchParams.get("isAnyPlatformConnected") === "true";
 
-        if (token) {
-            saveToken(token);
-            localStorage.setItem("isGoogleUser", "true");
+        if (!token) {
+            addToast("Authentication failed. Please try again.", 'error');
+            navigate("/auth");
+            return;
+        }
 
-            if (isNewUser || !isAnyPlatformConnected) {
-                addToast("Welcome to ReviewPilot!", 'success');
-                console.log('navigating to connect-platform');
-                navigate("/connect-platforms");
-            } else {
-                addToast("Pleasure to see you back!", 'success');
-                navigate("/");
-            }
+        saveToken(token);
+        localStorage.setItem("isGoogleUser", "true");
+
+        if (isNewUser || !isAnyPlatformConnected) {
+            addToast("Welcome to ReviewPilot!", 'success');
+            navigate("/connect-platforms", { replace: true });
         } else {
-            addToast("Error: please tru again!", 'error');
-            navigate("/auth?error=google_failed");
+            addToast("Welcome back!", 'success');
+            navigate("/", { replace: true });
         }
     }, []);
 

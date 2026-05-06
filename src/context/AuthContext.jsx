@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
             }
         }
 
+        setLoading(true);
         fetchProfile();
 
     }, [token]);
