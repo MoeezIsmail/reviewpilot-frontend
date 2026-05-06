@@ -53,14 +53,14 @@ const ReviewFilters = ({
                     </div>
 
                     {/* Sort + Rating */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 bg-red-400">
                         {/* Rating Filter */}
                         <div className="relative">
                             <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
                             <select
                                 value={ratingFilter}
                                 onChange={(e) => setRatingFilter(e.target.value)}
-                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
+                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4
                                        text-gray-700 bg-white shadow-sm cursor-pointer
                                        hover:shadow-md transition-all duration-200
                                        focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
@@ -82,7 +82,7 @@ const ReviewFilters = ({
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
-                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
+                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4
                                       text-gray-700 bg-white shadow-sm cursor-pointer
                                       hover:shadow-md transition-all duration-200
                                       focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
