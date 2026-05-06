@@ -37,7 +37,7 @@ const ReviewFilters = ({
                 <div className="flex gap-6">
                     {/* Status Filters */}
                     <div className="flex gap-2 rounded-xl p-2 !bg-gray-50 border-r border-gray-50 ">
-                        {["All", "Replied", "Pending"].map((f) => (
+                        {["all", "replied", "pending"].map((f) => (
                             <button
                                 key={f}
                                 onClick={() => setFilter(f)}
@@ -47,13 +47,13 @@ const ReviewFilters = ({
                                         : "!bg-gray-50 border border-gray-200 text-gray-600 hover:border-indigo-300"
                                 }`}
                             >
-                                {f}
+                                {f.charAt(0).toUpperCase() + f.slice(1)}
                             </button>
                         ))}
                     </div>
 
                     {/* Sort + Rating */}
-                    <div className="flex items-center gap-2 bg-red-400">
+                    <div className="flex items-center gap-2">
                         {/* Rating Filter */}
                         <div className="relative">
                             <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
