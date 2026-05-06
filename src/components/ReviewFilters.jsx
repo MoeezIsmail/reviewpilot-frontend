@@ -20,10 +20,10 @@ const ReviewFilters = ({
         <div className="flex flex-col gap-3">
 
             {/* Row 1 — Status Filter + Sort + Rating */}
-            <div className="flex items-center justify-start flex-wrap gap-6 rounded-xl p-2">
+            <div className="flex items-center justify-start flex-wrap gap-6 rounded-xl p-2 !bg-white">
 
                 {/* Status Filters */}
-                <div className="flex gap-2 rounded-xl p-2 !bg-white">
+                <div className="flex gap-2 rounded-xl p-2 !bg-gray-50 border-r-2 border-gray-50 ">
                     {["all", "Unreplied"].map((f) => (
                         <button
                             key={f}
@@ -40,12 +40,12 @@ const ReviewFilters = ({
                 </div>
 
                 {/* Sort + Rating */}
-                <div className="flex items-center gap-2 p-2 border-r-2 border-gray-20">
+                <div className="flex items-center gap-2 p-2">
                     {/* Rating Filter */}
                     <select
                         value={ratingFilter}
                         onChange={(e) => setRatingFilter(e.target.value)}
-                        className="text-sm border border-gray-200 rounded-xl px-3 py-1.5 text-gray-600 focus:outline-none focus:border-indigo-400 bg-white"
+                        className="text-sm border border-gray-200 rounded-xl px-3 py-4 text-gray-600 focus:outline-none focus:border-indigo-400 bg-white"
                     >
                         {RATING_OPTIONS.map((opt) => (
                             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -56,7 +56,7 @@ const ReviewFilters = ({
                     <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
-                        className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none focus:border-indigo-400 bg-white"
+                        className="text-sm border border-gray-200 rounded-xl px-3 py-4 text-gray-600 focus:outline-none focus:border-indigo-400 bg-white"
                     >
                         {SORT_OPTIONS.map((opt) => (
                             <option key={opt.value} value={opt.value}>{opt.label}</option>
