@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route, Outlet, Navigate} from "react-router-dom"
+import {Routes, Route, Outlet, Navigate} from "react-router-dom"
 import Dashboard from "./pages/Dashboard"
 import Reviews from "./pages/Reviews"
 import Sidebar from "./includes/Sidebar.jsx";
@@ -68,31 +68,29 @@ const OnboardingGuard = () => {
 
 const App = () => {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route element={<PublicRoute />}>
-                    <Route path="/auth" element={<Auth />} />
+        <Routes>
+            <Route element={<PublicRoute />}>
+                <Route path="/auth" element={<Auth />} />
+            </Route>
+
+            <Route path="/auth/success" element={<AuthSuccess />} />
+
+            <Route element={<ProtectedRoute />}>
+
+                <Route element={<OnboardingGuard />}>
+                    <Route path="/connect-platforms" element={<ConnectPlatforms />} />
+                    <Route path="/onboarding" element={<OnboardingInfo />} />
                 </Route>
 
-                <Route path="/auth/success" element={<AuthSuccess />} />
-
-                <Route element={<ProtectedRoute />}>
-
-                    <Route element={<OnboardingGuard />}>
-                        <Route path="/connect-platforms" element={<ConnectPlatforms />} />
-                        <Route path="/onboarding" element={<OnboardingInfo />} />
-                    </Route>
-
-                    <Route element={<Layout />}>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/reviews" element={<Reviews />} />
-                        <Route path="/analytics" element={<Analytics />} />
-                        <Route path="/settings" element={<Settings />} />
-                    </Route>
-
+                <Route element={<Layout />}>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/reviews" element={<Reviews />} />
+                    <Route path="/analytics" element={<Analytics />} />
+                    <Route path="/settings" element={<Settings />} />
                 </Route>
-            </Routes>
-        </BrowserRouter>
+
+            </Route>
+        </Routes>
     )
 }
 

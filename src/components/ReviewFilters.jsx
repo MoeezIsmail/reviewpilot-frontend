@@ -52,7 +52,7 @@ const ReviewFilters = ({
                         ))}
                     </div>
 
-                    <div className="w-[2px] h-10 !bg-gray-200"></div>
+                    <div className="w-[2px] h-8 !bg-gray-200"></div>
 
                     {/* Sort + Rating */}
                     <div className="flex items-center gap-2">

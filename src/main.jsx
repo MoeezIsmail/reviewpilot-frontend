@@ -5,14 +5,17 @@ import App from './App.jsx'
 import {ToastProvider} from "./components/ToastProvider.jsx";
 import {AuthProvider} from "./context/AuthContext.jsx";
 import {ReviewsProvider} from "./context/ReviewsContext.jsx";
+import {BrowserRouter} from "react-router-dom";
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <AuthProvider>
             <ToastProvider>
-                <ReviewsProvider>
-                    <App/>
-                </ReviewsProvider>
+                <BrowserRouter>
+                    <ReviewsProvider>
+                        <App/>
+                    </ReviewsProvider>
+                </BrowserRouter>
             </ToastProvider>
         </AuthProvider>
     </StrictMode>,

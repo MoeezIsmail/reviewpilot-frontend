@@ -15,8 +15,8 @@ const Settings = () => {
         const error = searchParams.get("error");
 
         if (google === "success") addToast("Google Business connected!", "success");
-        if (error === "state_expired") addToast("Session expired. Try again.", "error");
-        if (error) addToast("Connection failed. Try again.", "error");
+        else if (error === "state_expired") addToast("Session expired. Try again.", "error");
+        else if (error) addToast("Connection failed. Try again.", "error");
     }, []);
 
     return (

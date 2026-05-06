@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext.jsx";
 import { fetchReviews, fetchAiReply, postReply } from "../api/reviewsApi.js";
 import { useToast } from "../components/ToastProvider.jsx";
@@ -22,6 +23,7 @@ export const ReviewsProvider = ({ children }) => {
 
     const { user } = useAuth();
     const { addToast } = useToast();
+    const navigate = useNavigate();
 
     const isAnyPlatformConnected = (user) => {
         return !!(user?.platforms?.google?.accessToken || user?.platforms?.yelp?.accessToken);
@@ -51,7 +53,7 @@ export const ReviewsProvider = ({ children }) => {
             const message = err.response?.data?.message;
             if (message === "Business location not found. Please reconnect Google.") {
                 addToast("Please reconnect your Google Business account.", "error");
-                window.location.href = "/settings";
+                navigate("/settings");
             } else {
                 addToast("Failed to fetch reviews", "error");
             }
