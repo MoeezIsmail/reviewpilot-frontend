@@ -14,6 +14,7 @@ import ConnectPlatforms from "./pages/ConnectPlatforms.jsx";
 import Auth from "./pages/Auth.jsx";
 import OnboardingInfo from "./pages/OnboardingInfo.jsx";
 import ReviewActions from "./components/ReviewActions.jsx";
+import {useAuth} from "./context/AuthContext.jsx";
 
 axios.interceptors.response.use(
     response => response,
