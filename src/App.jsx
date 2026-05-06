@@ -53,16 +53,12 @@ const Layout = () => {
 const OnboardingGuard = () => {
     const { user, loading } = useAuth();
 
-    console.log('user: ', user);
-
     if (loading) return null;
 
     if (user?.onboardingCompleted) {
         console.log('In if');
         return <Navigate to="/" replace />;
     }
-
-    console.log('condition failed');
 
     return <Outlet />;
 };

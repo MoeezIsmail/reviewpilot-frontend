@@ -7,13 +7,16 @@ import {useEffect} from "react";
 
 export default function Analytics() {
 
-    const { loading: authLoading } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const { isAnyPlatformConnected } = useReviews();
     const navigate = useNavigate();
     const {addToast} = useToast();
 
     useEffect(() => {
-        if (!authLoading && isAnyPlatformConnected === false) {
+        if (authLoading) return;
+        if (!user?.onboardingCompleted) navigate("/connect-platforms"); // ← yahan bhi
+
+        if (isAnyPlatformConnected === false) {
             addToast('No platform connected!', 'error');
             navigate('/settings');
         }
