@@ -22,8 +22,16 @@ const ReviewFilters = ({
 
     return (
         <div className="flex flex-col gap-3">
+            <div className="relative">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
+                <input
+                    placeholder="Search by customer name or review text..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full border border-gray-200 bg-white rounded-lg pl-8 pr-4 py-2 text-sm focus:border-indigo-400 focus:outline-none"
+                />
+            </div>
 
-            {/* Row 1 — Status Filter + Sort + Rating */}
             <div className="flex items-center justify-between flex-wrap gap-6 rounded-xl p-2 !bg-white">
 
                 <div className="flex gap-6">
@@ -47,11 +55,12 @@ const ReviewFilters = ({
                     {/* Sort + Rating */}
                     <div className="flex items-center gap-2 p-2">
                         {/* Rating Filter */}
-                        <div className="relative" onChange={(e) => setRatingFilter(e.target.value)}>
+                        <div className="relative">
                             <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
                             <select
                                 value={ratingFilter}
-                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
+                                onChange={(e) => setRatingFilter(e.target.value)}
+                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4
                                        text-gray-700 bg-white shadow-sm cursor-pointer
                                        hover:shadow-md transition-all duration-200
                                        focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
@@ -68,11 +77,12 @@ const ReviewFilters = ({
                         </div>
 
                         {/* Sort */}
-                        <div className="relative" onChange={(e) => setSortBy(e.target.value)}>
+                        <div className="relative">
                             <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
                             <select
                                 value={sortBy}
-                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4
                                       text-gray-700 bg-white shadow-sm cursor-pointer
                                       hover:shadow-md transition-all duration-200
                                       focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
@@ -118,16 +128,6 @@ const ReviewFilters = ({
                 </div>
             </div>
 
-            {/* Row 2 — Search */}
-            <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
-                <input
-                    placeholder="Search by customer name or review text..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full border border-gray-200 bg-white rounded-lg pl-8 pr-4 py-2 text-sm focus:border-indigo-400 focus:outline-none"
-                />
-            </div>
         </div>
     );
 };
