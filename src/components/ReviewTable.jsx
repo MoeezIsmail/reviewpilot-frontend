@@ -69,14 +69,6 @@ const ReviewsTable = () => {
 
             {/* Top Toolbar — Bulk Actions + Refresh */}
             <div className="flex items-center justify-end gap-3">
-                {pendingGenerateCount > 0 && (<Button
-                        onClick={generateAllReplies}
-                        disabled={isGeneratingAll || isPostingAll}
-                        variant="primary"
-                    >
-                        {isGeneratingAll ? "Generating..." : `Generate All (${pendingGenerateCount})`}
-                    </Button>)}
-
                 {pendingRepliesCount > 0 && (<Button
                         onClick={postAllReplies}
                         disabled={isPostingAll || isGeneratingAll}
@@ -102,6 +94,10 @@ const ReviewsTable = () => {
                 sortBy={sortBy} setSortBy={setSortBy}
                 ratingFilter={ratingFilter} setRatingFilter={setRatingFilter}
                 SORT_OPTIONS={SORT_OPTIONS}
+                pendingGenerateCount={pendingGenerateCount}
+                generateAllReplies={generateAllReplies}
+                isGeneratingAll={isGeneratingAll}
+                isPostingAll={isPostingAll}
             />
 
             {/* Reviews */}

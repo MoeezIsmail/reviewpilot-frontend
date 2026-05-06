@@ -1,4 +1,5 @@
-import {Search, Star, ArrowUpDown} from "lucide-react";
+import {Search, Star, ArrowUpDown, RefreshCw} from "lucide-react";
+import Button from "../includes/Button.jsx";
 
 const RATING_OPTIONS = [
     {value: "all", label: "All Ratings"},
@@ -15,12 +16,14 @@ const ReviewFilters = ({
                            sortBy, setSortBy,
                            ratingFilter, setRatingFilter,
                            SORT_OPTIONS,
+                           pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll
                        }) => {
+
     return (
         <div className="flex flex-col gap-3">
 
             {/* Row 1 — Status Filter + Sort + Rating */}
-            <div className="flex items-center justify-start flex-wrap gap-6 rounded-xl p-2 !bg-white">
+            <div className="flex items-center justify-between flex-wrap gap-6 rounded-xl p-2 !bg-white">
 
                 {/* Status Filters */}
                 <div className="flex gap-2 rounded-xl p-2 !bg-gray-50 border-r border-gray-50 ">
@@ -48,7 +51,7 @@ const ReviewFilters = ({
                             value={ratingFilter}
                             onChange={(e) => setRatingFilter(e.target.value)}
                             className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
-                                       text-gray-700 bg-white shadow-sm
+                                       text-gray-700 bg-white shadow-sm cursor-pointer
                                        hover:shadow-md transition-all duration-200
                                        focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                             >
@@ -70,7 +73,7 @@ const ReviewFilters = ({
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
                             className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
-                                      text-gray-700 bg-white shadow-sm
+                                      text-gray-700 bg-white shadow-sm cursor-pointer
                                       hover:shadow-md transition-all duration-200
                                       focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                             >
@@ -84,6 +87,16 @@ const ReviewFilters = ({
                         {/* Dropdown arrow */}
                         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
                     </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 p-2">
+                    {pendingGenerateCount > 0 && (<Button
+                        onClick={generateAllReplies}
+                        disabled={isGeneratingAll || isPostingAll}
+                        variant="primary"
+                    >
+                        {isGeneratingAll ? "Generating..." : `Generate All (${pendingGenerateCount})`}
+                    </Button>)}
                 </div>
             </div>
 
