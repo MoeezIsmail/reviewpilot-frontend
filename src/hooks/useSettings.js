@@ -22,6 +22,10 @@ const useSettings = () => {
     const [disconnecting, setDisconnecting] = useState(null);
 
     useEffect(() => {
+        fetchStatus();
+    }, []);
+
+    useEffect(() => {
         if (hasRun.current) return;
         hasRun.current = true;
 
@@ -44,7 +48,7 @@ const useSettings = () => {
             addToast("Connection failed. Try again.", "error");
         }
 
-    }, [searchParams]);
+    }, [user]);
 
     const fetchStatus = async () => {
         try {
