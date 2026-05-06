@@ -25,6 +25,7 @@ const AuthSuccess = () => {
 
             if (isNewUser || !isAnyPlatformConnected) {
                 addToast("Welcome to ReviewPilot!", 'success');
+                console.log('navigating to connect-platform');
                 navigate("/connect-platforms");
             } else {
                 addToast("Pleasure to see you back!", 'success');
