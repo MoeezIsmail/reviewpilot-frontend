@@ -16,7 +16,8 @@ const ReviewFilters = ({
                            sortBy, setSortBy,
                            ratingFilter, setRatingFilter,
                            SORT_OPTIONS,
-                           pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll
+                           pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll,
+                           pendingRepliesCount, postAllReplies, refreshReviews, loading
                        }) => {
 
     return (
@@ -25,71 +26,71 @@ const ReviewFilters = ({
             {/* Row 1 — Status Filter + Sort + Rating */}
             <div className="flex items-center justify-between flex-wrap gap-6 rounded-xl p-2 !bg-white">
 
-                {/* Status Filters */}
-                <div className="flex gap-2 rounded-xl p-2 !bg-gray-50 border-r border-gray-50 ">
-                    {["All", "Replied", "Pending"].map((f) => (
-                        <button
-                            key={f}
-                            onClick={() => setFilter(f)}
-                            className={`px-4 py-1.5 rounded-xl text-sm font-medium capitalize transition-all ${
-                                filter === f
-                                    ? "!bg-indigo-600 text-white"
-                                    : "!bg-gray-50 border border-gray-200 text-gray-600 hover:border-indigo-300"
-                            }`}
-                        >
-                            {f}
-                        </button>
-                    ))}
-                </div>
+                <div className="flex gap-6">
+                    {/* Status Filters */}
+                    <div className="flex gap-2 rounded-xl p-2 !bg-gray-50 border-r border-gray-50 ">
+                        {["All", "Replied", "Pending"].map((f) => (
+                            <button
+                                key={f}
+                                onClick={() => setFilter(f)}
+                                className={`px-4 py-1.5 rounded-xl text-sm font-medium capitalize transition-all ${
+                                    filter === f
+                                        ? "!bg-indigo-600 text-white"
+                                        : "!bg-gray-50 border border-gray-200 text-gray-600 hover:border-indigo-300"
+                                }`}
+                            >
+                                {f}
+                            </button>
+                        ))}
+                    </div>
 
-                {/* Sort + Rating */}
-                <div className="flex items-center gap-2 p-2">
-                    {/* Rating Filter */}
-                    <div className="relative">
-                        <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
-                        <select
-                            value={ratingFilter}
-                            onChange={(e) => setRatingFilter(e.target.value)}
-                            className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
+                    {/* Sort + Rating */}
+                    <div className="flex items-center gap-2 p-2">
+                        {/* Rating Filter */}
+                        <div className="relative" onChange={(e) => setRatingFilter(e.target.value)}>
+                            <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
+                            <select
+                                value={ratingFilter}
+                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
                                        text-gray-700 bg-white shadow-sm cursor-pointer
                                        hover:shadow-md transition-all duration-200
                                        focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                             >
-                            {RATING_OPTIONS.map((opt) => (
-                                <option key={opt.value} value={opt.value}>
-                                    {opt.label}
-                                </option>
-                            ))}
-                        </select>
+                                {RATING_OPTIONS.map((opt) => (
+                                    <option key={opt.value} value={opt.value}>
+                                        {opt.label}
+                                    </option>
+                                ))}
+                            </select>
 
-                        {/* Dropdown arrow */}
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
-                    </div>
+                            {/* Dropdown arrow */}
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
+                        </div>
 
-                    {/* Sort */}
-                    <div className="relative">
-                        <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
-                        <select
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value)}
-                            className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
+                        {/* Sort */}
+                        <div className="relative" onChange={(e) => setSortBy(e.target.value)}>
+                            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
+                            <select
+                                value={sortBy}
+                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
                                       text-gray-700 bg-white shadow-sm cursor-pointer
                                       hover:shadow-md transition-all duration-200
                                       focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                             >
-                            {SORT_OPTIONS.map((opt) => (
-                                <option key={opt.value} value={opt.value}>
-                                    {opt.label}
-                                </option>
-                            ))}
-                        </select>
+                                {SORT_OPTIONS.map((opt) => (
+                                    <option key={opt.value} value={opt.value}>
+                                        {opt.label}
+                                    </option>
+                                ))}
+                            </select>
 
-                        {/* Dropdown arrow */}
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
+                            {/* Dropdown arrow */}
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2 p-2">
+                <div className="flex items-center gap-2 p-2">
                     {pendingGenerateCount > 0 && (<Button
                         onClick={generateAllReplies}
                         disabled={isGeneratingAll || isPostingAll}
@@ -97,6 +98,23 @@ const ReviewFilters = ({
                     >
                         {isGeneratingAll ? "Generating..." : `Generate All (${pendingGenerateCount})`}
                     </Button>)}
+
+                    {pendingRepliesCount > 0 && (<Button
+                        onClick={postAllReplies}
+                        disabled={isPostingAll || isGeneratingAll}
+                        variant="success"
+                    >
+                        {isPostingAll ? "Posting..." : `Post All (${pendingRepliesCount})`}
+                    </Button>)}
+
+                    <button
+                        onClick={refreshReviews}
+                        disabled={loading}
+                        className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline disabled:opacity-50"
+                    >
+                        <RefreshCw size={14} className={loading ? "animate-spin" : ""}/>
+                        {loading ? "Loading..." : "Refresh"}
+                    </button>
                 </div>
             </div>
 

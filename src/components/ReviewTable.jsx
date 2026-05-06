@@ -69,22 +69,7 @@ const ReviewsTable = () => {
 
             {/* Top Toolbar — Bulk Actions + Refresh */}
             <div className="flex items-center justify-end gap-3">
-                {pendingRepliesCount > 0 && (<Button
-                        onClick={postAllReplies}
-                        disabled={isPostingAll || isGeneratingAll}
-                        variant="success"
-                    >
-                        {isPostingAll ? "Posting..." : `Post All (${pendingRepliesCount})`}
-                    </Button>)}
 
-                <button
-                    onClick={refreshReviews}
-                    disabled={loading}
-                    className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline disabled:opacity-50"
-                >
-                    <RefreshCw size={14} className={loading ? "animate-spin" : ""}/>
-                    {loading ? "Loading..." : "Refresh"}
-                </button>
             </div>
 
             {/* Filters */}
@@ -98,6 +83,8 @@ const ReviewsTable = () => {
                 generateAllReplies={generateAllReplies}
                 isGeneratingAll={isGeneratingAll}
                 isPostingAll={isPostingAll}
+                pendingRepliesCount={pendingRepliesCount} postAllReplies={postAllReplies}
+                refreshReviews={refreshReviews} loading={loading}
             />
 
             {/* Reviews */}
