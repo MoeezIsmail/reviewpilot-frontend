@@ -1,12 +1,12 @@
-import { Search } from "lucide-react";
+import {Search, Star, ArrowUpDown} from "lucide-react";
 
 const RATING_OPTIONS = [
-    { value: "all", label: "All Ratings" },
-    { value: "5", label: "⭐⭐⭐⭐⭐" },
-    { value: "4", label: "⭐⭐⭐⭐" },
-    { value: "3", label: "⭐⭐⭐" },
-    { value: "2", label: "⭐⭐" },
-    { value: "1", label: "⭐" },
+    {value: "all", label: "All Ratings"},
+    {value: "5", label: "⭐⭐⭐⭐⭐"},
+    {value: "4", label: "⭐⭐⭐⭐"},
+    {value: "3", label: "⭐⭐⭐"},
+    {value: "2", label: "⭐⭐"},
+    {value: "1", label: "⭐"},
 ];
 
 const ReviewFilters = ({
@@ -23,15 +23,15 @@ const ReviewFilters = ({
             <div className="flex items-center justify-start flex-wrap gap-6 rounded-xl p-2 !bg-white">
 
                 {/* Status Filters */}
-                <div className="flex gap-2 rounded-xl p-2 !bg-gray-50 border-r-2 border-gray-50 ">
-                    {["all", "Unreplied"].map((f) => (
+                <div className="flex gap-2 rounded-xl p-2 !bg-gray-50 border-r border-gray-50 ">
+                    {["All", "Replied", "Pending"].map((f) => (
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
-                            className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition-all ${
+                            className={`px-4 py-1.5 rounded-xl text-sm font-medium capitalize transition-all ${
                                 filter === f
                                     ? "!bg-indigo-600 text-white"
-                                    : "!bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
+                                    : "!bg-gray-50 border border-gray-200 text-gray-600 hover:border-indigo-300"
                             }`}
                         >
                             {f}
@@ -42,32 +42,54 @@ const ReviewFilters = ({
                 {/* Sort + Rating */}
                 <div className="flex items-center gap-2 p-2">
                     {/* Rating Filter */}
-                    <select
-                        value={ratingFilter}
-                        onChange={(e) => setRatingFilter(e.target.value)}
-                        className="text-sm border border-gray-200 rounded-xl px-3 py-4 text-gray-600 focus:outline-none focus:border-indigo-400 bg-white"
-                    >
-                        {RATING_OPTIONS.map((opt) => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                    </select>
+                    <div className="relative">
+                        <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
+                        <select
+                            value={ratingFilter}
+                            onChange={(e) => setRatingFilter(e.target.value)}
+                            className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
+                                       text-gray-700 bg-white shadow-sm
+                                       hover:shadow-md transition-all duration-200
+                                       focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
+                            >
+                            {RATING_OPTIONS.map((opt) => (
+                                <option key={opt.value} value={opt.value}>
+                                    {opt.label}
+                                </option>
+                            ))}
+                        </select>
+
+                        {/* Dropdown arrow */}
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
+                    </div>
 
                     {/* Sort */}
-                    <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                        className="text-sm border border-gray-200 rounded-xl px-3 py-4 text-gray-600 focus:outline-none focus:border-indigo-400 bg-white"
-                    >
-                        {SORT_OPTIONS.map((opt) => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                    </select>
+                    <div className="relative">
+                        <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-3
+                                      text-gray-700 bg-white shadow-sm
+                                      hover:shadow-md transition-all duration-200
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
+                            >
+                            {SORT_OPTIONS.map((opt) => (
+                                <option key={opt.value} value={opt.value}>
+                                    {opt.label}
+                                </option>
+                            ))}
+                        </select>
+
+                        {/* Dropdown arrow */}
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
+                    </div>
                 </div>
             </div>
 
             {/* Row 2 — Search */}
             <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
                 <input
                     placeholder="Search by customer name or review text..."
                     value={search}
