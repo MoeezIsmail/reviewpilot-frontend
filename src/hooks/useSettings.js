@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useRef} from "react";
 import { useToast } from "../components/ToastProvider.jsx";
 import {disconnectPlatform, getConnectionStatus} from "../api/settingsApi.js";
 import { BACKEND_URL } from "../constants/urls.js";
 import axios from "axios";
 import {useAuth} from "../context/AuthContext.jsx";
+import {useSearchParams} from "react-router-dom";
 
 const useSettings = () => {
     const { addToast } = useToast();
     const { user, updateUser } = useAuth();
+    const [searchParams] = useSearchParams();
+    const hasRun = useRef(false);
+
 
     const [connections, setConnections] = useState({
         google: { connected: false, connectedAt: null },
@@ -18,8 +22,29 @@ const useSettings = () => {
     const [disconnecting, setDisconnecting] = useState(null);
 
     useEffect(() => {
-        fetchStatus();
-    }, []);
+        if (hasRun.current) return;
+        hasRun.current = true;
+
+        const google = searchParams.get("google");
+        const error = searchParams.get("error");
+
+        if (google === "success") {
+            addToast("Google Business connected!", "success");
+
+            fetchStatus();
+        }
+
+        if (error === "no_business") {
+            addToast("No Google Business found on this account. Please use a business account.", "error");
+        } else if (error === "no_location") {
+            addToast("No business registered to this account. Please connect to another account!", "error");
+        } else if (error === "state_expired") {
+            addToast("Session expired. Try again.", "error");
+        } else if (error) {
+            addToast("Connection failed. Try again.", "error");
+        }
+
+    }, [searchParams]);
 
     const fetchStatus = async () => {
         try {

@@ -55,7 +55,6 @@ const OnboardingGuard = () => {
 
     if (loading) return null;
 
-    // Onboarding complete hai → dashboard pe bhejo
     if (user?.onboardingCompleted) {
         return <Navigate to="/" replace />;
     }
