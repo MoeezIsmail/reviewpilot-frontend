@@ -1,15 +1,13 @@
-import {useState, useEffect} from "react";
 import ReviewCard from "./ReviewCard.jsx";
-import {useReviews} from "../../context/ReviewsContext.jsx";
-import {useAuth} from "../../context/AuthContext.jsx";
+import { useReviews } from "../../context/ReviewsContext.jsx";
 import ReviewFilters from "./ReviewFilters.jsx";
 import useReviewFilters from "../../hooks/useReviewFilters.js";
 import ReviewsSkeleton from "../skeletons/ReviewsSkeleton.jsx";
+import ReviewPagination from "./ReviewPagination.jsx";
 
 const ReviewsTable = () => {
     const {
         reviewsData,
-        loadNextPage,
         loading,
         aiReplies,
         replyStatus,
@@ -17,12 +15,8 @@ const ReviewsTable = () => {
         postAllReplies,
         isPostingAll,
         generateAllReplies,
-        isGeneratingAll
+        isGeneratingAll,
     } = useReviews();
-
-    console.log('review: ', reviewsData);
-
-    const {user} = useAuth();
 
     const {
         filter,
@@ -36,18 +30,6 @@ const ReviewsTable = () => {
         filteredReviews,
         SORT_OPTIONS,
     } = useReviewFilters(reviewsData.reviews, aiReplies, replyStatus);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const bottom = document.documentElement.scrollHeight === document.documentElement.scrollTop + window.innerHeight;
-            if (bottom && !loading && reviewsData.nextPageToken) {
-                loadNextPage(user._id);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [reviewsData.nextPageToken, loading, user?._id, loadNextPage]);
 
     const pendingRepliesCount = reviewsData.reviews.filter((review) => {
         const reviewId = review.reviewId || review.name;
@@ -85,7 +67,9 @@ const ReviewsTable = () => {
             {/* Reviews */}
             {filteredReviews?.length > 0 ? (
                 <div className="flex flex-col gap-3 max-h-[68vh] overflow-y-auto pr-2">
-                    {filteredReviews.map((review, i) => (<ReviewCard key={review.name || i} review={review}/>))}
+                    {filteredReviews.map((review, i) => (
+                        <ReviewCard key={review.name || i} review={review} />
+                    ))}
                 </div>
             ) : (
                 <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-96">
@@ -93,18 +77,8 @@ const ReviewsTable = () => {
                 </div>
             )}
 
-            {/* Load More */}
-            {reviewsData?.nextPageToken && (
-                <div className="flex justify-center">
-                    <button
-                        onClick={() => loadNextPage(user._id)}
-                        disabled={loading}
-                        className={`px-6 py-2 rounded-lg text-sm font-medium text-white ${loading ? "!bg-gray-400" : "!bg-indigo-600 hover:!bg-indigo-700"}`}
-                    >
-                        {loading ? "Loading..." : "Load More"}
-                    </button>
-                </div>
-            )}
+            {/* Pagination */}
+            <ReviewPagination />
         </div>
     );
 };

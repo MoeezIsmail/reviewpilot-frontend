@@ -21,6 +21,11 @@ export const ReviewsProvider = ({ children }) => {
     const [replyStatus, setReplyStatus] = useState({});
     const [isGeneratingAll, setIsGeneratingAll] = useState(false);
 
+    // ─── Pagination state ─────────────────────────────────────
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pagesCache, setPagesCache] = useState({});
+    // pagesCache[pageNum] = { reviews, nextPageToken, accountId, locationId }
+
     const { user } = useAuth();
     const { addToast } = useToast();
     const navigate = useNavigate();
@@ -29,25 +34,35 @@ export const ReviewsProvider = ({ children }) => {
         return !!(user?.platforms?.google?.accessToken || user?.platforms?.yelp?.accessToken);
     };
 
-    // ─── Load Reviews ─────────────────────────────────────────
-    const loadReviews = useCallback(async () => {
-        if (!user?._id || !isAnyPlatformConnected(user)) {
-            setLoading(false);
-            return;
-        }
+    // ─── Internal: fetch a specific page ─────────────────────
+    const fetchPage = useCallback(async (pageNum, token) => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const data = await fetchReviews(user._id);
-            setReviewsData(data);
+            const data = await fetchReviews(user._id, token);
+
+            const pageData = {
+                reviews: data.reviews || [],
+                nextPageToken: data.nextPageToken || null,
+                accountId: data.accountId || null,
+                locationId: data.locationId || null,
+            };
+
+            setPagesCache(prev => ({ ...prev, [pageNum]: pageData }));
+            setReviewsData(pageData);
+            setCurrentPage(pageNum);
             setHasFetched(true);
 
-            // Initialize reply status for each review
-            const initialStatus = {};
-            data.reviews.forEach((r) => {
-                const id = r.reviewId || r.name;
-                initialStatus[id] = r.reviewReply?.comment ? "posted" : "idle";
+            // Init reply status without overriding existing entries
+            setReplyStatus(prev => {
+                const updated = { ...prev };
+                data.reviews?.forEach(r => {
+                    const id = r.reviewId || r.name;
+                    if (!updated[id]) {
+                        updated[id] = r.reviewReply?.comment ? "posted" : "idle";
+                    }
+                });
+                return updated;
             });
-            setReplyStatus(initialStatus);
 
         } catch (err) {
             const message = err.response?.data?.message;
@@ -63,107 +78,112 @@ export const ReviewsProvider = ({ children }) => {
         }
     }, [user]);
 
+    // ─── Load Reviews (page 1) ────────────────────────────────
+    const loadReviews = useCallback(async () => {
+        if (!user?._id || !isAnyPlatformConnected(user)) {
+            setLoading(false);
+            return;
+        }
+        await fetchPage(1, null);
+    }, [user, fetchPage]);
+
     useEffect(() => {
         if (user && !hasFetched) loadReviews();
     }, [user, hasFetched]);
 
-    const refreshReviews = () => setHasFetched(false);
+    // ─── Navigate to a page ───────────────────────────────────
+    const goToPage = useCallback(async (pageNum) => {
+        if (pageNum < 1 || loading) return;
 
-    // ─── Load Next Page ───────────────────────────────────────
-    const loadNextPage = useCallback(async (userId) => {
-        if (!reviewsData.nextPageToken) return;
-        console.log('next page token: ', reviewsData.nextPageToken);
-        try {
-            setLoading(true);
-            const data = await fetchReviews(userId, reviewsData.nextPageToken);
-
-            setReviewsData((prev) => ({
-                reviews: [...prev.reviews, ...data.reviews],
-                nextPageToken: data.nextPageToken,
-                accountId: prev.accountId,
-                locationId: prev.locationId,
-            }));
-
-            // Status initialize for new reviews
-            const newStatus = {};
-            data.reviews.forEach((r) => {
-                const id = r.reviewId || r.name;
-                newStatus[id] = r.reviewReply?.comment ? "posted" : "idle";
-            });
-
-            setReplyStatus((prev) => ({ ...prev, ...newStatus }));
-        } catch (err) {
-            addToast("Failed to fetch more reviews", "error");
-        } finally {
-            setLoading(false);
+        // Use cache if available
+        if (pagesCache[pageNum]) {
+            setReviewsData(pagesCache[pageNum]);
+            setCurrentPage(pageNum);
+            return;
         }
-    }, [reviewsData.nextPageToken]);
+
+        // Fetch new page — need previous page's nextPageToken
+        const prevPageData = pagesCache[pageNum - 1];
+        if (!prevPageData?.nextPageToken) return;
+
+        await fetchPage(pageNum, prevPageData.nextPageToken);
+    }, [pagesCache, fetchPage, loading]);
+
+    const refreshReviews = () => {
+        setPagesCache({});
+        setCurrentPage(1);
+        setHasFetched(false);
+        setReplyStatus({});
+        setAiReplies({});
+    };
+
+    const totalPagesLoaded = Object.keys(pagesCache).length;
+    const hasNextPage = !!reviewsData.nextPageToken;
 
     // ─── Generate AI Reply ────────────────────────────────────
     const generateAiReply = async (reviewId, reviewText) => {
-        setReplyStatus((prev) => ({ ...prev, [reviewId]: "generating" }));
-        setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
+        setReplyStatus(prev => ({ ...prev, [reviewId]: "generating" }));
+        setAiReplies(prev => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
 
         try {
             const reply = await fetchAiReply(reviewId, reviewText);
-            setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: false, reply } }));
-            setReplyStatus((prev) => ({ ...prev, [reviewId]: "ready" }));
+            setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply } }));
+            setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
             addToast("AI reply generated!", "success");
             return reply;
         } catch (err) {
-            console.error(err);
-            setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: false, reply: "" } }));
-            setReplyStatus((prev) => ({ ...prev, [reviewId]: "failed" }));
+            setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply: "" } }));
+            setReplyStatus(prev => ({ ...prev, [reviewId]: "failed" }));
             addToast("Failed to generate AI reply", "error");
         }
     };
 
     // ─── Post Single Reply ────────────────────────────────────
     const postSingleReply = async (reviewId, replyText) => {
-        // Optimistic update
         const prevStatus = replyStatus[reviewId];
-        setReplyStatus((prev) => ({ ...prev, [reviewId]: "posting" }));
+        setReplyStatus(prev => ({ ...prev, [reviewId]: "posting" }));
 
         try {
-            await postReply(
-                reviewId,
-                replyText,
-                null,
-                reviewsData.accountId,
-                reviewsData.locationId
-            );
+            await postReply(reviewId, replyText, null, reviewsData.accountId, reviewsData.locationId);
 
-            // Real-time sync — update review in state
-            setReviewsData((prev) => ({
+            setReviewsData(prev => ({
                 ...prev,
-                reviews: prev.reviews.map((r) => {
+                reviews: prev.reviews.map(r => {
                     const id = r.reviewId || r.name;
-                    if (id === reviewId) {
-                        return {
-                            ...r,
-                            reviewReply: { comment: replyText }
-                        };
-                    }
-                    return r;
+                    return id === reviewId ? { ...r, reviewReply: { comment: replyText } } : r;
                 }),
             }));
 
-            setReplyStatus((prev) => ({ ...prev, [reviewId]: "posted" }));
+            // Sync cache for current page
+            setPagesCache(prev => {
+                const cached = prev[currentPage];
+                if (!cached) return prev;
+                return {
+                    ...prev,
+                    [currentPage]: {
+                        ...cached,
+                        reviews: cached.reviews.map(r => {
+                            const id = r.reviewId || r.name;
+                            return id === reviewId ? { ...r, reviewReply: { comment: replyText } } : r;
+                        }),
+                    },
+                };
+            });
+
+            setReplyStatus(prev => ({ ...prev, [reviewId]: "posted" }));
             addToast("Reply posted to Google!", "success");
 
         } catch (err) {
-            // Rollback on failure
-            setReplyStatus((prev) => ({ ...prev, [reviewId]: prevStatus }));
-            console.error(err);
+            setReplyStatus(prev => ({ ...prev, [reviewId]: prevStatus }));
             addToast("Failed to post reply", "error");
         }
     };
 
     // ─── Post All Replies ─────────────────────────────────────
     const postAllReplies = async () => {
-        const reviewsToPost = reviewsData.reviews.filter((review) => {
-            const reviewId = review.reviewId || review.name;
-            return replyStatus[reviewId] === "ready";
+        const reviewsToPost = reviewsData.reviews.filter(r => {
+            const id = r.reviewId || r.name;
+            return replyStatus[id] === "ready";
         });
 
         if (!reviewsToPost.length) {
@@ -173,11 +193,10 @@ export const ReviewsProvider = ({ children }) => {
 
         setIsPostingAll(true);
 
-        // Optimistic — sab "posting" mark karo
-        const postingIds = reviewsToPost.map((r) => r.reviewId || r.name);
-        setReplyStatus((prev) => {
+        const postingIds = reviewsToPost.map(r => r.reviewId || r.name);
+        setReplyStatus(prev => {
             const updated = { ...prev };
-            postingIds.forEach((id) => { updated[id] = "posting"; });
+            postingIds.forEach(id => { updated[id] = "posting"; });
             return updated;
         });
 
@@ -188,27 +207,20 @@ export const ReviewsProvider = ({ children }) => {
             const reviewId = review.reviewId || review.name;
             const aiReply = aiReplies[reviewId]?.reply;
             try {
-                await postReply(
-                    reviewId, aiReply, null,
-                    reviewsData.accountId, reviewsData.locationId
-                );
+                await postReply(reviewId, aiReply, null, reviewsData.accountId, reviewsData.locationId);
 
-                // Real-time sync
-                setReviewsData((prev) => ({
+                setReviewsData(prev => ({
                     ...prev,
-                    reviews: prev.reviews.map((r) => {
+                    reviews: prev.reviews.map(r => {
                         const id = r.reviewId || r.name;
-                        if (id === reviewId) return { ...r, reviewReply: { comment: aiReply } };
-                        return r;
+                        return id === reviewId ? { ...r, reviewReply: { comment: aiReply } } : r;
                     }),
                 }));
 
-                setReplyStatus((prev) => ({ ...prev, [reviewId]: "posted" }));
+                setReplyStatus(prev => ({ ...prev, [reviewId]: "posted" }));
                 successCount++;
-
             } catch (err) {
-                // Rollback single failed review
-                setReplyStatus((prev) => ({ ...prev, [reviewId]: "ready" }));
+                setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
                 failCount++;
             }
         }
@@ -221,10 +233,10 @@ export const ReviewsProvider = ({ children }) => {
     // ─── Reply Performance Stats ──────────────────────────────
     const getReplyPerformanceStats = () => {
         const total = Object.keys(replyStatus).length;
-        if (!total) return { posted: 0, ready: 0, pending: 0 };
+        if (!total) return { posted: 0, ready: 0, pending: 0, postedCount: 0, readyCount: 0, pendingCount: 0, total: 0 };
 
-        const posted = Object.values(replyStatus).filter((s) => s === "posted").length;
-        const ready = Object.values(replyStatus).filter((s) => s === "ready").length;
+        const posted = Object.values(replyStatus).filter(s => s === "posted").length;
+        const ready = Object.values(replyStatus).filter(s => s === "ready").length;
         const pending = total - posted - ready;
 
         return {
@@ -238,20 +250,17 @@ export const ReviewsProvider = ({ children }) => {
         };
     };
 
-    // ─── Update AI Reply (Edit ke baad) ──────────────────────
+    // ─── Update AI Reply ──────────────────────────────────────
     const updateAiReply = (reviewId, newReply) => {
-        setAiReplies((prev) => ({
-            ...prev,
-            [reviewId]: { ...prev[reviewId], reply: newReply }
-        }));
-        // Status "ready" pe rakhо — taake post ho sake
-        setReplyStatus((prev) => ({ ...prev, [reviewId]: "ready" }));
+        setAiReplies(prev => ({ ...prev, [reviewId]: { ...prev[reviewId], reply: newReply } }));
+        setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
     };
 
+    // ─── Generate All Replies ─────────────────────────────────
     const generateAllReplies = async () => {
-        const pendingReviews = reviewsData.reviews.filter((review) => {
-            const reviewId = review.reviewId || review.name;
-            const status = replyStatus[reviewId];
+        const pendingReviews = reviewsData.reviews.filter(r => {
+            const id = r.reviewId || r.name;
+            const status = replyStatus[id];
             return status === "idle" || status === "failed";
         });
 
@@ -268,17 +277,17 @@ export const ReviewsProvider = ({ children }) => {
             const reviewId = review.reviewId || review.name;
             const reviewText = review.comment || review.snippet || "";
 
-            setReplyStatus((prev) => ({ ...prev, [reviewId]: "generating" }));
-            setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
+            setReplyStatus(prev => ({ ...prev, [reviewId]: "generating" }));
+            setAiReplies(prev => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
 
             try {
                 const reply = await fetchAiReply(reviewId, reviewText);
-                setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: false, reply } }));
-                setReplyStatus((prev) => ({ ...prev, [reviewId]: "ready" }));
+                setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply } }));
+                setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
                 successCount++;
             } catch (err) {
-                setAiReplies((prev) => ({ ...prev, [reviewId]: { loading: false, reply: "" } }));
-                setReplyStatus((prev) => ({ ...prev, [reviewId]: "failed" }));
+                setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply: "" } }));
+                setReplyStatus(prev => ({ ...prev, [reviewId]: "failed" }));
                 failCount++;
             }
         }
@@ -293,7 +302,6 @@ export const ReviewsProvider = ({ children }) => {
             reviewsData,
             loading,
             error,
-            loadNextPage,
             aiReplies,
             replyStatus,
             generateAiReply,
@@ -306,6 +314,11 @@ export const ReviewsProvider = ({ children }) => {
             generateAllReplies,
             isGeneratingAll,
             isAnyPlatformConnected: isAnyPlatformConnected(user),
+            // Pagination
+            currentPage,
+            totalPagesLoaded,
+            hasNextPage,
+            goToPage,
         }}>
             {children}
         </ReviewsContext.Provider>
