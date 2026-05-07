@@ -3,11 +3,10 @@ import ReviewCard from "./ReviewCard.jsx";
 import {useReviews} from "../context/ReviewsContext.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
 import {RefreshCw} from "lucide-react";
-import Lottie from "lottie-react";
-import loader from "../assets/loading.json";
 import Button from "../includes/Button.jsx";
 import ReviewFilters from "./ReviewFilters.jsx";
 import useReviewFilters from "../hooks/useReviewFilters.js";
+import ReviewsSkeleton from "./skeletons/ReviewsSkeleton.jsx";
 
 const ReviewsTable = () => {
     const {
@@ -64,13 +63,12 @@ const ReviewsTable = () => {
         return status === "idle" || status === "failed";
     }).length;
 
+    if (loading && !reviewsData.reviews?.length) {
+        return <ReviewsSkeleton />;
+    }
+
     return (
         <div className="flex flex-col gap-4">
-
-            {/* Top Toolbar — Bulk Actions + Refresh */}
-            <div className="flex items-center justify-end gap-3">
-
-            </div>
 
             {/* Filters */}
             <ReviewFilters
@@ -88,16 +86,19 @@ const ReviewsTable = () => {
             />
 
             {/* Reviews */}
-            {filteredReviews?.length > 0 ? (<div className="flex flex-col gap-3 max-h-[68vh] overflow-y-auto pr-2">
+            {filteredReviews?.length > 0 ? (
+                <div className="flex flex-col gap-3 max-h-[68vh] overflow-y-auto pr-2">
                     {filteredReviews.map((review, i) => (<ReviewCard key={review.name || i} review={review}/>))}
-                </div>) : (
+                </div>
+            ) : (
                 <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-96">
-                    {loading ? <Lottie animationData={loader} loop className="max-w-96"/> :
-                        <p className="text-gray-400 text-sm">No reviews found.</p>}
-                </div>)}
+                    <p className="text-gray-400 text-sm">No reviews found.</p>
+                </div>
+            )}
 
             {/* Load More */}
-            {reviewsData?.nextPageToken && (<div className="flex justify-center">
+            {reviewsData?.nextPageToken && (
+                <div className="flex justify-center">
                     <button
                         onClick={() => loadNextPage(user._id)}
                         disabled={loading}
@@ -105,7 +106,8 @@ const ReviewsTable = () => {
                     >
                         {loading ? "Loading..." : "Load More"}
                     </button>
-                </div>)}
+                </div>
+            )}
         </div>
     );
 };

@@ -15,6 +15,7 @@ import Auth from "./pages/Auth.jsx";
 import OnboardingInfo from "./pages/OnboardingInfo.jsx";
 import ReviewActions from "./components/ReviewActions.jsx";
 import {useAuth} from "./context/AuthContext.jsx";
+import AppShellSkeleton from "./components/skeletons/AppShellSkeleton.jsx";
 
 axios.interceptors.response.use(
     response => response,
@@ -53,11 +54,7 @@ const Layout = () => {
 const OnboardingGuard = () => {
     const { user, loading } = useAuth();
 
-    if (loading) return (
-        <div className="min-h-screen min-w-screen flex items-center justify-center">
-            <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-    );
+    if (loading) return <AppShellSkeleton />;
 
     if (user?.onboardingCompleted) {
         return <Navigate to="/" replace />;

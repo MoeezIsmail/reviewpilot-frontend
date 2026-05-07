@@ -10,8 +10,7 @@ import AnalyticsSummaryCards from "../analytics/AnalyticsSummaryCards.jsx";
 import ReviewTrendChart from "../analytics/ReviewTrendChart.jsx";
 import RatingDistributionChart from "../analytics/RatingDistributionChart.jsx";
 import SentimentChart from "../analytics/SentimentChart.jsx";
-import Lottie from "lottie-react";
-import loader from "../../assets/loading.json";
+import AnalyticsSkeleton from "../skeletons/AnalyticsSkeleton.jsx";
 
 const AnalyticsCharts = () => {
     const { reviewsData, replyStatus, loading } = useReviews();
@@ -22,13 +21,7 @@ const AnalyticsCharts = () => {
     const responseRate = useMemo(() => getResponseRate(reviews, replyStatus), [reviews, replyStatus]);
     const sentiment = useMemo(() => getSentimentBreakdown(reviews), [reviews]);
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-64">
-                <Lottie animationData={loader} loop className="w-40 h-40" />
-            </div>
-        );
-    }
+    if (loading) return <AnalyticsSkeleton />;
 
     if (!reviews.length) {
         return (

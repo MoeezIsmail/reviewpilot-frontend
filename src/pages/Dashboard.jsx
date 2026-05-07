@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import {useToast} from "../components/ToastProvider.jsx";
 import Button from "../includes/Button.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
+import DashboardSkeleton from "../components/skeletons/DashboardSkeleton.jsx";
 
 const Dashboard = () => {
     const { reviewsData, isAnyPlatformConnected, refreshReviews, loading  } = useReviews();
@@ -37,7 +38,7 @@ const Dashboard = () => {
 
     }, [isAnyPlatformConnected, authLoading, loading]);
 
-    if (!reviewsData) return <div>Loading...</div>;
+    if (!reviewsData) return <DashboardSkeleton />;
 
     return (
         <div className="space-y-6">
