@@ -7,3 +7,7 @@ export const getProfile = async () => {
 export const saveBusinessInfo = async ({ userName, businessName, businessType }) => {
     return await authProtectedApi.post('/business-info', { userName, businessName, businessType });
 };
+
+export const updateBusinessInfo = async ({ businessName, businessType }) => {
+    return await authProtectedApi.patch('/business-info', { businessName, businessType });
+};

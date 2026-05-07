@@ -3,13 +3,25 @@ import { useEffect } from "react";
 import { useToast } from "../components/toast/ToastProvider.jsx";
 import ConnectionCard from "../components/platforms/ConnectionCard.jsx";
 import useSettings from "../hooks/useSettings.js";
+import InputField from "../components/ui/InputField.jsx";
+import Button from "../components/ui/Button.jsx";
+import { Pencil } from "lucide-react";
+
+const BUSINESS_TYPES = [
+    "Restaurant", "Hotel", "Cafe", "Bakery", "Gym",
+    "Salon", "Clinic", "Retail Store", "Auto Service", "Other"
+];
 
 const Settings = () => {
-    const { connections, loading, handleConnectGoogle, handleDisconnect, disconnecting } = useSettings();
+    const {
+        connections, loading, handleConnectGoogle, handleDisconnect, disconnecting,
+        businessForm, setBusinessForm,
+        isEditingBusiness, setIsEditingBusiness,
+        savingBusiness, handleSaveBusinessInfo, handleCancelBusinessEdit,
+    } = useSettings();
     const { addToast } = useToast();
     const [searchParams] = useSearchParams();
 
-    // Google callback handle karo
     useEffect(() => {
         const google = searchParams.get("google");
         const error = searchParams.get("error");
@@ -20,10 +32,97 @@ const Settings = () => {
     }, []);
 
     return (
-        <div className="max-w-2xl">
-            <p className="!text-gray-500 text-lg mb-8">
+        <div className="max-w-2xl space-y-6">
+            <p className="!text-gray-500 text-lg">
                 Manage your connected platforms and account preferences
             </p>
+
+            {/* Business Info Section */}
+            <div className="!bg-white rounded-xl shadow-sm border !border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-1">
+                    <h2 className="text-base font-semibold !text-gray-800">Business Info</h2>
+                    {!isEditingBusiness && (
+                        <button
+                            onClick={() => setIsEditingBusiness(true)}
+                            className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline"
+                        >
+                            <Pencil size={14} /> Edit
+                        </button>
+                    )}
+                </div>
+                <p className="!text-gray-400 text-sm mb-5">
+                    Update your business name and type
+                </p>
+
+                {isEditingBusiness ? (
+                    <div className="space-y-4">
+                        <InputField
+                            label="Business Name"
+                            placeholder="e.g. Pizza House"
+                            value={businessForm.businessName}
+                            onChange={(e) => setBusinessForm(prev => ({ ...prev, businessName: e.target.value }))}
+                        />
+
+                        <div>
+                            <label className="text-sm font-medium text-gray-700 mb-2 block">
+                                Business Type
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                                {BUSINESS_TYPES.map((type) => {
+                                    const isSelected = businessForm.businessType === type;
+                                    return (
+                                        <button
+                                            key={type}
+                                            type="button"
+                                            onClick={() => setBusinessForm(prev => ({ ...prev, businessType: type }))}
+                                            className={`px-4 py-2.5 rounded-lg border-2 text-left text-sm font-medium transition-all ${
+                                                isSelected
+                                                    ? "!bg-indigo-50 border-indigo-500 text-indigo-600"
+                                                    : "bg-white border-gray-200 text-gray-700 hover:border-indigo-300"
+                                            }`}
+                                        >
+                                            {type}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <div className="flex gap-3 pt-1">
+                            <Button
+                                variant="primary"
+                                onClick={handleSaveBusinessInfo}
+                                loading={savingBusiness}
+                                disabled={savingBusiness}
+                            >
+                                Save Changes
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={handleCancelBusinessEdit}
+                                disabled={savingBusiness}
+                            >
+                                Cancel
+                            </Button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                            <span className="text-sm text-gray-500">Business Name</span>
+                            <span className="text-sm font-medium text-gray-800">
+                                {businessForm.businessName || <span className="text-gray-400">Not set</span>}
+                            </span>
+                        </div>
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                            <span className="text-sm text-gray-500">Business Type</span>
+                            <span className="text-sm font-medium text-gray-800">
+                                {businessForm.businessType || <span className="text-gray-400">Not set</span>}
+                            </span>
+                        </div>
+                    </div>
+                )}
+            </div>
 
             {/* Connected Accounts Section */}
             <div className="!bg-white rounded-xl shadow-sm border !border-gray-200 p-6">
