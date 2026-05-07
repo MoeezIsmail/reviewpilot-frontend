@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "../constants/urls.js";
+import { BACKEND_URL } from "../../constants/urls.js";
 
 const GoogleAuthButton = () => {
     const handleGoogleAuth = () => {

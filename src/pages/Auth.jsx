@@ -1,9 +1,9 @@
-import { useToast } from "../components/ToastProvider.jsx";
-import GoogleAuthButton from "../components/GoogleAuthButton.jsx";
-import OtpInput from "../components/OtpInput.jsx";
+import { useToast } from "../components/toast/ToastProvider.jsx";
+import GoogleAuthButton from "../components/auth/GoogleAuthButton.jsx";
+import OtpInput from "../components/auth/OtpInput.jsx";
 import useOtpForm from "../hooks/useOtpForm.js";
-import InputField from "../includes/InputField.jsx";
-import Button from "../includes/Button.jsx";
+import InputField from "../components/ui/InputField.jsx";
+import Button from "../components/ui/Button.jsx";
 import { ArrowLeft } from 'lucide-react';
 
 const Auth = () => {

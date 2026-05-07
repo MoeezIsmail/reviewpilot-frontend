@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import AppShellSkeleton from "./skeletons/AppShellSkeleton.jsx";
+import AppShellSkeleton from "../components/skeletons/AppShellSkeleton.jsx";
 
 const ProtectedRoute = () => {
     const { user, loading } = useAuth();

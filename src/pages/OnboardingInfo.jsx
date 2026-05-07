@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../components/ToastProvider.jsx";
+import { useToast } from "../components/toast/ToastProvider.jsx";
 import { saveBusinessInfo } from "../api/authApi.js";
 import { ArrowRight } from 'lucide-react';
-import InputField from "../includes/InputField.jsx";
-import Button from "../includes/Button.jsx";
+import InputField from "../components/ui/InputField.jsx";
+import Button from "../components/ui/Button.jsx";
 
 const BUSINESS_TYPES = [
     "Restaurant", "Hotel", "Cafe", "Bakery", "Gym",

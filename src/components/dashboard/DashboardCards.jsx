@@ -1,5 +1,5 @@
 import { Star, MessageSquare, ThumbsUp, ThumbsDown } from "lucide-react"
-import {useAuth} from "../context/AuthContext.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 const DashboardCards = ({ stats }) => {
     const statsName = [

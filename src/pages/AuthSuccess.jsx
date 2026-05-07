@@ -1,7 +1,7 @@
 import {useEffect, useRef} from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import {useToast} from "../components/ToastProvider.jsx";
+import {useToast} from "../components/toast/ToastProvider.jsx";
 import NotFound from "./NotFound.jsx";
 
 const AuthSuccess = () => {

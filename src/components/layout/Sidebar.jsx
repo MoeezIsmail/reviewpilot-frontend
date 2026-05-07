@@ -1,6 +1,6 @@
 import { LayoutDashboard, Star, BarChart3, Settings, LogOut } from "lucide-react"
 import { NavLink, useLocation } from "react-router-dom"
-import { useAuth } from "../context/AuthContext.jsx"
+import { useAuth } from "../../context/AuthContext.jsx"
 
 const Sidebar = ({ setActivePage }) => {
     const { signOut } = useAuth()
@@ -42,7 +42,7 @@ const Sidebar = ({ setActivePage }) => {
                             className={`
                                 group relative flex items-center gap-3 px-4 py-3 rounded-xl
                                 transition-all duration-300 ease-out
-                                
+
                                 ${isActive
                                 ? "!bg-white shadow-lg shadow-indigo-200 scale-[1.02]"
                                 : "!text-gray-600 hover:!bg-white hover:!shadow-md hover:scale-[1.01]"

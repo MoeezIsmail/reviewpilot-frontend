@@ -7,19 +7,15 @@ export const ToastProvider = ({ children }) => {
 
     const [toasts, setToasts] = useState([])
 
-    // Add new toast
     const addToast = (message, type = "info", duration = 3000) => {
-
         const id = Date.now()
         setToasts(prev => [...prev, { id, message, type }])
 
-        // Auto remove after duration
         setTimeout(() => {
             setToasts(prev => prev.filter(t => t.id !== id))
         }, duration)
     }
 
-    // Remove manually
     const removeToast = (id) => {
         setToasts(prev => prev.filter(t => t.id !== id))
     }

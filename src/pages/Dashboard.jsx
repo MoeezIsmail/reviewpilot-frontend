@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import DashboardCards from "../components/DashboardCards";
-import RecentReviews from "../components/RecentReviews";
-import ReplyPerformance from "../components/ReplyPerformance";
+import DashboardCards from "../components/dashboard/DashboardCards";
+import RecentReviews from "../components/dashboard/RecentReviews";
+import ReplyPerformance from "../components/dashboard/ReplyPerformance";
 import { useReviews } from "../context/ReviewsContext.jsx";
 import calculateStats from "../utils/reviewAnalytics.js";
 import {useNavigate} from "react-router-dom";
-import {useToast} from "../components/ToastProvider.jsx";
-import Button from "../includes/Button.jsx";
+import {useToast} from "../components/toast/ToastProvider.jsx";
+import Button from "../components/ui/Button.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
 import DashboardSkeleton from "../components/skeletons/DashboardSkeleton.jsx";
 

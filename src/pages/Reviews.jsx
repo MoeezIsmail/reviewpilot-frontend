@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useReviews } from "../context/ReviewsContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useToast } from "../components/ToastProvider.jsx";
-import ReviewsTable from "../components/ReviewTable";
+import { useToast } from "../components/toast/ToastProvider.jsx";
+import ReviewsTable from "../components/reviews/ReviewTable";
 
 const Reviews = () => {
     const { isAnyPlatformConnected, loading } = useReviews();

@@ -1,5 +1,5 @@
 import {CheckCircle2} from "lucide-react";
-import Button from "../includes/Button.jsx";
+import Button from "../ui/Button.jsx";
 import PlatformIcon from "./PlatformIcon.jsx";
 
 const PlatformCard = ({ platform, connected, onConnect }) => {
@@ -46,4 +46,4 @@ const PlatformCard = ({ platform, connected, onConnect }) => {
     );
 };
 
-export default PlatformCard
+export default PlatformCard;

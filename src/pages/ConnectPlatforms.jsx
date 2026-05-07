@@ -1,10 +1,10 @@
 import {useEffect, useRef, useState} from "react";
-import {useToast} from "../components/ToastProvider.jsx";
+import {useToast} from "../components/toast/ToastProvider.jsx";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {ArrowRight, CheckCircle2} from 'lucide-react';
-import Button from "../includes/Button.jsx";
+import Button from "../components/ui/Button.jsx";
 import axios from "axios";
-import PlatformCard from "../components/PlatformCard.jsx";
+import PlatformCard from "../components/platforms/PlatformCard.jsx";
 import PLATFORMS from "../utils/connectPlatformUtils.jsx";
 import {BACKEND_URL} from "../constants/urls.js";
 import {useAuth} from "../context/AuthContext.jsx";

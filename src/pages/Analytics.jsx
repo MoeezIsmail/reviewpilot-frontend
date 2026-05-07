@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useReviews } from "../context/ReviewsContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useToast } from "../components/ToastProvider.jsx";
+import { useToast } from "../components/toast/ToastProvider.jsx";
 import AnalyticsCharts from "../components/analytics/AnalyticsCharts.jsx";
 
 const Analytics = () => {

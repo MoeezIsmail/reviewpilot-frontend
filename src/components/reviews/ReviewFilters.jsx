@@ -1,5 +1,5 @@
 import {Search, Star, ArrowUpDown, RefreshCw} from "lucide-react";
-import Button from "../includes/Button.jsx";
+import Button from "../ui/Button.jsx";
 
 const RATING_OPTIONS = [
     {value: "all", label: "All Ratings"},
@@ -73,8 +73,6 @@ const ReviewFilters = ({
                                     </option>
                                 ))}
                             </select>
-
-                            {/* Dropdown arrow */}
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
                         </div>
 
@@ -95,29 +93,31 @@ const ReviewFilters = ({
                                     </option>
                                 ))}
                             </select>
-
-                            {/* Dropdown arrow */}
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2 p-2">
-                    {pendingGenerateCount > 0 && (<Button
-                        onClick={generateAllReplies}
-                        disabled={isGeneratingAll || isPostingAll}
-                        variant="primary"
-                    >
-                        {isGeneratingAll ? "Generating..." : `Generate All (${pendingGenerateCount})`}
-                    </Button>)}
+                    {pendingGenerateCount > 0 && (
+                        <Button
+                            onClick={generateAllReplies}
+                            disabled={isGeneratingAll || isPostingAll}
+                            variant="primary"
+                        >
+                            {isGeneratingAll ? "Generating..." : `Generate All (${pendingGenerateCount})`}
+                        </Button>
+                    )}
 
-                    {pendingRepliesCount > 0 && (<Button
-                        onClick={postAllReplies}
-                        disabled={isPostingAll || isGeneratingAll}
-                        variant="success"
-                    >
-                        {isPostingAll ? "Posting..." : `Post All (${pendingRepliesCount})`}
-                    </Button>)}
+                    {pendingRepliesCount > 0 && (
+                        <Button
+                            onClick={postAllReplies}
+                            disabled={isPostingAll || isGeneratingAll}
+                            variant="success"
+                        >
+                            {isPostingAll ? "Posting..." : `Post All (${pendingRepliesCount})`}
+                        </Button>
+                    )}
 
                     <button
                         onClick={refreshReviews}

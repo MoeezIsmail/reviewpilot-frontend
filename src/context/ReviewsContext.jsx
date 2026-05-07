@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useContext, useCallback } fr
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext.jsx";
 import { fetchReviews, fetchAiReply, postReply } from "../api/reviewsApi.js";
-import { useToast } from "../components/ToastProvider.jsx";
+import { useToast } from "../components/toast/ToastProvider.jsx";
 
 const ReviewsContext = createContext();
 

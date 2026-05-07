@@ -1,10 +1,9 @@
-import { useReviews } from "../context/ReviewsContext.jsx";
-import { formatDate, getInitials, getRating, getReviewerName, getReviewText } from "../utils/reviewUtils.jsx";
-import { getAvatarColor, getReviewerProfileImage } from "../utils/avatarUtils.jsx";
+import { useReviews } from "../../context/ReviewsContext.jsx";
+import { formatDate, getInitials, getRating, getReviewerName, getReviewText } from "../../utils/reviewUtils.jsx";
+import { getAvatarColor, getReviewerProfileImage } from "../../utils/avatarUtils.jsx";
 import ReviewReplyBox from "./ReviewReplyBox.jsx";
 import ReviewActions from "./ReviewActions.jsx";
 
-// ─── Status Config ────────────────────────────────────────────
 const STATUS_CONFIG = {
     idle:       { label: "Pending",    bg: "bg-yellow-100", text: "text-yellow-700" },
     generating: { label: "Generating", bg: "bg-blue-100",   text: "text-blue-700"   },
@@ -14,7 +13,6 @@ const STATUS_CONFIG = {
     failed:     { label: "Failed",     bg: "bg-red-100",    text: "text-red-700"    },
 };
 
-// ─── Avatar Component ─────────────────────────────────────────
 const ReviewerAvatar = ({ profilePic, initials, avatarColor }) => (
     <div
         className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 overflow-hidden"
@@ -27,7 +25,6 @@ const ReviewerAvatar = ({ profilePic, initials, avatarColor }) => (
     </div>
 );
 
-// ─── Star Rating Component ────────────────────────────────────
 const StarRating = ({ rating }) => (
     <div className="flex gap-0.5">
         {[...Array(5)].map((_, i) => (
@@ -38,7 +35,6 @@ const StarRating = ({ rating }) => (
     </div>
 );
 
-// ─── Main ReviewCard ──────────────────────────────────────────
 const ReviewCard = ({ review }) => {
     const { aiReplies, generateAiReply, isPostingAll, replyStatus, postSingleReply } = useReviews();
 
@@ -89,7 +85,7 @@ const ReviewCard = ({ review }) => {
                 {getReviewText(review)}
             </p>
 
-            {/* Reply Box — with Edit */}
+            {/* Reply Box */}
             <ReviewReplyBox
                 reviewId={reviewId}
                 replyText={replyText}

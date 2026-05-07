@@ -1,28 +1,24 @@
-import {Routes, Route, Outlet, Navigate} from "react-router-dom"
+import {Routes, Route, Navigate, Outlet} from "react-router-dom"
 import Dashboard from "./pages/Dashboard"
 import Reviews from "./pages/Reviews"
-import Sidebar from "./includes/Sidebar.jsx";
-import Navbar from "./includes/Navbar.jsx";
 import Analytics from "./pages/Analytics.jsx";
 import Settings from "./pages/Settings.jsx";
-import React, {useEffect, useState} from "react";
-import PublicRoute from "./components/PublicRoute.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import axios from "axios";
 import AuthSuccess from "./pages/AuthSuccess.jsx";
 import ConnectPlatforms from "./pages/ConnectPlatforms.jsx";
 import Auth from "./pages/Auth.jsx";
 import OnboardingInfo from "./pages/OnboardingInfo.jsx";
-import ReviewActions from "./components/ReviewActions.jsx";
-import {useAuth} from "./context/AuthContext.jsx";
+import PublicRoute from "./routes/PublicRoute.jsx";
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import Layout from "./components/layout/Layout.jsx";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton.jsx";
+import {useAuth} from "./context/AuthContext.jsx";
 
 axios.interceptors.response.use(
     response => response,
     error => {
         if (error.response && error.response.status === 401) {
             const token = localStorage.getItem("token")
-
             if (token) {
                 localStorage.removeItem("token")
                 window.location.href = "/auth"
@@ -31,25 +27,6 @@ axios.interceptors.response.use(
         return Promise.reject(error)
     }
 )
-
-const Layout = () => {
-    const [activePage, setActivePage] = useState("Dashboard");
-
-    return (
-        <div className="flex h-screen w-screen bg-gray-100">
-            <Sidebar setActivePage={setActivePage} />
-
-            <div className="flex flex-col flex-1">
-
-                <Navbar pageTitle={activePage} />
-
-                <main className="p-4 overflow-y-auto bg-gray-100 h-screen">
-                    <Outlet />
-                </main>
-            </div>
-        </div>
-    )
-}
 
 const OnboardingGuard = () => {
     const { user, loading } = useAuth();

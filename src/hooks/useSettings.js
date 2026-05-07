@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useToast } from "../components/ToastProvider.jsx";
+import { useToast } from "../components/toast/ToastProvider.jsx";
 import {disconnectPlatform, getConnectionStatus} from "../api/settingsApi.js";
 import { BACKEND_URL } from "../constants/urls.js";
 import axios from "axios";

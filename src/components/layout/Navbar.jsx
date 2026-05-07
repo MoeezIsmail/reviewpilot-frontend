@@ -1,5 +1,5 @@
 import {Bell} from "lucide-react";
-import {useAuth} from "../context/AuthContext.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 const Navbar = ({pageTitle}) => {
     const {user} = useAuth();

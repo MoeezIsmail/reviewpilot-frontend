@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import { useToast } from "../components/ToastProvider.jsx";
-import ConnectionCard from "../components/ConnectionCard.jsx";
+import { useToast } from "../components/toast/ToastProvider.jsx";
+import ConnectionCard from "../components/platforms/ConnectionCard.jsx";
 import useSettings from "../hooks/useSettings.js";
 
 const Settings = () => {

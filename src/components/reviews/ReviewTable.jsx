@@ -1,12 +1,10 @@
 import {useState, useEffect} from "react";
 import ReviewCard from "./ReviewCard.jsx";
-import {useReviews} from "../context/ReviewsContext.jsx";
-import {useAuth} from "../context/AuthContext.jsx";
-import {RefreshCw} from "lucide-react";
-import Button from "../includes/Button.jsx";
+import {useReviews} from "../../context/ReviewsContext.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 import ReviewFilters from "./ReviewFilters.jsx";
-import useReviewFilters from "../hooks/useReviewFilters.js";
-import ReviewsSkeleton from "./skeletons/ReviewsSkeleton.jsx";
+import useReviewFilters from "../../hooks/useReviewFilters.js";
+import ReviewsSkeleton from "../skeletons/ReviewsSkeleton.jsx";
 
 const ReviewsTable = () => {
     const {
@@ -39,22 +37,19 @@ const ReviewsTable = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-
             const bottom = document.documentElement.scrollHeight === document.documentElement.scrollTop + window.innerHeight;
-
             if (bottom && !loading && reviewsData.nextPageToken) {
                 loadNextPage(user._id);
             }
         };
 
         window.addEventListener("scroll", handleScroll);
-
         return () => window.removeEventListener("scroll", handleScroll);
     }, [reviewsData.nextPageToken, loading, user?._id]);
 
     const pendingRepliesCount = reviewsData.reviews.filter((review) => {
         const reviewId = review.reviewId || review.name;
-        return replyStatus[reviewId] === "ready";  // ← sirf "ready" wale
+        return replyStatus[reviewId] === "ready";
     }).length;
 
     const pendingGenerateCount = reviewsData.reviews.filter((review) => {
