@@ -16,7 +16,7 @@ const ReviewPagination = () => {
         : 0;
 
     return (
-        <div className="flex flex-col items-center gap-3 py-3">
+        <div className="flex flex-col items-center gap-3 py-3 bg-red-500">
 
             <div className="flex items-center">
                 {/* Prev */}
@@ -25,8 +25,8 @@ const ReviewPagination = () => {
                     disabled={!canGoPrev || loading}
                     className={`w-7 h-7 rounded-full flex items-center justify-center mr-3 transition-all
                         ${canGoPrev && !loading
-                            ? "text-indigo-500 hover:bg-indigo-50 cursor-pointer"
-                            : "text-gray-300 cursor-not-allowed"
+                            ? "!text-indigo-500 hover:!bg-indigo-50 cursor-pointer"
+                            : "!text-gray-500 cursor-not-allowed"
                         }`}
                 >
                     <ChevronLeft size={15} strokeWidth={2.5} />
@@ -36,11 +36,11 @@ const ReviewPagination = () => {
                 <div className="relative flex items-center">
 
                     {/* Background track */}
-                    <div className="absolute top-[18px] left-3.5 right-3.5 h-1 bg-gray-100 rounded-full" />
+                    <div className="absolute top-[18px] left-3.5 right-3.5 h-1 !bg-gray-100 rounded-full" />
 
                     {/* Filled progress */}
                     <div
-                        className="absolute top-[18px] left-3.5 h-1 bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full transition-all duration-500"
+                        className="absolute top-[18px] left-3.5 h-1 !bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full transition-all duration-500"
                         style={{ width: `calc(${progressPercent}% * (100% - 28px) / 100%)` }}
                     />
 
@@ -58,10 +58,10 @@ const ReviewPagination = () => {
                                         disabled={loading || isActive}
                                         className={`relative flex items-center justify-center rounded-full transition-all duration-300 z-10
                                             ${isActive
-                                                ? "w-9 h-9 bg-indigo-600 text-white shadow-lg shadow-indigo-300 cursor-default ring-4 ring-indigo-100"
+                                                ? "w-9 h-9 !bg-indigo-600 !text-white shadow-lg shadow-indigo-300 cursor-default ring-4 ring-indigo-100"
                                                 : isVisited
-                                                    ? "w-7 h-7 bg-indigo-500 text-white hover:bg-indigo-600 hover:scale-110 cursor-pointer"
-                                                    : "w-7 h-7 bg-white border-2 border-gray-200 text-gray-400 hover:border-indigo-300 hover:text-indigo-500 cursor-pointer"
+                                                    ? "w-7 h-7 bg-indigo-500 !text-white hover:bg-indigo-600 hover:scale-110 cursor-pointer"
+                                                    : "w-7 h-7 bg-white border-2 !border-gray-200 !text-gray-400 hover:border-indigo-300 hover:text-indigo-500 cursor-pointer"
                                             } ${loading && !isActive ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
                                         {isLoadingThis
@@ -73,7 +73,7 @@ const ReviewPagination = () => {
                                         )}
                                     </button>
                                     <span className={`text-[10px] font-medium tracking-wide transition-colors
-                                        ${isActive ? "text-indigo-600" : isVisited ? "text-indigo-400" : "text-gray-300"}`}>
+                                        ${isActive ? "!text-indigo-600" : isVisited ? "!text-indigo-400" : "!text-gray-300"}`}>
                                         {isActive ? "current" : `pg ${page}`}
                                     </span>
                                 </div>
@@ -88,8 +88,8 @@ const ReviewPagination = () => {
                                     disabled={loading}
                                     className={`w-7 h-7 rounded-full border-2 border-dashed flex items-center justify-center transition-all z-10 bg-white
                                         ${loading
-                                            ? "border-gray-200 text-gray-300 cursor-not-allowed"
-                                            : "border-indigo-300 text-indigo-400 hover:border-indigo-500 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer"
+                                            ? "!border-gray-200 !text-gray-300 cursor-not-allowed"
+                                            : "border-indigo-300 !text-indigo-400 hover:border-indigo-500 hover:bg-indigo-50 hover:!text-indigo-600 cursor-pointer"
                                         }`}
                                 >
                                     {loading
@@ -97,7 +97,7 @@ const ReviewPagination = () => {
                                         : <span className="text-[10px] font-bold">+</span>
                                     }
                                 </button>
-                                <span className="text-[10px] text-gray-300 font-medium">more</span>
+                                <span className="text-[10px] !text-gray-300 font-medium">more</span>
                             </div>
                         )}
                     </div>
@@ -109,8 +109,8 @@ const ReviewPagination = () => {
                     disabled={!canGoNext || loading}
                     className={`w-7 h-7 rounded-full flex items-center justify-center ml-3 transition-all
                         ${canGoNext && !loading
-                            ? "text-indigo-500 hover:bg-indigo-50 cursor-pointer"
-                            : "text-gray-300 cursor-not-allowed"
+                            ? "!text-indigo-500 hover:bg-indigo-50 cursor-pointer"
+                            : "!text-gray-300 cursor-not-allowed"
                         }`}
                 >
                     <ChevronRight size={15} strokeWidth={2.5} />
