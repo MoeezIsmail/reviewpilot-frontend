@@ -29,7 +29,7 @@ const ReviewPagination = () => {
                             : "!text-gray-500 cursor-not-allowed"
                         }`}
                 >
-                    <ChevronLeft size={15} color={'black'} strokeWidth={2.5} />
+                    <ChevronLeft size={15} color={'black'} />
                 </button>
 
                 {/* Track + Nodes */}
@@ -113,7 +113,7 @@ const ReviewPagination = () => {
                             : "!text-gray-300 cursor-not-allowed"
                         }`}
                 >
-                    <ChevronRight size={15} color={'black'} strokeWidth={2.5} />
+                    <ChevronRight size={15} color={'black'} />
                 </button>
             </div>
         </div>
