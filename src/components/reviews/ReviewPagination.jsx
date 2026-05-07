@@ -9,7 +9,7 @@ const ReviewPagination = () => {
     const pageNums = Array.from({ length: totalPagesLoaded }, (_, i) => i + 1);
 
     return (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center py-1">
             <div className="flex items-center">
                 {pageNums.map((page, idx) => {
                     const isActive = page === currentPage;
@@ -27,7 +27,7 @@ const ReviewPagination = () => {
                                     ${isActive
                                         ? "w-9 h-9 !bg-indigo-600 !text-white shadow-md shadow-indigo-300 cursor-default ring-4 ring-indigo-100"
                                         : isVisited
-                                            ? "w-8 h-8 bg-indigo-500 !text-white hover:scale-110 cursor-pointer"
+                                            ? "w-8 h-8 bg-indigo-500 !text-gray-400 hover:scale-110 cursor-pointer"
                                             : "w-8 h-8 bg-indigo-200 border-2 !border-gray-200 !text-gray-400 hover:border-indigo-300 hover:!text-indigo-500 cursor-pointer"
                                     } ${loading && !isActive ? "opacity-50 cursor-not-allowed" : ""}`}
                             >
