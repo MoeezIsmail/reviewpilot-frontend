@@ -18,19 +18,29 @@ const useSettings = () => {
     const [loading, setLoading] = useState(true);
     const [disconnecting, setDisconnecting] = useState(null);
 
+    const KNOWN_TYPES = ["Restaurant", "Hotel", "Cafe", "Bakery", "Gym", "Salon", "Clinic", "Retail Store", "Auto Service", "Other"];
+
+    const resolveTypeFields = (rawType) => {
+        if (!rawType) return { businessType: "", customBusinessType: "" };
+        if (KNOWN_TYPES.includes(rawType) && rawType !== "Other") return { businessType: rawType, customBusinessType: "" };
+        if (rawType === "Other") return { businessType: "Other", customBusinessType: "" };
+        return { businessType: "Other", customBusinessType: rawType };
+    };
+
+    const initial = resolveTypeFields(user?.businessType);
     const [businessForm, setBusinessForm] = useState({
         businessName: user?.businessName || "",
-        businessType: user?.businessType || "",
+        businessType: initial.businessType,
     });
+    const [customBusinessType, setCustomBusinessType] = useState(initial.customBusinessType);
     const [isEditingBusiness, setIsEditingBusiness] = useState(false);
     const [savingBusiness, setSavingBusiness] = useState(false);
 
     useEffect(() => {
         if (user) {
-            setBusinessForm({
-                businessName: user.businessName || "",
-                businessType: user.businessType || "",
-            });
+            const resolved = resolveTypeFields(user.businessType);
+            setBusinessForm({ businessName: user.businessName || "", businessType: resolved.businessType });
+            setCustomBusinessType(resolved.customBusinessType);
         }
     }, [user]);
 
@@ -103,17 +113,21 @@ const useSettings = () => {
     };
 
     const handleSaveBusinessInfo = async () => {
+        const finalType = businessForm.businessType === "Other" ? customBusinessType.trim() : businessForm.businessType;
+
         if (!businessForm.businessName.trim() || !businessForm.businessType) {
             addToast("Business name and type are required.", "error");
             return;
         }
+        if (businessForm.businessType === "Other" && !customBusinessType.trim()) {
+            addToast("Please specify your business type.", "error");
+            return;
+        }
+
         setSavingBusiness(true);
         try {
-            await updateBusinessInfo({
-                businessName: businessForm.businessName.trim(),
-                businessType: businessForm.businessType,
-            });
-            updateUser({ ...user, businessName: businessForm.businessName.trim(), businessType: businessForm.businessType });
+            await updateBusinessInfo({ businessName: businessForm.businessName.trim(), businessType: finalType });
+            updateUser({ ...user, businessName: businessForm.businessName.trim(), businessType: finalType });
             addToast("Business info updated successfully.", "success");
             setIsEditingBusiness(false);
         } catch (err) {
@@ -124,7 +138,9 @@ const useSettings = () => {
     };
 
     const handleCancelBusinessEdit = () => {
-        setBusinessForm({ businessName: user?.businessName || "", businessType: user?.businessType || "" });
+        const resolved = resolveTypeFields(user?.businessType);
+        setBusinessForm({ businessName: user?.businessName || "", businessType: resolved.businessType });
+        setCustomBusinessType(resolved.customBusinessType);
         setIsEditingBusiness(false);
     };
 
@@ -136,6 +152,8 @@ const useSettings = () => {
         handleConnectGoogle,
         businessForm,
         setBusinessForm,
+        customBusinessType,
+        setCustomBusinessType,
         isEditingBusiness,
         setIsEditingBusiness,
         savingBusiness,
