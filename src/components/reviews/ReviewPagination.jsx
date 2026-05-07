@@ -8,88 +8,128 @@ const ReviewPagination = () => {
 
     const canGoPrev = currentPage > 1;
     const canGoNext = hasNextPage || currentPage < totalPagesLoaded;
-
-    const pageChips = Array.from({ length: totalPagesLoaded }, (_, i) => i + 1);
+    const pageNums = Array.from({ length: totalPagesLoaded }, (_, i) => i + 1);
 
     return (
-        <div className="flex flex-col items-center gap-3 pt-2 pb-1 select-none">
-            {/* Track */}
-            <div className="flex items-center gap-1">
-                {/* Prev Arrow */}
+        <div className="flex flex-col items-center gap-4 py-3">
+
+            {/* Node track */}
+            <div className="flex items-center">
+
+                {/* Prev */}
                 <button
-                    onClick={() => canGoPrev && goToPage(currentPage - 1)}
+                    onClick={() => canGoPrev && !loading && goToPage(currentPage - 1)}
                     disabled={!canGoPrev || loading}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all
+                    className={`w-7 h-7 rounded-full flex items-center justify-center mr-3 transition-all
                         ${canGoPrev && !loading
-                            ? "text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer"
+                            ? "text-indigo-500 hover:bg-indigo-50 cursor-pointer"
                             : "text-gray-300 cursor-not-allowed"
                         }`}
                 >
-                    <ChevronLeft size={16} strokeWidth={2.5} />
+                    <ChevronLeft size={15} strokeWidth={2.5} />
                 </button>
 
-                {/* Page chips */}
-                <div className="flex items-center gap-1.5 px-1">
-                    {pageChips.map((page) => {
+                {/* Nodes + connectors */}
+                <div className="flex items-center">
+                    {pageNums.map((page, idx) => {
                         const isActive = page === currentPage;
-                        const isLoading = loading && page === currentPage;
+                        const isVisited = page < currentPage;
+                        const isLoadingThis = loading && page === currentPage;
+                        const isLast = idx === pageNums.length - 1;
+
                         return (
-                            <button
-                                key={page}
-                                onClick={() => !isActive && !loading && goToPage(page)}
-                                disabled={loading}
-                                className={`relative h-8 min-w-[2rem] px-2.5 rounded-lg text-xs font-semibold transition-all duration-200
-                                    ${isActive
-                                        ? "bg-indigo-600 text-white shadow-md shadow-indigo-200 scale-110 ring-2 ring-indigo-300 ring-offset-1"
-                                        : "text-gray-500 border border-gray-200 bg-white hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/50 cursor-pointer"
-                                    } ${loading ? "cursor-not-allowed opacity-60" : ""}`}
-                            >
-                                {isLoading
-                                    ? <Loader2 size={12} className="animate-spin mx-auto" />
-                                    : page
-                                }
-                            </button>
+                            <div key={page} className="flex items-center">
+                                {/* Node */}
+                                <div className="flex flex-col items-center gap-1.5">
+                                    <button
+                                        onClick={() => !isActive && !loading && goToPage(page)}
+                                        disabled={loading || isActive}
+                                        className={`relative flex items-center justify-center rounded-full transition-all duration-300
+                                            ${isActive
+                                                ? "w-9 h-9 bg-indigo-600 text-white shadow-lg shadow-indigo-300 cursor-default ring-4 ring-indigo-100"
+                                                : isVisited
+                                                    ? "w-7 h-7 bg-indigo-500 text-white hover:bg-indigo-600 hover:scale-110 cursor-pointer"
+                                                    : "w-7 h-7 bg-white border-2 border-gray-200 text-gray-400 hover:border-indigo-300 hover:text-indigo-500 cursor-pointer"
+                                            } ${loading && !isActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                                    >
+                                        {isLoadingThis
+                                            ? <Loader2 size={14} className="animate-spin" />
+                                            : <span className={`font-bold leading-none ${isActive ? "text-sm" : "text-xs"}`}>{page}</span>
+                                        }
+                                        {/* Active pulse ring */}
+                                        {isActive && (
+                                            <span className="absolute inset-0 rounded-full animate-ping bg-indigo-400 opacity-20" />
+                                        )}
+                                    </button>
+                                    <span className={`text-[10px] font-medium tracking-wide transition-colors
+                                        ${isActive ? "text-indigo-600" : isVisited ? "text-indigo-400" : "text-gray-300"}`}>
+                                        {isActive ? "current" : `pg ${page}`}
+                                    </span>
+                                </div>
+
+                                {/* Connector line (between nodes) */}
+                                {!isLast && (
+                                    <div className={`w-10 h-0.5 mx-1 mb-4 rounded-full transition-all duration-300
+                                        ${page < currentPage
+                                            ? "bg-indigo-400"
+                                            : "bg-gray-200"
+                                        }`}
+                                    />
+                                )}
+
+                                {/* Dashed connector + ghost node for next unloaded page */}
+                                {isLast && hasNextPage && (
+                                    <div className="flex items-center mb-4">
+                                        <div className="w-6 h-0.5 mx-1 border-t-2 border-dashed border-indigo-200 rounded-full" />
+                                        <button
+                                            onClick={() => !loading && goToPage(totalPagesLoaded + 1)}
+                                            disabled={loading}
+                                            className={`w-7 h-7 rounded-full border-2 border-dashed flex items-center justify-center transition-all
+                                                ${loading
+                                                    ? "border-gray-200 text-gray-300 cursor-not-allowed"
+                                                    : "border-indigo-300 text-indigo-400 hover:border-indigo-500 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer"
+                                                }`}
+                                        >
+                                            {loading
+                                                ? <Loader2 size={11} className="animate-spin" />
+                                                : <span className="text-[10px] font-bold">+</span>
+                                            }
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         );
                     })}
-
-                    {/* Dashed "next" indicator */}
-                    {hasNextPage && currentPage === totalPagesLoaded && (
-                        <button
-                            onClick={() => !loading && goToPage(totalPagesLoaded + 1)}
-                            disabled={loading}
-                            className={`h-8 px-2.5 rounded-lg text-xs font-semibold border-2 border-dashed transition-all duration-200
-                                ${loading
-                                    ? "border-gray-200 text-gray-300 cursor-not-allowed"
-                                    : "border-indigo-300 text-indigo-400 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 cursor-pointer"
-                                }`}
-                        >
-                            {loading
-                                ? <Loader2 size={12} className="animate-spin mx-auto" />
-                                : "···"
-                            }
-                        </button>
-                    )}
                 </div>
 
-                {/* Next Arrow */}
+                {/* Next */}
                 <button
-                    onClick={() => canGoNext && goToPage(currentPage + 1)}
+                    onClick={() => canGoNext && !loading && goToPage(currentPage + 1)}
                     disabled={!canGoNext || loading}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all
+                    className={`w-7 h-7 rounded-full flex items-center justify-center ml-3 transition-all
                         ${canGoNext && !loading
-                            ? "text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer"
+                            ? "text-indigo-500 hover:bg-indigo-50 cursor-pointer"
                             : "text-gray-300 cursor-not-allowed"
                         }`}
                 >
-                    <ChevronRight size={16} strokeWidth={2.5} />
+                    <ChevronRight size={15} strokeWidth={2.5} />
                 </button>
             </div>
 
-            {/* Subtle label */}
-            <p className="text-[11px] text-gray-400 tracking-wide">
-                Page {currentPage}
-                {totalPagesLoaded > 1 && ` of ${totalPagesLoaded}${hasNextPage ? "+" : ""}`}
-            </p>
+            {/* Progress bar */}
+            {totalPagesLoaded > 1 && (
+                <div className="flex items-center gap-2">
+                    <div className="w-32 h-1 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full transition-all duration-500"
+                            style={{ width: `${(currentPage / totalPagesLoaded) * 100}%` }}
+                        />
+                    </div>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                        {currentPage} / {totalPagesLoaded}{hasNextPage ? "+" : ""}
+                    </span>
+                </div>
+            )}
         </div>
     );
 };
