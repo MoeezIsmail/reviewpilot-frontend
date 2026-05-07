@@ -41,14 +41,7 @@ const Settings = () => {
         : businessForm.businessType;
 
     return (
-        <div className="max-w-2xl space-y-6">
-            <div>
-                <h1 className="text-xl font-semibold text-gray-800">Settings</h1>
-                <p className="text-gray-400 text-sm mt-1">
-                    Manage your business info and connected platforms
-                </p>
-            </div>
-
+        <div className="max-w-screen space-y-6">
             {/* ── Business Info Card ── */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 {/* Card Header */}
@@ -58,7 +51,7 @@ const Settings = () => {
                             <Building2 size={16} className="text-indigo-600" />
                         </div>
                         <div>
-                            <h2 className="text-sm font-semibold text-gray-800">Business Info</h2>
+                            <h2 className="text-xl font-semibold text-gray-800">Business Info</h2>
                             <p className="text-xs text-gray-400">Your business name and category</p>
                         </div>
                     </div>
@@ -201,7 +194,7 @@ const Settings = () => {
                         </svg>
                     </div>
                     <div>
-                        <h2 className="text-sm font-semibold text-gray-800">Connected Accounts</h2>
+                        <h2 className="text-xl font-semibold text-gray-800">Connected Accounts</h2>
                         <p className="text-xs text-gray-400">Platforms connected to fetch and reply to reviews</p>
                     </div>
                 </div>
