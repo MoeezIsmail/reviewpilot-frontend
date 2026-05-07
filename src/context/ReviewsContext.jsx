@@ -72,6 +72,7 @@ export const ReviewsProvider = ({ children }) => {
     // ─── Load Next Page ───────────────────────────────────────
     const loadNextPage = useCallback(async (userId) => {
         if (!reviewsData.nextPageToken) return;
+        console.log('next page token: ', reviewsData.nextPageToken);
         try {
             setLoading(true);
             const data = await fetchReviews(userId, reviewsData.nextPageToken);
