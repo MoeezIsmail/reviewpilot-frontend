@@ -36,7 +36,7 @@ const ReviewFilters = ({
 
                 <div className="flex gap-6 items-center">
                     {/* Status Filters */}
-                    <div className="flex gap-2 rounded-xl p-2 !bg-gray-50">
+                    <div className="flex gap-2 rounded-xl p-2 !bg-gray-100">
                         {["all", "replied", "pending"].map((f) => (
                             <button
                                 key={f}
