@@ -70,7 +70,7 @@ export const ReviewsProvider = ({ children }) => {
     const refreshReviews = () => setHasFetched(false);
 
     // ─── Load Next Page ───────────────────────────────────────
-    const loadNextPage = async (userId) => {
+    const loadNextPage = (async (userId) => {
         if (!reviewsData.nextPageToken) return;
         try {
             setLoading(true);
@@ -96,7 +96,7 @@ export const ReviewsProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [reviewsData.nextPageToken]);
 
     // ─── Generate AI Reply ────────────────────────────────────
     const generateAiReply = async (reviewId, reviewText) => {

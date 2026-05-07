@@ -20,6 +20,8 @@ const ReviewsTable = () => {
         isGeneratingAll
     } = useReviews();
 
+    console.log('review: ', reviewsData);
+
     const {user} = useAuth();
 
     const {
@@ -45,7 +47,7 @@ const ReviewsTable = () => {
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [reviewsData.nextPageToken, loading, user?._id]);
+    }, [reviewsData.nextPageToken, loading, user?._id, loadNextPage]);
 
     const pendingRepliesCount = reviewsData.reviews.filter((review) => {
         const reviewId = review.reviewId || review.name;
