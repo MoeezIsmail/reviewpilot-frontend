@@ -75,6 +75,7 @@ export const ReviewsProvider = ({ children }) => {
         try {
             setLoading(true);
             const data = await fetchReviews(userId, reviewsData.nextPageToken);
+
             setReviewsData((prev) => ({
                 reviews: [...prev.reviews, ...data.reviews],
                 nextPageToken: data.nextPageToken,
@@ -88,8 +89,8 @@ export const ReviewsProvider = ({ children }) => {
                 const id = r.reviewId || r.name;
                 newStatus[id] = r.reviewReply?.comment ? "posted" : "idle";
             });
-            setReplyStatus((prev) => ({ ...prev, ...newStatus }));
 
+            setReplyStatus((prev) => ({ ...prev, ...newStatus }));
         } catch (err) {
             addToast("Failed to fetch more reviews", "error");
         } finally {
