@@ -7,9 +7,9 @@ const Navbar = ({pageTitle}) => {
     return (
         <header className={`p-2`}>
             <div className="flex items-center justify-between bg-indigo-600 !text-white px-6 py-4 border-b border-gray-300 rounded-lg">
-                <h1 className="text-sm font-semibold">
+                <p className="text-sm font-semibold">
                     {pageTitle || "Dashboard"}
-                </h1>
+                </p>
 
                 <div className="flex items-center gap-6">
                     <div className="border-r px-6 py-2">
