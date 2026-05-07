@@ -36,12 +36,12 @@ const ReviewFilters = ({
 
                 <div className="flex gap-6 items-center">
                     {/* Status Filters */}
-                    <div className="flex gap-2 rounded-xl p-2 !bg-gray-50">
+                    <div className="flex gap-2 rounded-xl p-1 !bg-gray-50">
                         {["all", "replied", "pending"].map((f) => (
                             <button
                                 key={f}
                                 onClick={() => setFilter(f)}
-                                className={`px-4 py-1.5 rounded-xl text-sm font-medium capitalize transition-all ${
+                                className={`px-4 py-1 rounded-xl text-sm font-medium capitalize transition-all ${
                                     filter === f
                                         ? "!bg-indigo-600 text-white"
                                         : "!bg-gray-50 border border-gray-200 text-gray-600 hover:border-indigo-300"
