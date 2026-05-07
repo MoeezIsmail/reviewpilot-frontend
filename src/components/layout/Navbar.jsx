@@ -7,7 +7,7 @@ const Navbar = ({pageTitle}) => {
     return (
         <header className={`p-2`}>
             <div className="flex items-center justify-between bg-indigo-600 !text-white px-6 py-4 border-b border-gray-300 rounded-lg">
-                <h1 className="text-md font-semibold">
+                <h1 className="text-sm font-semibold">
                     {pageTitle || "Dashboard"}
                 </h1>
 
