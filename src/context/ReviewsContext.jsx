@@ -36,6 +36,7 @@ export const ReviewsProvider = ({ children }) => {
             const data = await fetchReviews(user._id, token);
 
             console.log('context data: ', data);
+            return data;
 
             // const pageData = {
             //     reviews: data || [],
@@ -83,6 +84,7 @@ export const ReviewsProvider = ({ children }) => {
         }
 
         await fetchPage(1, null);
+
     }, [user, fetchPage]);
 
     useEffect(() => {
