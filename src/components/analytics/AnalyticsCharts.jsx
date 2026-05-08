@@ -15,6 +15,8 @@ import AnalyticsSkeleton from "../skeletons/AnalyticsSkeleton.jsx";
 const AnalyticsCharts = () => {
     const { reviewsData, replyStatus, loading } = useReviews();
 
+    console.log('reviews: ', reviewsData);
+
     const monthlyData = useMemo(() => groupReviewsByMonth(reviews), [reviews]);
     const ratingDist = useMemo(() => getRatingDistribution(reviews), [reviews]);
     const responseRate = useMemo(() => getResponseRate(reviews, replyStatus), [reviews, replyStatus]);
