@@ -7,7 +7,7 @@ const SummaryCard = ({ title, value, subtitle, color }) => (
 );
 
 const AnalyticsSummaryCards = ({ reviews, responseRate, sentiment }) => {
-
+    console.log('re: ', reviews)
     const total = reviews.reviews.length;
 
     return (
