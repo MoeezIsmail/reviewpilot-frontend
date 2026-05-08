@@ -16,8 +16,6 @@ const AnalyticsCharts = () => {
     const { reviewsData, replyStatus, loading } = useReviews();
     const reviews = reviewsData.reviews
 
-    console.log('reviews: ', reviewsData);
-
     const monthlyData = useMemo(() => groupReviewsByMonth(reviews), [reviews]);
     const ratingDist = useMemo(() => getRatingDistribution(reviews), [reviews]);
     const responseRate = useMemo(() => getResponseRate(reviews, replyStatus), [reviews, replyStatus]);
