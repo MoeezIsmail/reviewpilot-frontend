@@ -7,23 +7,18 @@ const SummaryCard = ({ title, value, subtitle, color }) => (
 );
 
 const AnalyticsSummaryCards = ({ reviews, responseRate, sentiment }) => {
-    const RATING_MAP = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
-    const total = reviews.length;
-    const avgRating = total
-        ? (reviews.reduce((sum, r) => sum + (RATING_MAP[r.starRating] || 0), 0) / total).toFixed(1)
-        : 0;
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <SummaryCard
                 title="Total Reviews"
-                value={total}
+                value={reviews.totalReviewCount}
                 subtitle="All time"
                 color="text-indigo-600"
             />
             <SummaryCard
                 title="Average Rating"
-                value={`${avgRating}★`}
+                value={`${reviews.averageRating}★`}
                 subtitle="Across all reviews"
                 color="text-yellow-500"
             />
