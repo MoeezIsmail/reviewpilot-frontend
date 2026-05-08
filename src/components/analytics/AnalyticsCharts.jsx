@@ -14,6 +14,7 @@ import AnalyticsSkeleton from "../skeletons/AnalyticsSkeleton.jsx";
 
 const AnalyticsCharts = () => {
     const { reviewsData, replyStatus, loading } = useReviews();
+    const reviews = reviewsData.reviews
 
     console.log('reviews: ', reviewsData);
 
