@@ -35,9 +35,6 @@ export const ReviewsProvider = ({ children }) => {
         try {
             const data = await fetchReviews(user._id, token);
 
-            console.log('context data: ', data);
-            return data;
-
             // const pageData = {
             //     reviews: data || [],
             //     nextPageToken: data.nextPageToken || null,
@@ -51,16 +48,16 @@ export const ReviewsProvider = ({ children }) => {
             setHasFetched(true);
 
             // Init reply status without overriding existing entries
-            // setReplyStatus(prev => {
-            //     const updated = { ...prev };
-            //     data?.reviews?.forEach(r => {
-            //         const id = r.reviewId || r.name;
-            //         if (!updated[id]) {
-            //             updated[id] = r.reviewReply?.comment ? "posted" : "idle";
-            //         }
-            //     });
-            //     return updated;
-            // });
+            setReplyStatus(prev => {
+                const updated = { ...prev };
+                data?.reviewsData.reviews?.forEach(r => {
+                    const id = r.reviewId || r.name;
+                    if (!updated[id]) {
+                        updated[id] = r.reviewReply?.comment ? "posted" : "idle";
+                    }
+                });
+                return updated;
+            });
 
         } catch (err) {
             const message = err.response?.data?.message;
@@ -118,7 +115,7 @@ export const ReviewsProvider = ({ children }) => {
     };
 
     const totalPagesLoaded = Object.keys(pagesCache).length;
-    const hasNextPage = !!reviewsData.nextPageToken;
+    const hasNextPage = !!reviewsData.reviewsData.nextPageToken;
 
     // ─── Generate AI Reply ────────────────────────────────────
     const generateAiReply = async (reviewId, reviewText) => {
@@ -181,7 +178,7 @@ export const ReviewsProvider = ({ children }) => {
 
     // ─── Post All Replies ─────────────────────────────────────
     const postAllReplies = async () => {
-        const reviewsToPost = reviewsData.reviews.filter(r => {
+        const reviewsToPost = reviewsData.reviewsData.reviews.filter(r => {
             const id = r.reviewId || r.name;
             return replyStatus[id] === "ready";
         });
@@ -194,11 +191,11 @@ export const ReviewsProvider = ({ children }) => {
         setIsPostingAll(true);
 
         const postingIds = reviewsToPost.map(r => r.reviewId || r.name);
-        // setReplyStatus(prev => {
-        //     const updated = { ...prev };
-        //     postingIds.forEach(id => { updated[id] = "posting"; });
-        //     return updated;
-        // });
+        setReplyStatus(prev => {
+            const updated = { ...prev };
+            postingIds.forEach(id => { updated[id] = "posting"; });
+            return updated;
+        });
 
         let successCount = 0;
         let failCount = 0;
@@ -258,7 +255,7 @@ export const ReviewsProvider = ({ children }) => {
 
     // ─── Generate All Replies ─────────────────────────────────
     const generateAllReplies = async () => {
-        const pendingReviews = reviewsData.reviews.filter(r => {
+        const pendingReviews = reviewsData.reviewsData.reviews.filter(r => {
             const id = r.reviewId || r.name;
             const status = replyStatus[id];
             return status === "idle" || status === "failed";
