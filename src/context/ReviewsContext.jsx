@@ -7,12 +7,7 @@ import { useToast } from "../components/toast/ToastProvider.jsx";
 const ReviewsContext = createContext();
 
 export const ReviewsProvider = ({ children }) => {
-    const [reviewsData, setReviewsData] = useState({
-        reviews: [],
-        nextPageToken: null,
-        accountId: null,
-        locationId: null,
-    });
+    const [reviewsData, setReviewsData] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [hasFetched, setHasFetched] = useState(false);
@@ -40,17 +35,19 @@ export const ReviewsProvider = ({ children }) => {
         try {
             const data = await fetchReviews(user._id, token);
 
-            const pageData = {
-                reviews: data.reviews || [],
-                nextPageToken: data.nextPageToken || null,
-                accountId: data.accountId || null,
-                locationId: data.locationId || null,
-            };
+            // const pageData = {
+            //     reviews: data || [],
+            //     nextPageToken: data.nextPageToken || null,
+            //     accountId: data.accountId || null,
+            //     locationId: data.locationId || null,
+            // };
 
-            setPagesCache(prev => ({ ...prev, [pageNum]: pageData }));
-            setReviewsData(pageData);
+            setPagesCache(prev => ({ ...prev, [pageNum]: data }));
+            setReviewsData(data);
             setCurrentPage(pageNum);
             setHasFetched(true);
+
+            console.log('context', reviewsData);
 
             // Init reply status without overriding existing entries
             setReplyStatus(prev => {
@@ -84,6 +81,7 @@ export const ReviewsProvider = ({ children }) => {
             setLoading(false);
             return;
         }
+
         await fetchPage(1, null);
     }, [user, fetchPage]);
 
