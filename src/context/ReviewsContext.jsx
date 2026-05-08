@@ -50,16 +50,16 @@ export const ReviewsProvider = ({ children }) => {
             setHasFetched(true);
 
             // Init reply status without overriding existing entries
-            setReplyStatus(prev => {
-                const updated = { ...prev };
-                data?.reviews?.forEach(r => {
-                    const id = r.reviewId || r.name;
-                    if (!updated[id]) {
-                        updated[id] = r.reviewReply?.comment ? "posted" : "idle";
-                    }
-                });
-                return updated;
-            });
+            // setReplyStatus(prev => {
+            //     const updated = { ...prev };
+            //     data?.reviews?.forEach(r => {
+            //         const id = r.reviewId || r.name;
+            //         if (!updated[id]) {
+            //             updated[id] = r.reviewReply?.comment ? "posted" : "idle";
+            //         }
+            //     });
+            //     return updated;
+            // });
 
         } catch (err) {
             const message = err.response?.data?.message;
