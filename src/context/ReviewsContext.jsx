@@ -192,11 +192,11 @@ export const ReviewsProvider = ({ children }) => {
         setIsPostingAll(true);
 
         const postingIds = reviewsToPost.map(r => r.reviewId || r.name);
-        setReplyStatus(prev => {
-            const updated = { ...prev };
-            postingIds.forEach(id => { updated[id] = "posting"; });
-            return updated;
-        });
+        // setReplyStatus(prev => {
+        //     const updated = { ...prev };
+        //     postingIds.forEach(id => { updated[id] = "posting"; });
+        //     return updated;
+        // });
 
         let successCount = 0;
         let failCount = 0;
