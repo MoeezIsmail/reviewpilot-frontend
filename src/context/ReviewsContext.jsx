@@ -35,6 +35,9 @@ export const ReviewsProvider = ({ children }) => {
         try {
             const data = await fetchReviews(user._id, token);
 
+            console.log('context data: ', data);
+            return;
+
             // const pageData = {
             //     reviews: data || [],
             //     nextPageToken: data.nextPageToken || null,
