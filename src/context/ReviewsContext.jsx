@@ -178,7 +178,7 @@ export const ReviewsProvider = ({ children }) => {
 
     // ─── Post All Replies ─────────────────────────────────────
     const postAllReplies = async () => {
-        const reviewsToPost = reviewsData.reviewsData.reviews.filter(r => {
+        const reviewsToPost = reviewsData.reviewsData.reviews?.filter(r => {
             const id = r.reviewId || r.name;
             return replyStatus[id] === "ready";
         });
