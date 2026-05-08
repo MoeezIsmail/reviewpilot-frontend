@@ -36,7 +36,6 @@ export const ReviewsProvider = ({ children }) => {
             const data = await fetchReviews(user._id, token);
 
             console.log('context data: ', data);
-            return;
 
             // const pageData = {
             //     reviews: data || [],
@@ -50,12 +49,10 @@ export const ReviewsProvider = ({ children }) => {
             setCurrentPage(pageNum);
             setHasFetched(true);
 
-            console.log('context', reviewsData);
-
             // Init reply status without overriding existing entries
             setReplyStatus(prev => {
                 const updated = { ...prev };
-                data.reviews?.forEach(r => {
+                data?.reviews?.forEach(r => {
                     const id = r.reviewId || r.name;
                     if (!updated[id]) {
                         updated[id] = r.reviewReply?.comment ? "posted" : "idle";
