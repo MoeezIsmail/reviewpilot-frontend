@@ -186,7 +186,7 @@ export const ReviewsProvider = ({ children }) => {
 
     // ─── Post All Replies ─────────────────────────────────────
     const postAllReplies = async () => {
-        const reviewsToPost = reviewsData.reviewsData.reviews?.filter(r => {
+        const reviewsToPost = reviewsData.reviewsData?.reviews?.filter(r => {
             const id = r.reviewId || r.name;
             return replyStatus[id] === "ready";
         });
@@ -247,8 +247,8 @@ export const ReviewsProvider = ({ children }) => {
         const total = Object.keys(replyStatus).length;
         if (!total) return { posted: 0, ready: 0, pending: 0, postedCount: 0, readyCount: 0, pendingCount: 0, total: 0 };
 
-        const posted = Object.values(replyStatus).filter(s => s === "posted").length;
-        const ready = Object.values(replyStatus).filter(s => s === "ready").length;
+        const posted = Object.values(replyStatus)?.filter(s => s === "posted").length;
+        const ready = Object.values(replyStatus)?.filter(s => s === "ready").length;
         const pending = total - posted - ready;
 
         return {
