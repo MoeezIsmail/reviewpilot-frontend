@@ -114,7 +114,7 @@ const Subscription = () => {
     const [loading, setLoading] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
     const [cancelConfirm, setCancelConfirm] = useState(false);
-    const { showToast } = useToast();
+    const { addToast: showToast } = useToast();
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {

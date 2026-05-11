@@ -1,26 +1,20 @@
-import { authProtectedApi } from "./axios.js";
+import axios from "axios";
+import { BACKEND_URL } from "../constants/urls.js";
 
-export const fetchCurrentPlan = async () => {
-    return await authProtectedApi.get('/subscription/current');
-};
+const subscriptionApi = axios.create({
+    baseURL: `${BACKEND_URL}/api/subscription`,
+    headers: { "Content-Type": "application/json" },
+});
 
-export const fetchPlans = async () => {
-    return await authProtectedApi.get('/subscription/plans');
-};
+subscriptionApi.interceptors.request.use(config => {
+    const token = localStorage.getItem("token");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
 
-export const createCheckoutSession = async ({ plan, gateway }) => {
-    return await authProtectedApi.post('/subscription/checkout', { plan, gateway });
-};
-
-export const createPortalSession = async () => {
-    return await authProtectedApi.post('/subscription/portal');
-};
-
-export const cancelPlan = async () => {
-    return await authProtectedApi.post('/subscription/cancel');
-};
-
-// dev/testing only
-export const upgradePlan = async (plan) => {
-    return await authProtectedApi.post('/subscription/upgrade', { plan });
-};
+export const fetchCurrentPlan = () => subscriptionApi.get('/current');
+export const fetchPlans = () => subscriptionApi.get('/plans');
+export const createCheckoutSession = ({ plan, gateway }) => subscriptionApi.post('/checkout', { plan, gateway });
+export const createPortalSession = () => subscriptionApi.post('/portal');
+export const cancelPlan = () => subscriptionApi.post('/cancel');
+export const upgradePlan = (plan) => subscriptionApi.post('/upgrade', { plan });
