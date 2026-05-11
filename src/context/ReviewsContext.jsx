@@ -59,7 +59,12 @@ export const ReviewsProvider = ({ children }) => {
         setLoading(true);
 
         try {
-            const data = await fetchReviews(user._id, token);
+            const response = await fetchReviews(user._id, token);
+
+            const data = {
+                ...response,
+                averageRating: Math.floor(response.averageRating * 10) / 10,
+            }
 
             setPagesCache(prev => ({ ...prev, [pageNum]: data }));
             setReviewsData(data);
