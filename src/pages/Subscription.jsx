@@ -97,7 +97,7 @@ const PlanCard = ({ planKey, plan, currentPlan, gateway, onUpgrade, onCancel, lo
                 <button
                     onClick={() => onUpgrade(planKey)}
                     disabled={loading}
-                    className={`w-full py-2.5 rounded-xl text-sm font-semibold transition disabled:opacity-50 ${c.btn}`}
+                    className={`w-full py-2.5 text-black rounded-xl text-sm font-semibold transition disabled:opacity-50 ${c.btn}`}
                 >
                     {loading ? "Redirecting..." : `Upgrade to ${plan.name}`}
                 </button>
