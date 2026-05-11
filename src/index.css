@@ -90,15 +90,15 @@ button:focus-visible {
 
 /* Smooth scrollbar */
 .reviews-card-container {
+  overflow-y: auto;
   scrollbar-gutter: stable;
-  overflow-anchor: none;
 
   scrollbar-width: thin;
   scrollbar-color: #6366f1 #eef2ff;
 }
 
 .reviews-card-container::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .reviews-card-container::-webkit-scrollbar-track {
