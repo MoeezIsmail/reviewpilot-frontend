@@ -81,7 +81,7 @@ const ReviewsTable = () => {
 
             {/* ← displayReviews use karo — filteredReviews nahi */}
             {displayReviews?.length > 0 ? (
-                <div className="reviews-card-container flex flex-col gap-3 max-h-[73vh] overflow-y-auto pr-2">
+                <div className="reviews-card-container flex flex-col gap-3 max-h-[73vh] overflow-y-scroll pr-2">
                     {displayReviews.map((review, i) => (
                         <ReviewCard key={review.reviewId || review.name || i} review={review} />
                     ))}
