@@ -11,7 +11,7 @@ import {useAuth} from "../context/AuthContext.jsx";
 import DashboardSkeleton from "../components/skeletons/DashboardSkeleton.jsx";
 
 const Dashboard = () => {
-    const { reviewsData, allReviews, isAnyPlatformConnected, refreshReviews, loading  } = useReviews();
+    const { reviewsData, allReviews, isAnyPlatformConnected, loading  } = useReviews();
     const { loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const { addToast } = useToast();
@@ -47,10 +47,6 @@ const Dashboard = () => {
     return (
         <div className="space-y-6">
             <DashboardCards stats={stats} />
-
-            <div className="flex justify-end w-full">
-                <Button  disabled={loading} onClick={refreshReviews} loading={loading} children={`${loading ? "Refreshing..." : "Refresh Reviews"}`}/>
-            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <RecentReviews reviews={allReviews} />
