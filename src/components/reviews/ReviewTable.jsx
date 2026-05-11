@@ -70,6 +70,8 @@ const ReviewsTable = () => {
                     {filteredReviews.map((review, i) => (
                         <ReviewCard key={review.name || i} review={review} />
                     ))}
+
+                    <ReviewPagination />
                 </div>
             ) : (
                 <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-96">
@@ -77,8 +79,6 @@ const ReviewsTable = () => {
                 </div>
             )}
 
-            {/* Pagination */}
-            <ReviewPagination />
         </div>
     );
 };
