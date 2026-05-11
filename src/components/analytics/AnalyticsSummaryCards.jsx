@@ -6,8 +6,8 @@ const SummaryCard = ({ title, value, subtitle, color }) => (
     </div>
 );
 
-const AnalyticsSummaryCards = ({ reviews, responseRate, sentiment }) => {
-    const total = reviews?.totalReviewCount || 0;
+const AnalyticsSummaryCards = ({ reviews, allReviews, responseRate, sentiment }) => {
+    const total = allReviews.length || 0;
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

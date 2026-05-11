@@ -13,15 +13,15 @@ import SentimentChart from "../analytics/SentimentChart.jsx";
 import AnalyticsSkeleton from "../skeletons/AnalyticsSkeleton.jsx";
 
 const AnalyticsCharts = () => {
-    const { reviewsData, replyStatus, loading } = useReviews();
+    const { reviewsData, allReviews, replyStatus, loading, totalPagesLoaded } = useReviews();
     const reviews = reviewsData?.reviews
 
-    const monthlyData = useMemo(() => groupReviewsByMonth(reviews), [reviews]);
-    const ratingDist = useMemo(() => getRatingDistribution(reviews), [reviews]);
-    const responseRate = useMemo(() => getResponseRate(reviews, replyStatus), [reviews, replyStatus]);
-    const sentiment = useMemo(() => getSentimentBreakdown(reviews), [reviews]);
+    const monthlyData = useMemo(() => groupReviewsByMonth(allReviews), [allReviews]);
+    const ratingDist = useMemo(() => getRatingDistribution(allReviews), [allReviews]);
+    const responseRate = useMemo(() => getResponseRate(allReviews, replyStatus), [allReviews, replyStatus]);
+    const sentiment = useMemo(() => getSentimentBreakdown(allReviews), [allReviews]);
 
-    if (loading) return <AnalyticsSkeleton />;
+    if (loading && !allReviews.length) return <AnalyticsSkeleton />;
 
     if (!reviewsData?.reviews.length) {
         return (
@@ -34,9 +34,18 @@ const AnalyticsCharts = () => {
     return (
         <div className="flex flex-col gap-6">
 
+            <p className="text-xs text-gray-400">
+                * Based on {allReviews.length} loaded reviews
+                {reviewsData.totalReviewCount > allReviews.length
+                    ? ` out of ${reviewsData.totalReviewCount} total`
+                    : " (all reviews loaded)"
+                }
+            </p>
+
             {/* Summary Cards */}
             <AnalyticsSummaryCards
                 reviews={reviewsData}
+                allReviews={allReviews}
                 responseRate={responseRate}
                 sentiment={sentiment}
             />

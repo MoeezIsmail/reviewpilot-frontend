@@ -8,6 +8,7 @@ import ReviewPagination from "./ReviewPagination.jsx";
 const ReviewsTable = () => {
     const {
         reviewsData,
+        allReviews,
         loading,
         aiReplies,
         replyStatus,
@@ -29,7 +30,15 @@ const ReviewsTable = () => {
         setRatingFilter,
         filteredReviews,
         SORT_OPTIONS,
-    } = useReviewFilters(reviewsData.reviews, aiReplies, replyStatus);
+    } = useReviewFilters(allReviews, aiReplies, replyStatus);
+
+    const currentPageIds = new Set(
+        reviewsData.reviews?.map(r => r.reviewId || r.name) || []
+    );
+
+    const displayReviews = filteredReviews.filter(r =>
+        currentPageIds.has(r.reviewId || r.name)
+    );
 
     const pendingRepliesCount = reviewsData.reviews.filter((review) => {
         const reviewId = review.reviewId || review.name;
@@ -65,7 +74,7 @@ const ReviewsTable = () => {
             />
 
             {/* Reviews */}
-            {filteredReviews?.length > 0 ? (
+            {displayReviews?.length > 0 ? (
                 <div className="flex flex-col gap-3 max-h-[73vh] overflow-y-auto pr-2">
                     {filteredReviews.map((review, i) => (
                         <ReviewCard key={review.name || i} review={review} />

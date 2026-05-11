@@ -11,7 +11,7 @@ import {useAuth} from "../context/AuthContext.jsx";
 import DashboardSkeleton from "../components/skeletons/DashboardSkeleton.jsx";
 
 const Dashboard = () => {
-    const { reviewsData, isAnyPlatformConnected, refreshReviews, loading  } = useReviews();
+    const { reviewsData, allReviews, isAnyPlatformConnected, refreshReviews, loading  } = useReviews();
     const { loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const { addToast } = useToast();
@@ -24,9 +24,13 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (reviewsData?.reviews) {
-            setStats(calculateStats(reviewsData));
+            setStats(calculateStats({
+                reviews: allReviews,
+                averageRating: reviewsData.averageRating,
+                totalReviewCount: reviewsData.totalReviewCount,
+            }));
         }
-    }, [reviewsData]);
+    }, [allReviews, reviewsData.averageRating]);
 
     useEffect(() => {
         if (authLoading || loading) return;
@@ -49,7 +53,7 @@ const Dashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <RecentReviews reviews={reviewsData?.reviews} />
+                <RecentReviews reviews={allReviews} />
                 <ReplyPerformance />
             </div>
         </div>
