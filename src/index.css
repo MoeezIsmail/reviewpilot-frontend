@@ -90,7 +90,7 @@ button:focus-visible {
 
 /* Smooth scrollbar */
 .reviews-card-container {
-  overflow-y: auto;
+  overflow-y: scroll;
   scrollbar-gutter: stable;
 
   scrollbar-width: thin;
