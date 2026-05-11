@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard"
 import Reviews from "./pages/Reviews"
 import Analytics from "./pages/Analytics.jsx";
 import Settings from "./pages/Settings.jsx";
+import Subscription from "./pages/Subscription.jsx";
 import axios from "axios";
 import AuthSuccess from "./pages/AuthSuccess.jsx";
 import ConnectPlatforms from "./pages/ConnectPlatforms.jsx";
@@ -61,6 +62,7 @@ const App = () => {
                     <Route path="/reviews" element={<Reviews />} />
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/subscription" element={<Subscription />} />
                 </Route>
 
             </Route>

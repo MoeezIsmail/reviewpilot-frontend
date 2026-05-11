@@ -1,4 +1,4 @@
-import { LayoutDashboard, Star, BarChart3, Settings, LogOut } from "lucide-react"
+import { LayoutDashboard, Star, BarChart3, Settings, CreditCard, LogOut } from "lucide-react"
 import { NavLink, useLocation } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext.jsx"
 
@@ -10,7 +10,8 @@ const Sidebar = ({ setActivePage }) => {
         { name: "Dashboard", icon: LayoutDashboard, path: "/" },
         { name: "Reviews", icon: Star, path: "/reviews" },
         { name: "Analytics", icon: BarChart3, path: "/analytics" },
-        { name: "Settings", icon: Settings, path: "/settings" }
+        { name: "Settings", icon: Settings, path: "/settings" },
+        { name: "Subscription", icon: CreditCard, path: "/subscription" },
     ]
 
     return (
