@@ -66,7 +66,7 @@ const ReviewsTable = () => {
 
             {/* Reviews */}
             {filteredReviews?.length > 0 ? (
-                <div className="flex flex-col gap-3 max-h-[68vh] overflow-y-auto pr-2">
+                <div className="flex flex-col gap-3 max-h-[75vh] overflow-y-auto pr-2">
                     {filteredReviews.map((review, i) => (
                         <ReviewCard key={review.name || i} review={review} />
                     ))}
