@@ -24,7 +24,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (reviewsData?.reviews) {
-            setStats(calculateStats(reviewsData.reviews));
+            setStats(calculateStats(reviewsData));
         }
     }, [reviewsData]);
 

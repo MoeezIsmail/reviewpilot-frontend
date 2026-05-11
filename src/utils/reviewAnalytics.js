@@ -1,5 +1,5 @@
 const calculateStats = (reviews) => {
-    const total = reviews.length;
+    const total = reviews?.totalReviewCount;
     if (!total) return {
         totalReviews: 0,
         averageRating: 0,
@@ -12,7 +12,7 @@ const calculateStats = (reviews) => {
 
     let positive = 0, negative = 0, average = 0, ratingSum = 0;
 
-    reviews.forEach((r) => {
+    reviews.reviews.forEach((r) => {
         const numericRating = ratingMap[r.starRating] || r.rating || 0;
         ratingSum += numericRating;
         if (numericRating >= 4) positive++;
@@ -22,7 +22,7 @@ const calculateStats = (reviews) => {
 
     return {
         totalReviews: total,
-        averageRating: (ratingSum / total).toFixed(1),
+        averageRating: reviews.averageRating,
         positiveReviews: positive,
         negativeReviews: negative,
         averageReviews: average,
