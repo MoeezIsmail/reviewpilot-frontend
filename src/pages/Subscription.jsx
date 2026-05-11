@@ -65,12 +65,13 @@ const PlanCard = ({ planKey, plan, currentPlan, gateway, onUpgrade, onCancel, lo
     const isLoadingThis = loadingPlan === planKey;
 
     const features = [
-        formatFeature("platforms", plan.features.platforms),
+        // formatFeature("platforms", plan.features.platforms),
         formatFeature("reviews / month", plan.features.reviewsPerMonth),
         formatFeature("AI replies / month", plan.features.aiRepliesPerMonth),
         plan.features.bulkGenerate ? "Bulk AI Generate" : null,
+        plan.features?.bulkPosting ? "Bulk Posting" : null,
         plan.features.analytics ? "Advanced Analytics" : null,
-        plan.features.multiLocation ? "Multi-Location Support" : null,
+        // plan.features.multiLocation ? "Multi-Location Support" : null,
     ].filter(Boolean);
 
     return (
@@ -80,9 +81,6 @@ const PlanCard = ({ planKey, plan, currentPlan, gateway, onUpgrade, onCancel, lo
                 ? `border-transparent ring-2 ${meta.ringClass} shadow-2xl ${meta.glow} scale-[1.02]`
                 : "border-gray-100 hover:border-gray-200 hover:shadow-xl hover:scale-[1.01]"}
         `}>
-            {/* Top gradient strip */}
-            <div className={`h-1.5 rounded-t-3xl bg-gradient-to-r ${meta.gradient}`} />
-
             <div className="p-6 flex flex-col flex-1">
                 {/* Badge */}
                 <div className="flex items-center justify-between mb-5">
