@@ -89,27 +89,31 @@ button:focus-visible {
 }
 
 /* Smooth scrollbar */
-.custom-scroll {
+.reviews-card-container {
   scrollbar-width: thin;
   scrollbar-color: #6366f1 #eef2ff; /* thumb + track */
 }
 
 /* Chrome, Edge, Safari */
-.custom-scroll::-webkit-scrollbar {
+.reviews-card-container::-webkit-scrollbar {
   width: 8px;
 }
 
-.custom-scroll::-webkit-scrollbar-track {
+.reviews-card-container::-webkit-scrollbar-track {
   background: #eef2ff;
   border-radius: 10px;
 }
 
-.custom-scroll::-webkit-scrollbar-thumb {
+.reviews-card-container::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #6366f1, #4f46e5);
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
-.custom-scroll::-webkit-scrollbar-thumb:hover {
+.reviews-card-container::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #8d88ea, #4338ca);
+}
+
+.reviews-card-container {
+  scrollbar-gutter: stable;
 }
