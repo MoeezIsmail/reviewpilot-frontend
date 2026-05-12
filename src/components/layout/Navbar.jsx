@@ -18,7 +18,7 @@ const Navbar = ({pageTitle}) => {
 
                     <div className="flex items-center gap-4">
                         <img
-                            src="https://i.pravatar.cc/40"
+                            src={user?.profileImage}
                             className="w-10 h-10 rounded-full"
                         />
                         <div className="flex flex-col font-bold">
