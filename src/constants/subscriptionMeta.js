@@ -1,43 +1,41 @@
 import { Sparkles, Zap, Crown } from "lucide-react";
 
-export const YEARLY_DISCOUNT_PCT = 20;
 export const LIFETIME_SPOTS_LEFT = 47;
+export const MONTHLY_DISCOUNT_PCT = 75;
 
 export const PLAN_PRICING = {
     starter: { monthly: 0,  yearly: 0,  lifetime: 0   },
-    growth:  { monthly: 29, yearly: 23, lifetime: 279  },
-    pro:     { monthly: 59, yearly: 47, lifetime: 499  },
+    growth:  { monthly: 7,  yearly: 18, lifetime: 200  },
+    pro:     { monthly: 15, yearly: 35, lifetime: 350  },
 };
 
-export const YEARLY_BILLED_TOTAL = {
-    growth: 276,
-    pro:    564,
+export const PLAN_PRICING_ORIGINAL = {
+    growth: { monthly: 29, yearly: 29, lifetime: 279 },
+    pro:    { monthly: 59, yearly: 59, lifetime: 499 },
 };
 
 export const PLAN_FEATURES = {
     starter: [
-        { label: "Unlimited review syncing",  included: true  },
-        { label: "10 AI replies / month",     included: true  },
-        { label: "1 connected platform",      included: true  },
-        { label: "Bulk AI Generate",          included: false },
-        { label: "Bulk Posting",              included: false },
-        { label: "Analytics",                 included: false },
+        { label: "Unlimited review syncing", included: true  },
+        { label: "10 AI replies / month",    included: true  },
+        { label: "Bulk AI Generate",         included: false },
+        { label: "Bulk Posting",             included: false },
+        { label: "Analytics",               included: false },
     ],
     growth: [
-        { label: "Unlimited review syncing",  included: true  },
-        { label: "200 AI replies / month",    included: true  },
-        { label: "Bulk AI Generate",          included: true  },
-        { label: "Bulk Posting",              included: true  },
-        { label: "Up to 3 platforms",         included: true  },
-        { label: "Analytics dashboard",       included: true  },
+        { label: "Unlimited review syncing", included: true },
+        { label: "200 AI replies / month",   included: true },
+        { label: "Bulk AI Generate",         included: true },
+        { label: "Bulk Posting",             included: true },
+        { label: "Analytics dashboard",      included: true },
     ],
     pro: [
-        { label: "Unlimited review syncing",  included: true  },
-        { label: "Unlimited AI replies",      included: true  },
-        { label: "Bulk AI Generate",          included: true  },
-        { label: "Bulk Posting",              included: true  },
-        { label: "Advanced Analytics",        included: true  },
-        { label: "Priority support",          included: true  },
+        { label: "Unlimited review syncing", included: true },
+        { label: "Unlimited AI replies",     included: true },
+        { label: "Bulk AI Generate",         included: true },
+        { label: "Bulk Posting",             included: true },
+        { label: "Advanced Analytics",       included: true },
+        { label: "Priority support",         included: true },
     ],
 };
 

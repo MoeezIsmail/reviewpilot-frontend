@@ -1,6 +1,6 @@
 import { Loader2, Flame } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
-import { PLAN_META, PLAN_FEATURES, PLAN_PRICING, YEARLY_BILLED_TOTAL, LIFETIME_SPOTS_LEFT } from "../../constants/subscriptionMeta.js";
+import { PLAN_META, PLAN_FEATURES, PLAN_PRICING, PLAN_PRICING_ORIGINAL, LIFETIME_SPOTS_LEFT, MONTHLY_DISCOUNT_PCT } from "../../constants/subscriptionMeta.js";
 
 const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
     const isActive = currentPlan === planKey;
@@ -11,7 +11,9 @@ const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCanc
     const features = PLAN_FEATURES[planKey] ?? [];
 
     const price = PLAN_PRICING[planKey]?.[billingPeriod] ?? plan.price;
-    const monthlyPrice = PLAN_PRICING[planKey]?.monthly ?? plan.price;
+    const original = PLAN_PRICING_ORIGINAL[planKey];
+    const yearlySavingsPct = original ? Math.round((1 - PLAN_PRICING[planKey].yearly / original.monthly) * 100) : 0;
+    const lifetimeSavings = original ? original.lifetime - PLAN_PRICING[planKey].lifetime : 0;
 
     return (
         <div className={`
@@ -70,7 +72,12 @@ const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCanc
                                 </span>
                                 <span className="text-gray-400 text-sm mb-1">one-time</span>
                             </div>
-                            <p className="text-xs text-gray-400 mt-1">Pay once, use forever</p>
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className="text-xs text-gray-400 line-through">${original?.lifetime}</span>
+                                <span className="text-xs font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">
+                                    Save ${lifetimeSavings}
+                                </span>
+                            </div>
                         </div>
                     ) : billingPeriod === "yearly" ? (
                         <div>
@@ -81,21 +88,26 @@ const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCanc
                                 <span className="text-gray-400 text-sm mb-1">/ month</span>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-400 line-through">${monthlyPrice}/mo</span>
+                                <span className="text-xs text-gray-400 line-through">${original?.monthly}/mo</span>
                                 <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                                    Save 20%
+                                    Save {yearlySavingsPct}%
                                 </span>
                             </div>
-                            <p className="text-xs text-gray-400 mt-0.5">
-                                Billed ${YEARLY_BILLED_TOTAL[planKey]} / year
-                            </p>
                         </div>
                     ) : (
-                        <div className="flex items-end gap-1">
-                            <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
-                                ${price}
-                            </span>
-                            <span className="text-gray-400 text-sm mb-1">/ month</span>
+                        <div>
+                            <div className="flex items-end gap-1">
+                                <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
+                                    ${price}
+                                </span>
+                                <span className="text-gray-400 text-sm mb-1">/ month</span>
+                            </div>
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className="text-xs text-gray-400 line-through">${original?.monthly}/mo</span>
+                                <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                                    {MONTHLY_DISCOUNT_PCT}% off · Limited
+                                </span>
+                            </div>
                         </div>
                     )}
                 </div>

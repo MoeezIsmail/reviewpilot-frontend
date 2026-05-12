@@ -22,7 +22,7 @@ const PERIODS = [
 ];
 
 const BillingToggle = ({ billingPeriod, setBillingPeriod }) => (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex items-center justify-center">
         <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-2xl">
             {PERIODS.map(({ value, label, badge, badgeClass, Icon }) => (
                 <button
@@ -45,16 +45,6 @@ const BillingToggle = ({ billingPeriod, setBillingPeriod }) => (
                 </button>
             ))}
         </div>
-        {billingPeriod === "yearly" && (
-            <p className="text-xs text-emerald-600 font-medium">
-                Billed annually — 2 months free
-            </p>
-        )}
-        {billingPeriod === "lifetime" && (
-            <p className="text-xs text-orange-500 font-medium">
-                One-time payment · Access forever · Limited availability
-            </p>
-        )}
     </div>
 );
 
