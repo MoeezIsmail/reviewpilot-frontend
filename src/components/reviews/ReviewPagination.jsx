@@ -27,9 +27,9 @@ const ReviewPagination = () => {
                                     ${isActive
                                         ? "w-9 h-9 !bg-indigo-600 !text-white shadow-md shadow-indigo-300 cursor-default ring-4 ring-indigo-100"
                                         : isVisited
-                                            ? "w-8 h-8 bg-indigo-500 !text-gray-400 hover:scale-110 cursor-pointer"
-                                            : "w-8 h-8 bg-indigo-200 border-2 !border-gray-200 !text-gray-400 hover:border-indigo-300 hover:!text-indigo-500 cursor-pointer"
-                                    } ${loading && !isActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                                            ? "w-7 h-7 bg-indigo-500 !text-gray-400 hover:scale-110 cursor-pointer"
+                                            : "w-7 h-7 bg-indigo-200 border-2 !border-gray-200 !text-gray-400 hover:border-indigo-300 hover:!text-indigo-500 cursor-pointer"
+                                    } ${loading && !isActive ? "opacity-80 cursor-not-allowed" : ""}`}
                             >
                                 {isLoadingThis
                                     ? <Loader2 size={14} className="animate-spin" />
@@ -56,9 +56,9 @@ const ReviewPagination = () => {
                                     <button
                                         onClick={() => !loading && goToPage(totalPagesLoaded + 1)}
                                         disabled={loading}
-                                        className={`w-8 h-8 rounded-full border-2 border-dashed flex items-center justify-center font-bold transition-all z-10 bg-white
+                                        className={`w-7 h-7 rounded-full border-2 border-dashed flex items-center justify-center font-bold transition-all z-10 bg-white
                                             ${loading
-                                                ? "!border-gray-200 !text-gray-300 cursor-not-allowed"
+                                                ? "!border-gray-200 !text-gray-500 cursor-not-allowed"
                                                 : "!border-indigo-300 !text-indigo-400 hover:!border-indigo-500 hover:bg-indigo-50 hover:!text-indigo-600 cursor-pointer"
                                             }`}
                                     >
