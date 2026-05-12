@@ -9,7 +9,7 @@ const ReviewPagination = () => {
     const pageNums = Array.from({ length: totalPagesLoaded }, (_, i) => i + 1);
 
     return (
-        <div className="flex items-center justify-center py-1">
+        <div className="flex items-center justify-center py-2">
             <div className="flex items-center">
                 {pageNums.map((page, idx) => {
                     const isActive = page === currentPage;
