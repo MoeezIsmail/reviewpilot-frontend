@@ -40,7 +40,7 @@ const Auth = () => {
 
                     {step === "auth" && (
                         <>
-                            <h2 className="text-2xl font-bold text-black mb-2">Welcome to reviewpilot</h2>
+                            <h2 className="text-2xl font-bold text-black mb-6">Welcome to reviewpilot</h2>
                             {/*<p className="text-gray-500 text-sm mb-6">Sign in or create your account</p>*/}
 
                             <GoogleAuthButton />
