@@ -2,7 +2,6 @@ import { Sparkles } from "lucide-react";
 import useSubscription from "../hooks/useSubscription.js";
 import PlanCard from "../components/subscription/PlanCard.jsx";
 import ActivePlanBanner from "../components/subscription/ActivePlanBanner.jsx";
-import GatewaySelector from "../components/subscription/GatewaySelector.jsx";
 import BillingToggle from "../components/subscription/BillingToggle.jsx";
 import CancelModal from "../components/subscription/CancelModal.jsx";
 import SubscriptionSkeleton from "../components/skeletons/SubscriptionSkeleton.jsx";
@@ -10,7 +9,6 @@ import SubscriptionSkeleton from "../components/skeletons/SubscriptionSkeleton.j
 const Subscription = () => {
     const {
         plans, currentPlan, subscription,
-        gateway, setGateway,
         billingPeriod, setBillingPeriod,
         loadingPlan, portalLoading, pageLoading,
         cancelConfirm, setCancelConfirm, cancelLoading,
@@ -53,11 +51,6 @@ const Subscription = () => {
                     portalLoading={portalLoading}
                     onManageBilling={handlePortal}
                 />
-
-                {/* Gateway Selector */}
-                {currentPlan === "starter" && (
-                    <GatewaySelector gateway={gateway} setGateway={setGateway} />
-                )}
 
                 {/* Plan Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 isolate">

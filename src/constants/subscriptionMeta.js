@@ -27,9 +27,9 @@ export const PLAN_FEATURES = {
         { label: "Unlimited review syncing",  included: true  },
         { label: "200 AI replies / month",    included: true  },
         { label: "Bulk AI Generate",          included: true  },
+        { label: "Bulk Posting",              included: true  },
         { label: "Up to 3 platforms",         included: true  },
         { label: "Analytics dashboard",       included: true  },
-        { label: "Bulk Posting",              included: false },
     ],
     pro: [
         { label: "Unlimited review syncing",  included: true  },

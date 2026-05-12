@@ -117,13 +117,28 @@ const ReviewFilters = ({
                     )}
 
                     {pendingRepliesCount > 0 && (
-                        <Button
-                            onClick={postAllReplies}
-                            disabled={isPostingAll || isGeneratingAll}
-                            variant="success"
-                        >
-                            {isPostingAll ? "Posting..." : `Post All (${pendingRepliesCount})`}
-                        </Button>
+                        isFreePlan ? (
+                            <button
+                                onClick={() => navigate("/subscription")}
+                                className="flex items-center gap-1.5 text-sm font-medium bg-emerald-50 text-emerald-400 px-4 py-2 rounded-xl hover:bg-emerald-100 hover:text-emerald-600 transition-colors group"
+                                title="Upgrade to unlock Bulk Posting"
+                            >
+                                <Lock size={13} className="group-hover:hidden" />
+                                <Zap size={13} className="hidden group-hover:block text-emerald-500" />
+                                Post All
+                                <span className="text-xs font-semibold bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 px-1.5 py-0.5 rounded-full transition-colors">
+                                    Pro
+                                </span>
+                            </button>
+                        ) : (
+                            <Button
+                                onClick={postAllReplies}
+                                disabled={isPostingAll || isGeneratingAll}
+                                variant="success"
+                            >
+                                {isPostingAll ? "Posting..." : `Post All (${pendingRepliesCount})`}
+                            </Button>
+                        )
                     )}
 
                     <button
