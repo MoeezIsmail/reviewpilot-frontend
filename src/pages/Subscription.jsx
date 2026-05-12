@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Check, Zap, Crown, Sparkles, CreditCard, ExternalLink, X, Loader2 } from "lucide-react";
 import { fetchCurrentPlan, fetchPlans, createCheckoutSession, createPortalSession, cancelPlan } from "../api/subscriptionApi.js";
 import { useToast } from "../components/toast/ToastProvider.jsx";
+import SubscriptionSkeleton from "../components/skeletons/SubscriptionSkeleton.jsx";
 
 const PLAN_META = {
     starter: {
@@ -254,13 +255,7 @@ const Subscription = () => {
         }
     };
 
-    if (pageLoading) {
-        return (
-            <div className="flex-1 flex items-center justify-center">
-                <Loader2 className="w-7 h-7 text-indigo-500 animate-spin" />
-            </div>
-        );
-    }
+    if (pageLoading) return <SubscriptionSkeleton />;
 
     return (
         <div className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-6 md:p-8">

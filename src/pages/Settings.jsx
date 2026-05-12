@@ -56,7 +56,9 @@ const Settings = () => {
                         </div>
                     </div>
 
-                    {!isEditingBusiness && (
+                    {loading ? (
+                        <div className="h-7 w-14 bg-gray-100 rounded-lg animate-pulse" />
+                    ) : !isEditingBusiness && (
                         <button
                             onClick={() => setIsEditingBusiness(true)}
                             className="flex items-center gap-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-all"
@@ -68,7 +70,24 @@ const Settings = () => {
 
                 {/* Card Body */}
                 <div className="px-6 py-5">
-                    {isEditingBusiness ? (
+                    {loading ? (
+                        <div className="space-y-3 animate-pulse">
+                            <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                                <div className="w-9 h-9 bg-gray-200 rounded-lg shrink-0" />
+                                <div className="flex-1">
+                                    <div className="h-2.5 w-24 bg-gray-200 rounded mb-2" />
+                                    <div className="h-3.5 w-40 bg-gray-200 rounded" />
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                                <div className="w-9 h-9 bg-gray-200 rounded-lg shrink-0" />
+                                <div className="flex-1">
+                                    <div className="h-2.5 w-24 bg-gray-200 rounded mb-2" />
+                                    <div className="h-3.5 w-32 bg-gray-200 rounded" />
+                                </div>
+                            </div>
+                        </div>
+                    ) : isEditingBusiness ? (
                         <div className="space-y-5">
                             {/* Business Name */}
                             <InputField
