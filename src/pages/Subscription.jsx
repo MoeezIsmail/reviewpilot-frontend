@@ -39,7 +39,6 @@ const PLAN_META = {
 
 const GATEWAY_OPTIONS = [
     { value: "stripe", label: "Credit / Debit Card", sub: "Visa, Mastercard, Amex" },
-    { value: "paypal", label: "PayPal", sub: "Coming soon", disabled: true },
 ];
 
 const FeatureRow = ({ label, included = true }) => (
@@ -82,6 +81,14 @@ const PlanCard = ({ planKey, plan, currentPlan, gateway, onUpgrade, onCancel, lo
                 : "border-gray-100 hover:border-gray-200 hover:shadow-xl hover:scale-[1.01]"}
         `}>
             <div className="p-6 flex flex-col flex-1">
+                <div className="flex flex-col gap-4 w-full">
+                    <h1 className={`text-xl text-indigo-600`}>
+                        Choose the right plan for your business
+                    </h1>
+
+                    <p className={`text-gray-400`}>Scale your reputation management with precision. Select the tier that matches your current growth stage.</p>
+                </div>
+
                 {/* Badge */}
                 <div className="flex items-center justify-between mb-5">
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full ${meta.badgeClass}`}>
@@ -263,7 +270,7 @@ const Subscription = () => {
 
                 {/* Active plan banner */}
                 {subscription && currentPlan !== "starter" && (
-                    <div className="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-violet-600 rounded-3xl p-5 text-white shadow-xl shadow-indigo-200">
+                    <div className="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-violet-600 rounded-4xl p-5 text-white shadow-xl shadow-indigo-200">
                         <div className="absolute inset-0 opacity-10"
                             style={{ backgroundImage: "radial-gradient(circle at 80% 50%, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
                         <div className="relative flex items-center justify-between gap-4">
