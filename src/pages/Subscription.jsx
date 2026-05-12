@@ -252,7 +252,7 @@ const Subscription = () => {
 
     return (
         <div className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-6 md:p-8">
-            <div className="max-w-5xl mx-auto space-y-12">
+            <div className="max-w-5xl mx-auto space-y-10">
                 <div className="flex flex-col gap-2 w-full">
                     <h1 className={`text-xl font-extrabold text-indigo-600 tracking-tight`}>
                         Choose the right plan for your business
