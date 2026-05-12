@@ -25,7 +25,7 @@ const ReviewPagination = () => {
                                 disabled={loading || isActive}
                                 className={`relative flex items-center justify-center rounded-full font-bold transition-all duration-300 z-10
                                     ${isActive
-                                        ? "w-9 h-9 !bg-indigo-600 !text-white shadow-md shadow-indigo-300 cursor-default"
+                                        ? "w-9 h-9 !bg-indigo-600 !text-white shadow-md shadow-indigo-300 cursor-default ring-4 ring-indigo-100"
                                         : isVisited
                                             ? "w-7 h-7 bg-indigo-500 !text-gray-400 hover:scale-110 cursor-pointer"
                                             : "w-7 h-7 bg-indigo-200 border-2 !border-gray-200 !text-gray-400 hover:border-indigo-300 hover:!text-indigo-500 cursor-pointer"
@@ -35,9 +35,7 @@ const ReviewPagination = () => {
                                     ? <Loader2 size={14} className="animate-spin" />
                                     : <span className={isActive ? "text-sm" : "text-xs"}>{page}</span>
                                 }
-                                {isActive && (
-                                    <span className="absolute inset-0 rounded-full animate-ping !bg-indigo-400 opacity-20" />
-                                )}
+
                             </button>
 
                             {/* Line to next numbered node */}
