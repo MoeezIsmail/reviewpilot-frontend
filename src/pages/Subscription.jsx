@@ -252,12 +252,12 @@ const Subscription = () => {
 
     return (
         <div className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-6 md:p-8">
-            <div className="max-w-5xl mx-auto space-y-8">
-                <div className="flex flex-col gap-4 w-full">
-                    <h1 className={`text-2xl font-extrabold text-indigo-600 tracking-tight`}>
+            <div className="max-w-5xl mx-auto space-y-12">
+                <div className="flex flex-col gap-2 w-full">
+                    <h1 className={`text-xl font-extrabold text-indigo-600 tracking-tight`}>
                         Choose the right plan for your business
                     </h1>
-                    <p className={`text-gray-400`}>Scale your reputation management with precision. Select the tier that matches your current growth stage.</p>
+                    <p className={`text-gray-400 text-sm`}>Scale your reputation management with precision. Select the tier that matches your current growth stage.</p>
                 </div>
 
                 {/* Active plan banner */}
