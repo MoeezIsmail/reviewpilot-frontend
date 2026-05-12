@@ -8,6 +8,7 @@ const useSubscription = () => {
     const [currentPlan, setCurrentPlan] = useState(null);
     const [subscription, setSubscription] = useState(null);
     const [gateway, setGateway] = useState("stripe");
+    const [billingPeriod, setBillingPeriod] = useState("monthly");
     const [loadingPlan, setLoadingPlan] = useState(null);
     const [portalLoading, setPortalLoading] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
@@ -46,7 +47,7 @@ const useSubscription = () => {
     const handleUpgrade = async (plan) => {
         setLoadingPlan(plan);
         try {
-            const res = await createCheckoutSession({ plan, gateway });
+            const res = await createCheckoutSession({ plan, gateway, billingPeriod });
             if (res.data.checkoutUrl) window.location.href = res.data.checkoutUrl;
         } catch (err) {
             showToast(err?.response?.data?.message || "Checkout failed.", "error");
@@ -88,6 +89,8 @@ const useSubscription = () => {
         subscription,
         gateway,
         setGateway,
+        billingPeriod,
+        setBillingPeriod,
         loadingPlan,
         portalLoading,
         pageLoading,

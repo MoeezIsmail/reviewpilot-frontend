@@ -1,27 +1,17 @@
-import { Loader2 } from "lucide-react";
+import { Loader2, Flame } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
-import { PLAN_META } from "../../constants/subscriptionMeta.js";
+import { PLAN_META, PLAN_FEATURES, PLAN_PRICING, YEARLY_BILLED_TOTAL, LIFETIME_SPOTS_LEFT } from "../../constants/subscriptionMeta.js";
 
-const formatFeature = (label, value) => {
-    if (typeof value === "boolean") return value ? label : null;
-    if (value === -1) return `Unlimited ${label}`;
-    return `${value} ${label}`;
-};
-
-const PlanCard = ({ planKey, plan, currentPlan, onUpgrade, onCancel, loadingPlan }) => {
+const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
     const isActive = currentPlan === planKey;
     const isStarter = planKey === "starter";
     const meta = PLAN_META[planKey];
     const Icon = meta.icon;
     const isLoadingThis = loadingPlan === planKey;
+    const features = PLAN_FEATURES[planKey] ?? [];
 
-    const features = [
-        formatFeature("reviews / month", plan.features.reviewsPerMonth),
-        formatFeature("AI replies / month", plan.features.aiRepliesPerMonth),
-        plan.features.bulkGenerate ? "Bulk AI Generate" : null,
-        plan.features?.bulkPosting ? "Bulk Posting" : null,
-        plan.features.analytics ? "Advanced Analytics" : null,
-    ].filter(Boolean);
+    const price = PLAN_PRICING[planKey]?.[billingPeriod] ?? plan.price;
+    const monthlyPrice = PLAN_PRICING[planKey]?.monthly ?? plan.price;
 
     return (
         <div className={`
@@ -30,9 +20,17 @@ const PlanCard = ({ planKey, plan, currentPlan, onUpgrade, onCancel, loadingPlan
                 ? `border-transparent ring-2 ${meta.ringClass} shadow-2xl ${meta.glow} z-10`
                 : "border-gray-100 hover:border-gray-200 hover:shadow-xl hover:-translate-y-1.5 hover:z-10"}
         `}>
+            {/* Lifetime spots ribbon */}
+            {billingPeriod === "lifetime" && !isStarter && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md shadow-orange-200 whitespace-nowrap">
+                    <Flame size={11} />
+                    {LIFETIME_SPOTS_LEFT} spots remaining
+                </div>
+            )}
+
             <div className="p-6 flex flex-col flex-1">
-                {/* Badge */}
-                <div className="flex items-center justify-between mb-5">
+                {/* Badge row */}
+                <div className="flex items-center justify-between mb-4">
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full ${meta.badgeClass}`}>
                         {meta.badge}
                     </span>
@@ -43,27 +41,61 @@ const PlanCard = ({ planKey, plan, currentPlan, onUpgrade, onCancel, loadingPlan
                     )}
                 </div>
 
-                {/* Icon + Name */}
-                <div className="flex items-center gap-3 mb-3">
-                    <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center shadow-md`}>
+                {/* Icon + Name + Description */}
+                <div className="flex items-center gap-3 mb-1">
+                    <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center shadow-md shrink-0`}>
                         <Icon size={18} className="text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
+                    <div>
+                        <h3 className="text-lg font-bold text-gray-900 leading-tight">{plan.name}</h3>
+                        <p className="text-xs text-gray-400">{meta.description}</p>
+                    </div>
                 </div>
 
+                {/* Divider */}
+                <div className="h-px bg-gray-100 my-4" />
+
                 {/* Price */}
-                <div className="mb-6">
-                    {plan.price === 0 ? (
+                <div className="mb-5">
+                    {isStarter ? (
                         <div className="flex items-end gap-1">
                             <span className="text-4xl font-extrabold text-gray-900">$0</span>
-                            <span className="text-gray-400 text-sm mb-1">/month</span>
+                            <span className="text-gray-400 text-sm mb-1">/ month</span>
+                        </div>
+                    ) : billingPeriod === "lifetime" ? (
+                        <div>
+                            <div className="flex items-end gap-1">
+                                <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
+                                    ${price}
+                                </span>
+                                <span className="text-gray-400 text-sm mb-1">one-time</span>
+                            </div>
+                            <p className="text-xs text-gray-400 mt-1">Pay once, use forever</p>
+                        </div>
+                    ) : billingPeriod === "yearly" ? (
+                        <div>
+                            <div className="flex items-end gap-1.5">
+                                <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
+                                    ${price}
+                                </span>
+                                <span className="text-gray-400 text-sm mb-1">/ month</span>
+                            </div>
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className="text-xs text-gray-400 line-through">${monthlyPrice}/mo</span>
+                                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                                    Save 20%
+                                </span>
+                            </div>
+                            <p className="text-xs text-gray-400 mt-0.5">
+                                Billed ${YEARLY_BILLED_TOTAL[planKey]} / year
+                            </p>
                         </div>
                     ) : (
                         <div className="flex items-end gap-1">
                             <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
-                                ${plan.price}
+                                ${price}
                             </span>
-                            <span className="text-gray-400 text-sm mb-1">/month</span>
+                            <span className="text-gray-400 text-sm mb-1">/ month</span>
                         </div>
                     )}
                 </div>
@@ -71,11 +103,17 @@ const PlanCard = ({ planKey, plan, currentPlan, onUpgrade, onCancel, loadingPlan
                 {/* Features */}
                 <ul className="space-y-2.5 mb-7 flex-1">
                     {features.map((f, i) => (
-                        <FeatureRow key={i} label={f} checkBg={meta.checkBg} checkColor={meta.checkColor} />
+                        <FeatureRow
+                            key={i}
+                            label={f.label}
+                            included={f.included}
+                            checkBg={meta.checkBg}
+                            checkColor={meta.checkColor}
+                        />
                     ))}
                 </ul>
 
-                {/* Button */}
+                {/* CTA Button */}
                 {isActive ? (
                     isStarter ? (
                         <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-slate-400 bg-slate-50 select-none">
@@ -109,6 +147,8 @@ const PlanCard = ({ planKey, plan, currentPlan, onUpgrade, onCancel, loadingPlan
                                 <Loader2 size={15} className="animate-spin" />
                                 Redirecting...
                             </>
+                        ) : billingPeriod === "lifetime" ? (
+                            `Get ${plan.name} Lifetime →`
                         ) : (
                             `Upgrade to ${plan.name} →`
                         )}

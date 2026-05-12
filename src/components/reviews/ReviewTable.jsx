@@ -1,5 +1,6 @@
 import ReviewCard from "./ReviewCard.jsx";
 import { useReviews } from "../../context/ReviewsContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import ReviewFilters from "./ReviewFilters.jsx";
 import useReviewFilters from "../../hooks/useReviewFilters.js";
 import ReviewsSkeleton from "../skeletons/ReviewsSkeleton.jsx";
@@ -18,6 +19,8 @@ const ReviewsTable = () => {
         generateAllReplies,
         isGeneratingAll,
     } = useReviews();
+    const { user } = useAuth();
+    const isFreePlan = !user?.plan || user?.plan === "starter";
 
     // ← Filters allReviews pe apply hote hain (search/sort/rating)
     const {
@@ -77,6 +80,7 @@ const ReviewsTable = () => {
                 postAllReplies={postAllReplies}
                 refreshReviews={refreshReviews}
                 loading={loading}
+                isFreePlan={isFreePlan}
             />
 
             {/* ← displayReviews use karo — filteredReviews nahi */}

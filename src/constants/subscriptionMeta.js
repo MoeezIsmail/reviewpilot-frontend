@@ -1,10 +1,52 @@
 import { Sparkles, Zap, Crown } from "lucide-react";
 
+export const YEARLY_DISCOUNT_PCT = 20;
+export const LIFETIME_SPOTS_LEFT = 47;
+
+export const PLAN_PRICING = {
+    starter: { monthly: 0,  yearly: 0,  lifetime: 0   },
+    growth:  { monthly: 29, yearly: 23, lifetime: 279  },
+    pro:     { monthly: 59, yearly: 47, lifetime: 499  },
+};
+
+export const YEARLY_BILLED_TOTAL = {
+    growth: 276,
+    pro:    564,
+};
+
+export const PLAN_FEATURES = {
+    starter: [
+        { label: "Unlimited review syncing",  included: true  },
+        { label: "10 AI replies / month",     included: true  },
+        { label: "1 connected platform",      included: true  },
+        { label: "Bulk AI Generate",          included: false },
+        { label: "Bulk Posting",              included: false },
+        { label: "Analytics",                 included: false },
+    ],
+    growth: [
+        { label: "Unlimited review syncing",  included: true  },
+        { label: "200 AI replies / month",    included: true  },
+        { label: "Bulk AI Generate",          included: true  },
+        { label: "Up to 3 platforms",         included: true  },
+        { label: "Analytics dashboard",       included: true  },
+        { label: "Bulk Posting",              included: false },
+    ],
+    pro: [
+        { label: "Unlimited review syncing",  included: true  },
+        { label: "Unlimited AI replies",      included: true  },
+        { label: "Bulk AI Generate",          included: true  },
+        { label: "Bulk Posting",              included: true  },
+        { label: "Advanced Analytics",        included: true  },
+        { label: "Priority support",          included: true  },
+    ],
+};
+
 export const PLAN_META = {
     starter: {
         icon: Sparkles,
         gradient: "from-slate-400 to-slate-500",
         glow: "",
+        description: "Perfect for getting started",
         badge: "Free Forever",
         badgeClass: "bg-slate-100 text-slate-500",
         btnClass: "bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-default",
@@ -16,6 +58,7 @@ export const PLAN_META = {
         icon: Zap,
         gradient: "from-indigo-500 to-violet-500",
         glow: "shadow-indigo-200",
+        description: "For growing businesses",
         badge: "Most Popular",
         badgeClass: "bg-indigo-100 text-indigo-600",
         btnClass: "bg-gradient-to-r from-indigo-500 to-violet-500 text-white hover:from-indigo-600 hover:to-violet-600 shadow-lg shadow-indigo-200",
@@ -27,6 +70,7 @@ export const PLAN_META = {
         icon: Crown,
         gradient: "from-violet-500 to-purple-600",
         glow: "shadow-violet-200",
+        description: "For scaling operations",
         badge: "Best Value",
         badgeClass: "bg-violet-100 text-violet-600",
         btnClass: "bg-gradient-to-r from-violet-500 to-purple-600 text-white hover:from-violet-600 hover:to-purple-700 shadow-lg shadow-violet-200",

@@ -1,29 +1,32 @@
-import {Search, Star, ArrowUpDown, RefreshCw} from "lucide-react";
+import { Search, Star, ArrowUpDown, RefreshCw, Lock, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Button from "../ui/Button.jsx";
 
 const RATING_OPTIONS = [
-    {value: "all", label: "All Ratings"},
-    {value: "5", label: "⭐⭐⭐⭐⭐"},
-    {value: "4", label: "⭐⭐⭐⭐"},
-    {value: "3", label: "⭐⭐⭐"},
-    {value: "2", label: "⭐⭐"},
-    {value: "1", label: "⭐"},
+    { value: "all", label: "All Ratings" },
+    { value: "5",   label: "⭐⭐⭐⭐⭐" },
+    { value: "4",   label: "⭐⭐⭐⭐" },
+    { value: "3",   label: "⭐⭐⭐" },
+    { value: "2",   label: "⭐⭐" },
+    { value: "1",   label: "⭐" },
 ];
 
 const ReviewFilters = ({
-                           filter, setFilter,
-                           search, setSearch,
-                           sortBy, setSortBy,
-                           ratingFilter, setRatingFilter,
-                           SORT_OPTIONS,
-                           pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll,
-                           pendingRepliesCount, postAllReplies, refreshReviews, loading
-                       }) => {
+    filter, setFilter,
+    search, setSearch,
+    sortBy, setSortBy,
+    ratingFilter, setRatingFilter,
+    SORT_OPTIONS,
+    pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll,
+    pendingRepliesCount, postAllReplies, refreshReviews, loading,
+    isFreePlan,
+}) => {
+    const navigate = useNavigate();
 
     return (
         <div className="flex flex-col gap-3">
             <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                     placeholder="Search by customer name or review text..."
                     value={search}
@@ -52,45 +55,33 @@ const ReviewFilters = ({
                         ))}
                     </div>
 
-                    <div className="w-[2px] h-8 !bg-gray-200"></div>
+                    <div className="w-[2px] h-8 !bg-gray-200" />
 
                     {/* Sort + Rating */}
                     <div className="flex items-center gap-2">
-                        {/* Rating Filter */}
                         <div className="relative">
-                            <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
+                            <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4" />
                             <select
                                 value={ratingFilter}
                                 onChange={(e) => setRatingFilter(e.target.value)}
-                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4
-                                       text-gray-700 bg-white shadow-sm cursor-pointer
-                                       hover:shadow-md transition-all duration-200
-                                       focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
+                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4 text-gray-700 bg-white shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                             >
                                 {RATING_OPTIONS.map((opt) => (
-                                    <option key={opt.value} value={opt.value}>
-                                        {opt.label}
-                                    </option>
+                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
                         </div>
 
-                        {/* Sort */}
                         <div className="relative">
-                            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
+                            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4" />
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
-                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4
-                                      text-gray-700 bg-white shadow-sm cursor-pointer
-                                      hover:shadow-md transition-all duration-200
-                                      focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
+                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4 text-gray-700 bg-white shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                             >
                                 {SORT_OPTIONS.map((opt) => (
-                                    <option key={opt.value} value={opt.value}>
-                                        {opt.label}
-                                    </option>
+                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
@@ -99,14 +90,30 @@ const ReviewFilters = ({
                 </div>
 
                 <div className="flex items-center gap-2 p-2">
-                    {pendingGenerateCount > 0 && (
-                        <Button
-                            onClick={generateAllReplies}
-                            disabled={isGeneratingAll || isPostingAll}
-                            variant="primary"
+                    {/* Bulk Generate — locked for free plan */}
+                    {isFreePlan ? (
+                        <button
+                            onClick={() => navigate("/subscription")}
+                            className="flex items-center gap-1.5 text-sm font-medium bg-indigo-50 text-indigo-400 px-4 py-2 rounded-xl hover:bg-indigo-100 hover:text-indigo-600 transition-colors group"
+                            title="Upgrade to unlock Bulk AI Generate"
                         >
-                            {isGeneratingAll ? "Generating..." : `Generate All (${pendingGenerateCount})`}
-                        </Button>
+                            <Lock size={13} className="group-hover:hidden" />
+                            <Zap size={13} className="hidden group-hover:block text-indigo-500" />
+                            Generate All
+                            <span className="text-xs font-semibold bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200 px-1.5 py-0.5 rounded-full transition-colors">
+                                Pro
+                            </span>
+                        </button>
+                    ) : (
+                        pendingGenerateCount > 0 && (
+                            <Button
+                                onClick={generateAllReplies}
+                                disabled={isGeneratingAll || isPostingAll}
+                                variant="primary"
+                            >
+                                {isGeneratingAll ? "Generating..." : `Generate All (${pendingGenerateCount})`}
+                            </Button>
+                        )
                     )}
 
                     {pendingRepliesCount > 0 && (
@@ -124,12 +131,11 @@ const ReviewFilters = ({
                         disabled={loading}
                         className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline disabled:opacity-50"
                     >
-                        <RefreshCw size={14} className={loading ? "animate-spin" : ""}/>
+                        <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
                         {loading ? "Loading..." : "Refresh"}
                     </button>
                 </div>
             </div>
-
         </div>
     );
 };
