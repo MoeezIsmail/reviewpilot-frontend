@@ -40,16 +40,16 @@ const Auth = () => {
 
                     {step === "auth" && (
                         <>
-                            <h2 className="text-2xl font-bold text-black mb-2">Welcome</h2>
-                            <p className="text-gray-500 text-sm mb-6">Sign in or create your account</p>
+                            <h2 className="text-2xl font-bold text-black mb-2">Welcome to reviewpilot</h2>
+                            {/*<p className="text-gray-500 text-sm mb-6">Sign in or create your account</p>*/}
 
                             <GoogleAuthButton />
 
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="flex-1 h-px bg-gray-200" />
-                                <span className="text-gray-400 text-sm">or</span>
-                                <div className="flex-1 h-px bg-gray-200" />
-                            </div>
+                            {/*<div className="flex items-center gap-3 mb-6">*/}
+                            {/*    <div className="flex-1 h-px bg-gray-200" />*/}
+                            {/*    <span className="text-gray-400 text-sm">or</span>*/}
+                            {/*    <div className="flex-1 h-px bg-gray-200" />*/}
+                            {/*</div>*/}
 
                             {/*<InputField*/}
                             {/*    type="email"*/}
@@ -66,37 +66,37 @@ const Auth = () => {
                         </>
                     )}
 
-                    {step === "otp" && (
-                        <>
-                            <Button variant="gray" size="lg" fullWidth loading={loading} onClick={resetOtp}>
-                                <ArrowLeft/> Back
-                            </Button>
+                    {/*{step === "otp" && (*/}
+                    {/*    <>*/}
+                    {/*        <Button variant="gray" size="lg" fullWidth loading={loading} onClick={resetOtp}>*/}
+                    {/*            <ArrowLeft/> Back*/}
+                    {/*        </Button>*/}
 
-                            <h2 className="text-2xl font-bold text-black mb-2">Check your email</h2>
-                            <p className="text-gray-500 text-sm mb-6">
-                                We sent a 6-digit OTP to{" "}
-                                <span className="text-indigo-600 font-medium">{email}</span>
-                            </p>
+                    {/*        <h2 className="text-2xl font-bold text-black mb-2">Check your email</h2>*/}
+                    {/*        <p className="text-gray-500 text-sm mb-6">*/}
+                    {/*            We sent a 6-digit OTP to{" "}*/}
+                    {/*            <span className="text-indigo-600 font-medium">{email}</span>*/}
+                    {/*        </p>*/}
 
-                            <OtpInput
-                                otp={otp}
-                                onChange={handleOtpChange}
-                                onKeyDown={handleOtpKeyDown}
-                                error={errors.otp}
-                            />
+                    {/*        <OtpInput*/}
+                    {/*            otp={otp}*/}
+                    {/*            onChange={handleOtpChange}*/}
+                    {/*            onKeyDown={handleOtpKeyDown}*/}
+                    {/*            error={errors.otp}*/}
+                    {/*        />*/}
 
-                            <Button variant="primary" size="lg" fullWidth loading={loading} onClick={handleVerifyOTP}>
-                                {loading ? "Verifying..." : "Verify OTP"}
-                            </Button>
+                    {/*        <Button variant="primary" size="lg" fullWidth loading={loading} onClick={handleVerifyOTP}>*/}
+                    {/*            {loading ? "Verifying..." : "Verify OTP"}*/}
+                    {/*        </Button>*/}
 
-                            <p className="text-sm text-center text-gray-500 mt-4">
-                                Didn't receive it?{" "}
-                                <button onClick={handleSendOTP} className="text-indigo-600 hover:underline">
-                                    Resend OTP
-                                </button>
-                            </p>
-                        </>
-                    )}
+                    {/*        <p className="text-sm text-center text-gray-500 mt-4">*/}
+                    {/*            Didn't receive it?{" "}*/}
+                    {/*            <button onClick={handleSendOTP} className="text-indigo-600 hover:underline">*/}
+                    {/*                Resend OTP*/}
+                    {/*            </button>*/}
+                    {/*        </p>*/}
+                    {/*    </>*/}
+                    {/*)}*/}
 
                 </div>
             </div>
