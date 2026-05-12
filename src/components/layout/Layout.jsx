@@ -1,14 +1,22 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import Navbar from "./Navbar.jsx";
 
+const PAGE_TITLES = {
+    "/": "Dashboard",
+    "/reviews": "Reviews",
+    "/analytics": "Analytics",
+    "/settings": "Settings",
+    "/subscription": "Subscription",
+};
+
 const Layout = () => {
-    const [activePage, setActivePage] = useState("Dashboard");
+    const { pathname } = useLocation();
+    const activePage = PAGE_TITLES[pathname] ?? "Dashboard";
 
     return (
         <div className="flex h-screen w-screen bg-gray-100">
-            <Sidebar setActivePage={setActivePage} />
+            <Sidebar />
 
             <div className="flex flex-col flex-1">
                 <Navbar pageTitle={activePage} />

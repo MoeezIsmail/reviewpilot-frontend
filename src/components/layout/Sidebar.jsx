@@ -2,7 +2,7 @@ import { LayoutDashboard, Star, BarChart3, Settings, CreditCard, LogOut } from "
 import { NavLink, useLocation } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext.jsx"
 
-const Sidebar = ({ setActivePage }) => {
+const Sidebar = () => {
     const { signOut } = useAuth()
     const location = useLocation()
 
@@ -39,8 +39,7 @@ const Sidebar = ({ setActivePage }) => {
                             key={i}
                             to={item.path}
                             end
-                            onClick={() => setActivePage(item.name)}
-                            className={`
+                                className={`
                                 group relative flex items-center gap-3 px-4 py-3 rounded-xl
                                 transition-all duration-300 ease-out
 
