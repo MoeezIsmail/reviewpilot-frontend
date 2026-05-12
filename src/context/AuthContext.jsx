@@ -40,7 +40,9 @@ export const AuthProvider = ({ children }) => {
 
             try {
                 const res = await getProfile();
+                console.log('user res: ', res);
                 setUser(res.data.message);
+                console.log('user message: ', res.data.message);
             } catch (err) {
                 setError("Failed to fetch profile, please try again.");
                 clearAuth();
