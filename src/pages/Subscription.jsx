@@ -14,6 +14,8 @@ const PLAN_META = {
         badgeClass: "bg-slate-100 text-slate-500",
         btnClass: "bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-default",
         ringClass: "ring-slate-300",
+        checkBg: "bg-slate-100",
+        checkColor: "text-slate-500",
     },
     growth: {
         icon: Zap,
@@ -24,6 +26,8 @@ const PLAN_META = {
         badgeClass: "bg-indigo-100 text-indigo-600",
         btnClass: "bg-gradient-to-r from-indigo-500 to-violet-500 text-white hover:from-indigo-600 hover:to-violet-600 shadow-lg shadow-indigo-200",
         ringClass: "ring-indigo-400",
+        checkBg: "bg-indigo-100",
+        checkColor: "text-indigo-600",
     },
     pro: {
         icon: Crown,
@@ -34,6 +38,8 @@ const PLAN_META = {
         badgeClass: "bg-violet-100 text-violet-600",
         btnClass: "bg-gradient-to-r from-violet-500 to-purple-600 text-white hover:from-violet-600 hover:to-purple-700 shadow-lg shadow-violet-200",
         ringClass: "ring-violet-400",
+        checkBg: "bg-violet-100",
+        checkColor: "text-violet-600",
     },
 };
 
@@ -41,10 +47,10 @@ const GATEWAY_OPTIONS = [
     { value: "stripe", label: "Credit / Debit Card", sub: "Visa, Mastercard, Amex" },
 ];
 
-const FeatureRow = ({ label, included = true }) => (
+const FeatureRow = ({ label, included = true, checkBg = "bg-indigo-100", checkColor = "text-indigo-600" }) => (
     <li className={`flex items-center gap-2.5 text-sm ${included ? "text-gray-700" : "text-gray-300 line-through"}`}>
-        <span className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${included ? "bg-indigo-100" : "bg-gray-100"}`}>
-            <Check size={10} className={included ? "text-indigo-600" : "text-gray-300"} strokeWidth={3} />
+        <span className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${included ? checkBg : "bg-gray-100"}`}>
+            <Check size={10} className={included ? checkColor : "text-gray-300"} strokeWidth={3} />
         </span>
         {label}
     </li>
@@ -75,10 +81,10 @@ const PlanCard = ({ planKey, plan, currentPlan, gateway, onUpgrade, onCancel, lo
 
     return (
         <div className={`
-            relative flex flex-col rounded-3xl border-2 bg-white transition-all duration-300
+            relative flex flex-col rounded-3xl border-2 bg-white transition-[transform,box-shadow,border-color] duration-300
             ${isActive
-                ? `border-transparent ring-2 ${meta.ringClass} shadow-2xl ${meta.glow} scale-[1.02]`
-                : "border-gray-100 hover:border-gray-200 hover:shadow-xl hover:scale-[1.01]"}
+                ? `border-transparent ring-2 ${meta.ringClass} shadow-2xl ${meta.glow} z-10`
+                : "border-gray-100 hover:border-gray-200 hover:shadow-xl hover:-translate-y-1.5 hover:z-10"}
         `}>
             <div className="p-6 flex flex-col flex-1">
                 {/* Badge */}
@@ -120,22 +126,28 @@ const PlanCard = ({ planKey, plan, currentPlan, gateway, onUpgrade, onCancel, lo
 
                 {/* Features */}
                 <ul className="space-y-2.5 mb-7 flex-1">
-                    {features.map((f, i) => <FeatureRow key={i} label={f} />)}
+                    {features.map((f, i) => (
+                        <FeatureRow key={i} label={f} checkBg={meta.checkBg} checkColor={meta.checkColor} />
+                    ))}
                 </ul>
 
                 {/* Button */}
                 {isActive ? (
-                    !isStarter && (
+                    isStarter ? (
+                        <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-slate-400 bg-slate-50 select-none">
+                            Your Current Plan
+                        </div>
+                    ) : (
                         <button
                             onClick={onCancel}
-                            className="w-full py-3 rounded-2xl text-sm font-semibold text-red-500 bg-red-50 hover:bg-red-100 transition-all"
+                            className="w-full py-3 rounded-2xl text-sm font-semibold text-red-500 bg-red-50 hover:bg-red-100 transition-colors flex items-center justify-center"
                         >
                             Cancel Plan
                         </button>
                     )
                 ) : isStarter ? (
-                    <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-gray-400 bg-gray-50">
-                        Current Free Plan
+                    <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-gray-400 bg-gray-50 select-none">
+                        Free Forever
                     </div>
                 ) : (
                     <button
@@ -253,8 +265,8 @@ const Subscription = () => {
     return (
         <div className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-6 md:p-8">
             <div className="max-w-5xl mx-auto space-y-10">
-                <div className="flex flex-col gap-2 w-full">
-                    <h1 className={`text-xl font-extrabold text-indigo-600 tracking-tight`}>
+                <div className="flex flex-col gap-3 w-full">
+                    <h1 className={`text-xl font-semibold text-indigo-600 tracking-tight`}>
                         Choose the right plan for your business
                     </h1>
                     <p className={`text-gray-400 text-sm`}>Scale your reputation management with precision. Select the tier that matches your current growth stage.</p>
@@ -327,7 +339,7 @@ const Subscription = () => {
                 )}
 
                 {/* Plan cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 isolate">
                     {Object.entries(plans).map(([key, plan]) => (
                         <PlanCard
                             key={key}
@@ -355,8 +367,8 @@ const Subscription = () => {
                     <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl">
                         <div className="flex items-start justify-between mb-1">
                             <h3 className="font-bold text-gray-900 text-lg">Cancel your plan?</h3>
-                            <button onClick={() => setCancelConfirm(false)} className="text-gray-400 hover:text-gray-600 transition">
-                                <X size={18} />
+                            <button onClick={() => setCancelConfirm(false)} className="w-8 h-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors">
+                                <X size={16} />
                             </button>
                         </div>
                         <p className="text-sm text-gray-500 mb-6">
