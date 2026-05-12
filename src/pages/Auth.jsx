@@ -51,18 +51,18 @@ const Auth = () => {
                                 <div className="flex-1 h-px bg-gray-200" />
                             </div>
 
-                            <InputField
-                                type="email"
-                                placeholder="Enter your email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                onKeyDown={(e) => e.key === "Enter" && handleSendOTP()}
-                                error={errors.email}
-                            />
+                            {/*<InputField*/}
+                            {/*    type="email"*/}
+                            {/*    placeholder="Enter your email"*/}
+                            {/*    value={email}*/}
+                            {/*    onChange={(e) => setEmail(e.target.value)}*/}
+                            {/*    onKeyDown={(e) => e.key === "Enter" && handleSendOTP()}*/}
+                            {/*    error={errors.email}*/}
+                            {/*/>*/}
 
-                            <Button variant="primary" size="lg" fullWidth loading={loading} onClick={handleSendOTP}>
-                                {loading ? "Sending OTP..." : "Continue with Email"}
-                            </Button>
+                            {/*<Button variant="primary" size="lg" fullWidth loading={loading} onClick={handleSendOTP}>*/}
+                            {/*    {loading ? "Sending OTP..." : "Continue with Email"}*/}
+                            {/*</Button>*/}
                         </>
                     )}
 
