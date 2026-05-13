@@ -2,9 +2,10 @@ import { Loader2, Flame } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
 import { PLAN_META, PLAN_FEATURES, PLAN_PRICING_DISCOUNT, PLAN_PRICING_ORIGINAL, LIFETIME_SPOTS_LEFT, MONTHLY_DISCOUNT_PCT } from "../../constants/subscriptionMeta.js";
 
-const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
-    const isActive = currentPlan === planKey;
+const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
     const isStarter = planKey === "starter";
+    // Active only when plan AND billing period both match what user actually purchased
+    const isActive = currentPlan === planKey && (isStarter || subscription?.billingPeriod === billingPeriod);
     const meta = PLAN_META[planKey];
     const Icon = meta.icon;
     const isLoadingThis = loadingPlan === planKey;
@@ -26,7 +27,7 @@ const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCanc
             {billingPeriod === "lifetime" && !isStarter && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md shadow-orange-200 whitespace-nowrap">
                     <Flame size={11} />
-                    {LIFETIME_SPOTS_LEFT} spots remaining
+                    {plan.lifetimeSpotsLeft ?? LIFETIME_SPOTS_LEFT} spots remaining
                 </div>
             )}
 

@@ -12,12 +12,19 @@ const PLAN_COLORS = {
     pro: "bg-violet-50 border-violet-200 text-violet-700",
 };
 
+const isExpired = (subscription) => {
+    if (!subscription?.expiresAt) return false;
+    if (subscription.billingPeriod === "lifetime") return false;
+    return new Date(subscription.expiresAt) < new Date();
+};
+
 const ActivePlanBanner = ({ plans, currentPlan, subscription, portalLoading, onManageBilling }) => {
     if (!currentPlan || !plans[currentPlan]) return null;
 
     const Icon = PLAN_ICONS[currentPlan] || Zap;
     const plan = plans[currentPlan];
-    const hasActivePaid = currentPlan !== "starter" && subscription?.status === "active";
+    const expired = isExpired(subscription) || subscription?.status === "expired";
+    const hasActivePaid = currentPlan !== "starter" && subscription?.status === "active" && !expired;
     const isLifetime = subscription?.billingPeriod === "lifetime";
 
     return (
@@ -34,7 +41,12 @@ const ActivePlanBanner = ({ plans, currentPlan, subscription, portalLoading, onM
                                 Lifetime
                             </span>
                         )}
-                        {subscription?.status === "past_due" && (
+                        {expired && (
+                            <span className="ml-2 text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">
+                                Expired
+                            </span>
+                        )}
+                        {!expired && subscription?.status === "past_due" && (
                             <span className="ml-2 text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">
                                 Payment Failed
                             </span>
@@ -45,9 +57,11 @@ const ActivePlanBanner = ({ plans, currentPlan, subscription, portalLoading, onM
                             ? "Free forever — upgrade to unlock AI features"
                             : isLifetime
                                 ? "Lifetime access — no recurring charges"
-                                : subscription?.expiresAt
-                                    ? `Renews ${new Date(subscription.expiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
-                                    : "Active subscription"
+                                : expired
+                                    ? "Subscription expired — renew to restore access"
+                                    : subscription?.expiresAt
+                                        ? `Renews ${new Date(subscription.expiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+                                        : "Active subscription"
                         }
                     </p>
                 </div>

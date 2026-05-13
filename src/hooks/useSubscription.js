@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchCurrentPlan, fetchPlans, createCheckoutSession, createPortalSession, cancelPlan, verifyCheckoutSession } from "../api/subscriptionApi.js";
 import { useToast } from "../components/toast/ToastProvider.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const useSubscription = () => {
     const [plans, setPlans] = useState({});
@@ -15,6 +16,7 @@ const useSubscription = () => {
     const [cancelConfirm, setCancelConfirm] = useState(false);
     const [cancelLoading, setCancelLoading] = useState(false);
     const { addToast: showToast } = useToast();
+    const { user, updateUser } = useAuth();
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
@@ -49,9 +51,11 @@ const useSubscription = () => {
                 const [plansRes, currentRes] = await Promise.all([fetchPlans(), fetchCurrentPlan()]);
                 console.log("[Subscription] fetchPlans response:", plansRes.data);
                 console.log("[Subscription] fetchCurrentPlan response:", currentRes.data);
+                const freshSub = currentRes.data.subscription;
                 setPlans(plansRes.data.plans);
-                setCurrentPlan(currentRes.data.subscription.plan);
-                setSubscription(currentRes.data.subscription);
+                setCurrentPlan(freshSub.plan);
+                setSubscription(freshSub);
+                updateUser({ ...user, subscription: freshSub });
             } catch (err) {
                 console.error("[Subscription] Load error:", err?.response?.data || err.message);
                 showToast("Failed to load subscription info.", "error");

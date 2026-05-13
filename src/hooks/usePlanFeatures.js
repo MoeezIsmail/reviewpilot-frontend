@@ -21,32 +21,40 @@ const PLAN_LIMITS = {
     },
 };
 
+const isSubscriptionExpired = (subscription) => {
+    if (!subscription?.expiresAt) return false;
+    if (subscription.billingPeriod === "lifetime") return false;
+    return new Date(subscription.expiresAt) < new Date();
+};
+
 const usePlanFeatures = () => {
     const { user } = useAuth();
 
-    const plan = user?.subscription?.plan || "starter";
-    const status = user?.subscription?.status || "active";
-    const aiRepliesUsed = user?.subscription?.aiRepliesUsed || 0;
+    const subscription = user?.subscription;
+    const plan = subscription?.plan || "starter";
+    const status = subscription?.status || "active";
+    const aiRepliesUsed = subscription?.aiRepliesUsed || 0;
 
-    // Agar past_due hai to starter treat karo
-    const effectivePlan = status === "past_due" ? "starter" : plan;
+    const isExpired = isSubscriptionExpired(subscription);
+    const isDowngraded = status === "past_due" || status === "expired" || status === "cancelled" || isExpired;
+    const effectivePlan = isDowngraded ? "starter" : plan;
     const limits = PLAN_LIMITS[effectivePlan] || PLAN_LIMITS.starter;
 
-    const canUseAiReply = () => {
-        if (limits.aiRepliesPerMonth === -1) return true;  // unlimited
-        return aiRepliesUsed < limits.aiRepliesPerMonth;
-    };
+    const canUseAiReply = limits.aiRepliesPerMonth === -1 || aiRepliesUsed < limits.aiRepliesPerMonth;
 
-    const remainingAiReplies = () => {
-        if (limits.aiRepliesPerMonth === -1) return Infinity;
-        return Math.max(0, limits.aiRepliesPerMonth - aiRepliesUsed);
-    };
+    const remainingAiReplies = limits.aiRepliesPerMonth === -1
+        ? Infinity
+        : Math.max(0, limits.aiRepliesPerMonth - aiRepliesUsed);
 
     return {
         plan: effectivePlan,
+        rawPlan: plan,
+        status,
+        isExpired,
+        isDowngraded,
         limits,
-        canUseAiReply: canUseAiReply(),
-        remainingAiReplies: remainingAiReplies(),
+        canUseAiReply,
+        remainingAiReplies,
         canBulkGenerate: limits.bulkGenerate,
         canBulkPost: limits.bulkPosting,
         canViewAnalytics: limits.analytics,

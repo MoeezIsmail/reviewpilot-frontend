@@ -60,6 +60,7 @@ const Subscription = () => {
                             planKey={key}
                             plan={plan}
                             currentPlan={currentPlan}
+                            subscription={subscription}
                             billingPeriod={billingPeriod}
                             onUpgrade={handleUpgrade}
                             onCancel={() => setCancelConfirm(true)}
