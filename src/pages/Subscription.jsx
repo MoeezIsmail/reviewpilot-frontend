@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import { Sparkles, Crown, Users, Zap } from "lucide-react";
 import useSubscription from "../hooks/useSubscription.js";
 import PlanCard from "../components/subscription/PlanCard.jsx";
 import ActivePlanBanner from "../components/subscription/ActivePlanBanner.jsx";
@@ -21,13 +21,44 @@ const Subscription = () => {
         <div className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-6 md:p-8">
             <div className="max-w-5xl mx-auto space-y-8">
 
-                {/* Promo Banner */}
-                <div className="flex items-center justify-center gap-2.5 bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 rounded-2xl px-5 py-3 text-sm">
-                    <Sparkles size={15} className="text-indigo-500 shrink-0" />
-                    <span className="text-gray-600">
-                        <span className="font-semibold text-indigo-600">Limited time —</span>{" "}
-                        Save 20% with yearly billing, or grab lifetime access before spots run out.
-                    </span>
+                {/* Founder Club Banner */}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 p-[2px] shadow-lg shadow-amber-200/50">
+                    <div className="relative rounded-2xl bg-gradient-to-r from-amber-950/90 via-orange-950/90 to-yellow-950/90 px-6 py-4 overflow-hidden">
+                        {/* Background shimmer */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 via-yellow-300/5 to-amber-400/10 animate-pulse" />
+                        <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-amber-400/10 blur-2xl" />
+                        <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-orange-400/10 blur-2xl" />
+
+                        <div className="relative flex flex-col sm:flex-row items-center justify-between gap-4">
+                            {/* Left: Badge + Text */}
+                            <div className="flex items-center gap-4">
+                                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-500/40">
+                                    <Crown size={20} className="text-white" />
+                                </div>
+                                <div>
+                                    <div className="flex items-center gap-2 mb-0.5">
+                                        <span className="text-amber-400 font-bold text-base tracking-wide">Founder Club</span>
+                                        <span className="inline-flex items-center gap-1 bg-amber-400/20 border border-amber-400/30 text-amber-300 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                            <Zap size={9} className="fill-amber-300" /> Exclusive
+                                        </span>
+                                    </div>
+                                    <p className="text-amber-100/80 text-sm leading-snug">
+                                        First <span className="text-white font-bold">50 members</span> lock in today's price{" "}
+                                        <span className="text-amber-300 font-semibold">forever</span> — price never increases for you.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Right: Spots counter */}
+                            <div className="flex-shrink-0 flex items-center gap-2 bg-white/10 border border-amber-400/20 rounded-xl px-4 py-2.5">
+                                <Users size={15} className="text-amber-300" />
+                                <div className="text-center">
+                                    <div className="text-white font-bold text-sm leading-none">50 spots</div>
+                                    <div className="text-amber-300/70 text-[10px] mt-0.5 leading-none">Lifetime pricing</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Header */}
