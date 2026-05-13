@@ -47,7 +47,7 @@ const Analytics = () => {
     const navigate = useNavigate();
     const { addToast } = useToast();
 
-    const isFreePlan = !user?.plan || user?.plan === "starter";
+    const isFreePlan = !user?.subscription?.plan || user?.subscription?.plan === "starter";
 
     useEffect(() => {
         if (authLoading || loading) return;
@@ -56,9 +56,6 @@ const Analytics = () => {
             navigate("/settings");
         }
     }, [isAnyPlatformConnected, authLoading, loading]);
-
-    console.log('isfreePLn:', isFreePlan);
-    console.log('user plan:', user?.plan);
 
     if (isFreePlan) return <AnalyticsGate />;
 

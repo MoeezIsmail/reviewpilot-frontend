@@ -20,7 +20,7 @@ const ReviewsTable = () => {
         isGeneratingAll,
     } = useReviews();
     const { user } = useAuth();
-    const isFreePlan = !user?.plan || user?.plan === "starter";
+    const isFreePlan = !user?.subscription?.plan || user?.subscription?.plan === "starter";
 
     // ← Filters allReviews pe apply hote hain (search/sort/rating)
     const {
