@@ -10,8 +10,8 @@ const PLAN_LIMITS = {
     growth: {
         aiRepliesPerMonth: 200,
         bulkGenerate: true,
-        bulkPosting: false,
-        analytics: false,
+        bulkPosting: true,
+        analytics: true,
     },
     pro: {
         aiRepliesPerMonth: -1,   // unlimited
