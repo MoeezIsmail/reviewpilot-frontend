@@ -57,6 +57,9 @@ const Analytics = () => {
         }
     }, [isAnyPlatformConnected, authLoading, loading]);
 
+    console.log('isfreePLn:', isFreePlan);
+    console.log('user plan:', user?.plan);
+
     if (isFreePlan) return <AnalyticsGate />;
 
     return <AnalyticsCharts />;

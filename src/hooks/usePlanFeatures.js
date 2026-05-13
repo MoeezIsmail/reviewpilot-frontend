@@ -14,7 +14,7 @@ const PLAN_LIMITS = {
         analytics: true,
     },
     pro: {
-        aiRepliesPerMonth: -1,   // unlimited
+        aiRepliesPerMonth: -1,
         bulkGenerate: true,
         bulkPosting: true,
         analytics: true,
