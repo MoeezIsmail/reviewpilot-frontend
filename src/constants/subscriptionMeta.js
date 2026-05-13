@@ -1,18 +1,18 @@
 import { Sparkles, Zap, Crown } from "lucide-react";
 
 export const LIFETIME_SPOTS_LEFT = 47;
-export const MONTHLY_DISCOUNT_PCT = 75;
-export const YEARLY_DISCOUNT_PCT = 20;
+export const MONTHLY_DISCOUNT_PCT = 69;
+export const YEARLY_DISCOUNT_PCT = 70;
 
-export const PLAN_PRICING = {
+export const PLAN_PRICING_DISCOUNT = {
     starter: { monthly: 0,  yearly: 0,  lifetime: 0   },
-    growth:  { monthly: 7,  yearly: 18, lifetime: 200  },
+    growth:  { monthly: 8.99,  yearly: 7.5, lifetime: 200  },
     pro:     { monthly: 15, yearly: 35, lifetime: 350  },
 };
 
 export const PLAN_PRICING_ORIGINAL = {
-    growth: { monthly: 29, yearly: 29, lifetime: 279 },
-    pro:    { monthly: 59, yearly: 59, lifetime: 499 },
+    growth: { monthly: 29, yearly: 25, lifetime: 279 },
+    pro:    { monthly: 18.29, yearly: 17.70, lifetime: 499 },
 };
 
 export const PLAN_FEATURES = {

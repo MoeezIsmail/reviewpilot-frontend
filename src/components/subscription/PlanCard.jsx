@@ -1,6 +1,6 @@
 import { Loader2, Flame } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
-import { PLAN_META, PLAN_FEATURES, PLAN_PRICING, PLAN_PRICING_ORIGINAL, LIFETIME_SPOTS_LEFT, MONTHLY_DISCOUNT_PCT } from "../../constants/subscriptionMeta.js";
+import { PLAN_META, PLAN_FEATURES, PLAN_PRICING_DISCOUNT, PLAN_PRICING_ORIGINAL, LIFETIME_SPOTS_LEFT, MONTHLY_DISCOUNT_PCT } from "../../constants/subscriptionMeta.js";
 
 const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
     const isActive = currentPlan === planKey;
@@ -10,10 +10,10 @@ const PlanCard = ({ planKey, plan, currentPlan, billingPeriod, onUpgrade, onCanc
     const isLoadingThis = loadingPlan === planKey;
     const features = PLAN_FEATURES[planKey] ?? [];
 
-    const price = PLAN_PRICING[planKey]?.[billingPeriod] ?? plan.price;
+    const price = PLAN_PRICING_DISCOUNT[planKey]?.[billingPeriod] ?? plan.price;
     const original = PLAN_PRICING_ORIGINAL[planKey];
-    const yearlySavingsPct = original ? Math.round((1 - PLAN_PRICING[planKey].yearly / original.monthly) * 100) : 0;
-    const lifetimeSavings = original ? original.lifetime - PLAN_PRICING[planKey].lifetime : 0;
+    const yearlySavingsPct = original ? Math.round((1 - PLAN_PRICING_DISCOUNT[planKey].yearly / original.monthly) * 100) : 0;
+    const lifetimeSavings = original ? original.lifetime - PLAN_PRICING_DISCOUNT[planKey].lifetime : 0;
 
     return (
         <div className={`
