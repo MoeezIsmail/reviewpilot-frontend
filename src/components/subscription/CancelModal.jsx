@@ -7,9 +7,9 @@ const CancelModal = ({ onConfirm, onClose, loading }) => (
                 <h3 className="font-bold text-gray-900 text-lg">Cancel your plan?</h3>
                 <button
                     onClick={onClose}
-                    className="w-8 h-8 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                    className="w-8 h-8 flex items-center justify-center rounded-xl !text-gray-400 hover:!text-gray-700 hover:!bg-gray-100 transition-colors"
                 >
-                    <X size={16} />
+                    <X size={16} color={'red'} />
                 </button>
             </div>
             <p className="text-sm text-gray-500 mb-6">
@@ -18,16 +18,16 @@ const CancelModal = ({ onConfirm, onClose, loading }) => (
             <div className="flex gap-3">
                 <button
                     onClick={onClose}
-                    className="flex-1 py-3 rounded-2xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition"
+                    className="flex-1 py-3 rounded-2xl border !border-gray-200 text-sm font-semibold !text-gray-600 hover:!bg-gray-50 transition"
                 >
                     Keep Plan
                 </button>
                 <button
                     onClick={onConfirm}
                     disabled={loading}
-                    className="flex-1 py-3 rounded-2xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition disabled:opacity-60 flex items-center justify-center gap-2"
+                    className="flex-1 py-3 rounded-2xl !bg-red-500 !text-white text-sm font-semibold hover:!bg-red-600 transition disabled:opacity-60 flex items-center justify-center gap-2"
                 >
-                    {loading && <Loader2 size={14} className="animate-spin" />}
+                    {loading && <Loader2 size={14} className="animate-spin" color={'indigo'} />}
                     Yes, Cancel
                 </button>
             </div>
