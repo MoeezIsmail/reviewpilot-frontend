@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchCurrentPlan, fetchPlans, createCheckoutSession, createPortalSession, cancelPlan } from "../api/subscriptionApi.js";
+import { fetchCurrentPlan, fetchPlans, createCheckoutSession, createPortalSession, cancelPlan, verifyCheckoutSession } from "../api/subscriptionApi.js";
 import { useToast } from "../components/toast/ToastProvider.jsx";
 
 const useSubscription = () => {
@@ -19,7 +19,26 @@ const useSubscription = () => {
 
     useEffect(() => {
         const paymentStatus = searchParams.get("payment");
-        if (paymentStatus === "success") {
+        const sessionId = searchParams.get("session_id");
+
+        if (paymentStatus === "success" && sessionId) {
+            setPageLoading(true);
+            verifyCheckoutSession(sessionId)
+                .then((res) => {
+                    if (res.data.success) {
+                        setCurrentPlan(res.data.subscription?.plan || null);
+                        setSubscription(res.data.subscription || null);
+                        showToast("Payment successful! Your plan has been upgraded.", "success");
+                    }
+                })
+                .catch(() => {
+                    showToast("Payment received — refreshing your plan status.", "success");
+                })
+                .finally(() => {
+                    setPageLoading(false);
+                    setSearchParams({}, { replace: true });
+                });
+        } else if (paymentStatus === "success") {
             showToast("Payment successful! Your plan has been upgraded.", "success");
             setSearchParams({}, { replace: true });
         } else if (paymentStatus === "cancelled") {
