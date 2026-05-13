@@ -2,6 +2,7 @@ import {Search, Star, ArrowUpDown, RefreshCw, Lock, Zap} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import Button from "../ui/Button.jsx";
 import usePlanFeatures from "../../hooks/usePlanFeatures.js";
+import { useToast } from "../toast/ToastProvider.jsx";
 
 const RATING_OPTIONS = [
     {value: "all", label: "All Ratings"},
@@ -23,7 +24,18 @@ const ReviewFilters = ({
                            isFreePlan,
                        }) => {
     const navigate = useNavigate();
+    const { addToast } = useToast();
     const {canBulkGenerate, canBulkPost} = usePlanFeatures();
+
+    const handleLockedGenerate = () => {
+        addToast("Upgrade your plan to unlock Bulk AI Generate.", "warning");
+        navigate("/subscription");
+    };
+
+    const handleLockedPost = () => {
+        addToast("Upgrade to Pro to unlock Bulk Posting.", "warning");
+        navigate("/subscription");
+    };
 
     return (
         <div className="flex flex-col gap-3">
@@ -92,31 +104,28 @@ const ReviewFilters = ({
                 </div>
 
                 <div className="flex items-center gap-2 p-2">
-                    {/* Bulk Generate — locked for free plan */}
+                    {/* Bulk Generate — locked for free/non-eligible plan */}
                     {isFreePlan ? (
                         <button
-                            onClick={() => navigate("/subscription")}
+                            onClick={handleLockedGenerate}
                             className="flex items-center gap-1.5 text-sm font-medium bg-indigo-50 text-indigo-400 px-4 py-2 rounded-xl hover:bg-indigo-100 hover:text-indigo-600 transition-colors group"
-                            title="Upgrade to unlock Bulk AI Generate"
                         >
                             <Lock size={13} className="group-hover:hidden"/>
                             <Zap size={13} className="hidden group-hover:block text-indigo-500"/>
                             Generate All
-                            <span
-                                className="text-xs font-semibold bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200 px-1.5 py-0.5 rounded-full transition-colors">
+                            <span className="text-xs font-semibold bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200 px-1.5 py-0.5 rounded-full transition-colors">
                                 Pro
                             </span>
                         </button>
                     ) : (
                         pendingGenerateCount > 0 && (
                             <Button
-                                onClick={canBulkGenerate ? generateAllReplies : () => navigate("/subscription")}
+                                onClick={canBulkGenerate ? generateAllReplies : handleLockedGenerate}
                                 disabled={isGeneratingAll || isPostingAll}
                                 variant={canBulkGenerate ? "primary" : "gray"}
-                                title={!canBulkGenerate ? "Upgrade to use Bulk Generate" : ""}
                             >
                                 {!canBulkGenerate
-                                    ? "🔒 Bulk Generate"
+                                    ? <span className="flex items-center gap-1.5"><Lock size={13} /> Bulk Generate</span>
                                     : isGeneratingAll
                                         ? "Generating..."
                                         : `Generate All (${pendingGenerateCount})`
@@ -125,19 +134,18 @@ const ReviewFilters = ({
                         )
                     )}
 
-                    {<Button
-                        onClick={canBulkPost ? postAllReplies : () => navigate("/subscription")}
+                    <Button
+                        onClick={canBulkPost ? postAllReplies : handleLockedPost}
                         disabled={isPostingAll || isGeneratingAll}
                         variant={canBulkPost ? "success" : "gray"}
-                        title={!canBulkPost ? "Upgrade to Pro to use Bulk Posting" : ""}
                     >
                         {!canBulkPost
-                            ? "🔒 Post All"
+                            ? <span className="flex items-center gap-1.5"><Lock size={13} /> Post All</span>
                             : isPostingAll
                                 ? "Posting..."
                                 : `Post All (${pendingRepliesCount})`
                         }
-                    </Button>}
+                    </Button>
 
                     <button
                         onClick={refreshReviews}

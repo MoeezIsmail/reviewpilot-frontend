@@ -1,10 +1,13 @@
 import usePlanFeatures from "../../hooks/usePlanFeatures.js";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../toast/ToastProvider.jsx";
 import Button from "../ui/Button.jsx";
+import { Lock } from "lucide-react";
 
 const ReviewActions = ({ status, hasReply, isPostingAll, onPost, onAiReply }) => {
-    const { canUseAiReply, remainingAiReplies, canBulkPost } = usePlanFeatures();
+    const { canUseAiReply, remainingAiReplies } = usePlanFeatures();
     const navigate = useNavigate();
+    const { addToast } = useToast();
 
     const isPosted = status === "posted";
     const isPosting = status === "posting";
@@ -12,6 +15,7 @@ const ReviewActions = ({ status, hasReply, isPostingAll, onPost, onAiReply }) =>
 
     const handleAiReply = () => {
         if (!canUseAiReply) {
+            addToast("AI reply limit reached. Upgrade your plan to continue.", "warning");
             navigate("/subscription");
             return;
         }
@@ -36,20 +40,22 @@ const ReviewActions = ({ status, hasReply, isPostingAll, onPost, onAiReply }) =>
                 disabled={isGenerating || isPosted || isPosting || isPostingAll}
                 className={`${
                     !canUseAiReply
-                        ? "!bg-gray-100 text-gray-400"
+                        ? "!bg-gray-100 !text-gray-400 hover:!bg-gray-200 cursor-pointer"
                         : "!bg-indigo-50 text-indigo-600 hover:!bg-indigo-100"
                 }`}
-                title={!canUseAiReply ? "AI reply limit reached — upgrade plan" : ""}
             >
-                {isGenerating
-                    ? "Generating..."
-                    : !canUseAiReply
-                        ? "Limit Reached"
-                        : `AI Reply`
-                }
+                {isGenerating ? (
+                    "Generating..."
+                ) : !canUseAiReply ? (
+                    <span className="flex items-center gap-1">
+                        <Lock size={11} />
+                        Limit Reached
+                    </span>
+                ) : (
+                    "AI Reply"
+                )}
             </Button>
 
-            {/* Remaining count */}
             {remainingAiReplies !== Infinity && remainingAiReplies <= 5 && !isPosted && (
                 <span className="text-xs text-orange-500">
                     {remainingAiReplies} left
