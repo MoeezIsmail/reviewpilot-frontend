@@ -7,7 +7,7 @@ const CancelModal = ({ onConfirm, onClose, loading }) => (
                 <h3 className="font-bold text-gray-900 text-lg">Cancel your plan?</h3>
                 <div
                     onClick={onClose}
-                    className="w-8 h-8 flex items-center justify-center rounded-xl !text-gray-400 hover:!text-gray-700 hover:!bg-gray-100 transition-colors"
+                    className="w-8 h-8 flex items-center justify-center rounded-xl !text-gray-400 hover:!text-gray-700 hover:!bg-gray-100 cursor-pointer transition-colors"
                 >
                     <X size={16} />
                 </div>
