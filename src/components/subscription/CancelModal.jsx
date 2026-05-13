@@ -5,12 +5,12 @@ const CancelModal = ({ onConfirm, onClose, loading }) => (
         <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl">
             <div className="flex items-start justify-between mb-1">
                 <h3 className="font-bold text-gray-900 text-lg">Cancel your plan?</h3>
-                <button
+                <div
                     onClick={onClose}
                     className="w-8 h-8 flex items-center justify-center rounded-xl !text-gray-400 hover:!text-gray-700 hover:!bg-gray-100 transition-colors"
                 >
                     <X size={16} />
-                </button>
+                </div>
             </div>
             <p className="text-sm text-gray-500 mb-6">
                 Your plan will be downgraded to <strong className="text-gray-700">Starter (Free)</strong> immediately and paid features will be disabled.
