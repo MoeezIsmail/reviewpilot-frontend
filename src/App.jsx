@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {Routes, Route, Navigate, Outlet} from "react-router-dom"
 import Dashboard from "./pages/Dashboard"
 import Reviews from "./pages/Reviews"
@@ -14,6 +15,7 @@ import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import Layout from "./components/layout/Layout.jsx";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton.jsx";
 import {useAuth} from "./context/AuthContext.jsx";
+import { useToast } from "./components/toast/ToastProvider.jsx";
 
 axios.interceptors.response.use(
     response => response,
@@ -42,6 +44,13 @@ const OnboardingGuard = () => {
 };
 
 const App = () => {
+    const { error } = useAuth();
+    const { addToast } = useToast();
+
+    useEffect(() => {
+        if (error) addToast(error, "error");
+    }, [error]);
+
     return (
         <Routes>
             <Route element={<PublicRoute />}>

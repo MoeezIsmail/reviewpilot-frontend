@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useReviews } from "../context/ReviewsContext.jsx";
+import { useToast } from "../components/toast/ToastProvider.jsx";
 
 const useEditReply = (reviewId, initialReply) => {
     const { updateAiReply } = useReviews();
+    const { addToast } = useToast();
     const [isEditing, setIsEditing] = useState(false);
     const [editedText, setEditedText] = useState(initialReply || "");
 
     const startEditing = () => {
-        console.log("Editing!")
         setEditedText(initialReply || "");
         setIsEditing(true);
     };
@@ -21,6 +22,7 @@ const useEditReply = (reviewId, initialReply) => {
         if (!editedText.trim()) return;
         updateAiReply(reviewId, editedText.trim());
         setIsEditing(false);
+        addToast("Reply updated.", "success");
     };
 
     return {
