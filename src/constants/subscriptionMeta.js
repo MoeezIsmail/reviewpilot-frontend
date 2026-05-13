@@ -7,12 +7,12 @@ export const YEARLY_DISCOUNT_PCT = 70;
 export const PLAN_PRICING_DISCOUNT = {
     starter: { monthly: 0,  yearly: 0,  lifetime: 0   },
     growth:  { monthly: 8.99,  yearly: 7.5, lifetime: 200  },
-    pro:     { monthly: 15, yearly: 35, lifetime: 350  },
+    pro:     { monthly: 18.29, yearly: 15, lifetime: 350  },
 };
 
 export const PLAN_PRICING_ORIGINAL = {
     growth: { monthly: 29, yearly: 25, lifetime: 279 },
-    pro:    { monthly: 18.29, yearly: 17.70, lifetime: 499 },
+    pro:    { monthly: 59, yearly: 50, lifetime: 499 },
 };
 
 export const PLAN_FEATURES = {
