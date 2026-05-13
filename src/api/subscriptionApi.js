@@ -14,7 +14,7 @@ subscriptionApi.interceptors.request.use(config => {
 
 export const fetchCurrentPlan = () => subscriptionApi.get('/current');
 export const fetchPlans = () => subscriptionApi.get('/plans');
-export const createCheckoutSession = ({ plan, gateway }) => subscriptionApi.post('/checkout', { plan, gateway });
+export const createCheckoutSession = ({ plan, gateway, billingPeriod }) => subscriptionApi.post('/checkout', { plan, gateway, billingPeriod });
 export const createPortalSession = () => subscriptionApi.post('/portal');
 export const cancelPlan = () => subscriptionApi.post('/cancel');
 export const upgradePlan = (plan) => subscriptionApi.post('/upgrade', { plan });

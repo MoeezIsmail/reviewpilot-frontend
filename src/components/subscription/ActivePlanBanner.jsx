@@ -1,46 +1,71 @@
-import { CreditCard, ExternalLink, Loader2 } from "lucide-react";
+import { Zap, Crown, Gift, ExternalLink, Loader2 } from "lucide-react";
+
+const PLAN_ICONS = {
+    starter: Gift,
+    growth: Zap,
+    pro: Crown,
+};
+
+const PLAN_COLORS = {
+    starter: "bg-gray-50 border-gray-200 text-gray-600",
+    growth: "bg-indigo-50 border-indigo-200 text-indigo-700",
+    pro: "bg-violet-50 border-violet-200 text-violet-700",
+};
 
 const ActivePlanBanner = ({ plans, currentPlan, subscription, portalLoading, onManageBilling }) => {
-    if (!subscription || currentPlan === "starter") return null;
+    if (!currentPlan || !plans[currentPlan]) return null;
+
+    const Icon = PLAN_ICONS[currentPlan] || Zap;
+    const plan = plans[currentPlan];
+    const hasActivePaid = currentPlan !== "starter" && subscription?.status === "active";
+    const isLifetime = subscription?.billingPeriod === "lifetime";
 
     return (
-        <div className="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-violet-600 rounded-4xl p-5 text-white shadow-xl shadow-indigo-200">
-            <div
-                className="absolute inset-0 opacity-10"
-                style={{ backgroundImage: "radial-gradient(circle at 80% 50%, white 1px, transparent 1px)", backgroundSize: "24px 24px" }}
-            />
-            <div className="relative flex items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                        <CreditCard size={20} />
-                    </div>
-                    <div>
-                        <p className="font-bold text-lg leading-tight">
-                            {plans[currentPlan]?.name} Plan
-                            {subscription.activeGateway && (
-                                <span className="ml-2 text-xs font-normal text-white/60 capitalize">
-                                    via {subscription.activeGateway}
-                                </span>
-                            )}
-                        </p>
-                        {subscription.expiresAt && (
-                            <p className="text-white/70 text-xs mt-0.5">
-                                Renews {new Date(subscription.expiresAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
-                            </p>
-                        )}
-                    </div>
+        <div className={`flex items-center justify-between border rounded-2xl px-5 py-4 ${PLAN_COLORS[currentPlan]}`}>
+            <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+                    <Icon size={18} className="text-current" />
                 </div>
-                {subscription.activeGateway === "stripe" && (
-                    <button
-                        onClick={onManageBilling}
-                        disabled={portalLoading}
-                        className="flex items-center gap-1.5 text-sm font-semibold bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl transition backdrop-blur-sm disabled:opacity-60 shrink-0"
-                    >
-                        {portalLoading ? <Loader2 size={14} className="animate-spin" /> : <ExternalLink size={14} />}
-                        Manage Billing
-                    </button>
-                )}
+                <div>
+                    <p className="font-semibold text-sm">
+                        {plan.name} Plan
+                        {isLifetime && (
+                            <span className="ml-2 text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-medium">
+                                Lifetime
+                            </span>
+                        )}
+                        {subscription?.status === "past_due" && (
+                            <span className="ml-2 text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">
+                                Payment Failed
+                            </span>
+                        )}
+                    </p>
+                    <p className="text-xs opacity-70 mt-0.5">
+                        {currentPlan === "starter"
+                            ? "Free forever — upgrade to unlock AI features"
+                            : isLifetime
+                                ? "Lifetime access — no recurring charges"
+                                : subscription?.expiresAt
+                                    ? `Renews ${new Date(subscription.expiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+                                    : "Active subscription"
+                        }
+                    </p>
+                </div>
             </div>
+
+            {hasActivePaid && !isLifetime && (
+                <button
+                    onClick={onManageBilling}
+                    disabled={portalLoading}
+                    className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+                >
+                    {portalLoading
+                        ? <Loader2 size={12} className="animate-spin" />
+                        : <ExternalLink size={12} />
+                    }
+                    Manage Billing
+                </button>
+            )}
         </div>
     );
 };

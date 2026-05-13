@@ -1,32 +1,34 @@
-import { Search, Star, ArrowUpDown, RefreshCw, Lock, Zap } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {Search, Star, ArrowUpDown, RefreshCw, Lock, Zap} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 import Button from "../ui/Button.jsx";
+import usePlanFeatures from "../../hooks/usePlanFeatures.js";
 
 const RATING_OPTIONS = [
-    { value: "all", label: "All Ratings" },
-    { value: "5",   label: "⭐⭐⭐⭐⭐" },
-    { value: "4",   label: "⭐⭐⭐⭐" },
-    { value: "3",   label: "⭐⭐⭐" },
-    { value: "2",   label: "⭐⭐" },
-    { value: "1",   label: "⭐" },
+    {value: "all", label: "All Ratings"},
+    {value: "5", label: "⭐⭐⭐⭐⭐"},
+    {value: "4", label: "⭐⭐⭐⭐"},
+    {value: "3", label: "⭐⭐⭐"},
+    {value: "2", label: "⭐⭐"},
+    {value: "1", label: "⭐"},
 ];
 
 const ReviewFilters = ({
-    filter, setFilter,
-    search, setSearch,
-    sortBy, setSortBy,
-    ratingFilter, setRatingFilter,
-    SORT_OPTIONS,
-    pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll,
-    pendingRepliesCount, postAllReplies, refreshReviews, loading,
-    isFreePlan,
-}) => {
+                           filter, setFilter,
+                           search, setSearch,
+                           sortBy, setSortBy,
+                           ratingFilter, setRatingFilter,
+                           SORT_OPTIONS,
+                           pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll,
+                           pendingRepliesCount, postAllReplies, refreshReviews, loading,
+                           isFreePlan,
+                       }) => {
     const navigate = useNavigate();
+    const {canBulkGenerate, canBulkPost} = usePlanFeatures();
 
     return (
         <div className="flex flex-col gap-3">
             <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
                 <input
                     placeholder="Search by customer name or review text..."
                     value={search}
@@ -55,12 +57,12 @@ const ReviewFilters = ({
                         ))}
                     </div>
 
-                    <div className="w-[2px] h-8 !bg-gray-200" />
+                    <div className="w-[2px] h-8 !bg-gray-200"/>
 
                     {/* Sort + Rating */}
                     <div className="flex items-center gap-2">
                         <div className="relative">
-                            <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4" />
+                            <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
                             <select
                                 value={ratingFilter}
                                 onChange={(e) => setRatingFilter(e.target.value)}
@@ -74,7 +76,7 @@ const ReviewFilters = ({
                         </div>
 
                         <div className="relative">
-                            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4" />
+                            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
@@ -97,56 +99,52 @@ const ReviewFilters = ({
                             className="flex items-center gap-1.5 text-sm font-medium bg-indigo-50 text-indigo-400 px-4 py-2 rounded-xl hover:bg-indigo-100 hover:text-indigo-600 transition-colors group"
                             title="Upgrade to unlock Bulk AI Generate"
                         >
-                            <Lock size={13} className="group-hover:hidden" />
-                            <Zap size={13} className="hidden group-hover:block text-indigo-500" />
+                            <Lock size={13} className="group-hover:hidden"/>
+                            <Zap size={13} className="hidden group-hover:block text-indigo-500"/>
                             Generate All
-                            <span className="text-xs font-semibold bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200 px-1.5 py-0.5 rounded-full transition-colors">
+                            <span
+                                className="text-xs font-semibold bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200 px-1.5 py-0.5 rounded-full transition-colors">
                                 Pro
                             </span>
                         </button>
                     ) : (
                         pendingGenerateCount > 0 && (
                             <Button
-                                onClick={generateAllReplies}
+                                onClick={canBulkGenerate ? generateAllReplies : () => navigate("/subscription")}
                                 disabled={isGeneratingAll || isPostingAll}
-                                variant="primary"
+                                variant={canBulkGenerate ? "primary" : "gray"}
+                                title={!canBulkGenerate ? "Upgrade to use Bulk Generate" : ""}
                             >
-                                {isGeneratingAll ? "Generating..." : `Generate All (${pendingGenerateCount})`}
+                                {!canBulkGenerate
+                                    ? "🔒 Bulk Generate"
+                                    : isGeneratingAll
+                                        ? "Generating..."
+                                        : `Generate All (${pendingGenerateCount})`
+                                }
                             </Button>
                         )
                     )}
 
-                    {pendingRepliesCount > 0 && (
-                        isFreePlan ? (
-                            <button
-                                onClick={() => navigate("/subscription")}
-                                className="flex items-center gap-1.5 text-sm font-medium bg-emerald-50 text-emerald-400 px-4 py-2 rounded-xl hover:bg-emerald-100 hover:text-emerald-600 transition-colors group"
-                                title="Upgrade to unlock Bulk Posting"
-                            >
-                                <Lock size={13} className="group-hover:hidden" />
-                                <Zap size={13} className="hidden group-hover:block text-emerald-500" />
-                                Post All
-                                <span className="text-xs font-semibold bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 px-1.5 py-0.5 rounded-full transition-colors">
-                                    Pro
-                                </span>
-                            </button>
-                        ) : (
-                            <Button
-                                onClick={postAllReplies}
-                                disabled={isPostingAll || isGeneratingAll}
-                                variant="success"
-                            >
-                                {isPostingAll ? "Posting..." : `Post All (${pendingRepliesCount})`}
-                            </Button>
-                        )
-                    )}
+                    {<Button
+                        onClick={canBulkPost ? postAllReplies : () => navigate("/subscription")}
+                        disabled={isPostingAll || isGeneratingAll}
+                        variant={canBulkPost ? "success" : "gray"}
+                        title={!canBulkPost ? "Upgrade to Pro to use Bulk Posting" : ""}
+                    >
+                        {!canBulkPost
+                            ? "🔒 Post All"
+                            : isPostingAll
+                                ? "Posting..."
+                                : `Post All (${pendingRepliesCount})`
+                        }
+                    </Button>}
 
                     <button
                         onClick={refreshReviews}
                         disabled={loading}
                         className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline disabled:opacity-50"
                     >
-                        <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+                        <RefreshCw size={14} className={loading ? "animate-spin" : ""}/>
                         {loading ? "Loading..." : "Refresh"}
                     </button>
                 </div>
