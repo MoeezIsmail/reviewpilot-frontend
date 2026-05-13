@@ -31,7 +31,7 @@ const BillingToggle = ({ billingPeriod, setBillingPeriod }) => (
                     className={`
                         flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
                         ${billingPeriod === value
-                            ? "bg-white shadow-sm text-gray-900 font-semibold"
+                            ? "bg-white shadow-sm text-gray-900 font-semibold border border-indigo-600"
                             : "text-gray-500 hover:text-gray-700"}
                     `}
                 >
