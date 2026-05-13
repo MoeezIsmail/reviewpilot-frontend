@@ -105,8 +105,10 @@ const useSubscription = () => {
             showToast("Plan cancelled. Downgraded to Starter.", "success");
             const res = await fetchCurrentPlan();
             console.log("[Subscription] fetchCurrentPlan after cancel:", res.data);
-            setCurrentPlan(res.data.subscription.plan);
-            setSubscription(res.data.subscription);
+            const freshSub = res.data.subscription;
+            setCurrentPlan(freshSub.plan);
+            setSubscription(freshSub);
+            updateUser({ ...user, subscription: freshSub });
         } catch (err) {
             console.error("[Subscription] cancelPlan error:", err?.response?.data || err.message);
             if (err?.message === "Lifetime plans cannot be cancelled") {
