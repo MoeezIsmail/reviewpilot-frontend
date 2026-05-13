@@ -109,7 +109,11 @@ const useSubscription = () => {
             setSubscription(res.data.subscription);
         } catch (err) {
             console.error("[Subscription] cancelPlan error:", err?.response?.data || err.message);
-            showToast("Failed to cancel plan.", "error");
+            if (err?.message === "Lifetime plans cannot be cancelled") {
+                showToast(err?.message, "error")
+            } else {
+                showToast("Failed to cancel plan.", "error");
+            }
         } finally {
             setCancelLoading(false);
             setCancelConfirm(false);
