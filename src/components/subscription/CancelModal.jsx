@@ -9,7 +9,7 @@ const CancelModal = ({ onConfirm, onClose, loading }) => (
                     onClick={onClose}
                     className="w-8 h-8 flex items-center justify-center rounded-xl !text-gray-400 hover:!text-gray-700 hover:!bg-gray-100 transition-colors"
                 >
-                    <X size={16} color={'red'} />
+                    <X size={16} />
                 </button>
             </div>
             <p className="text-sm text-gray-500 mb-6">
