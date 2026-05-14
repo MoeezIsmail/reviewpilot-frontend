@@ -63,3 +63,43 @@ button {
 .dark .reviews-card-container::-webkit-scrollbar-track {
   background: #1e1b4b;
 }
+
+/* Subscription page scrollbar */
+.subscription-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #818cf8 #e0e7ff;
+}
+
+.subscription-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.subscription-scroll::-webkit-scrollbar-track {
+  background: #e0e7ff;
+  border-radius: 10px;
+}
+
+.subscription-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #818cf8, #6366f1);
+  border-radius: 10px;
+}
+
+.subscription-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #6366f1, #4f46e5);
+}
+
+.dark .subscription-scroll {
+  scrollbar-color: #6366f1 #1e1b4b;
+}
+
+.dark .subscription-scroll::-webkit-scrollbar-track {
+  background: #1e1b4b;
+}
+
+.dark .subscription-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366f1, #4f46e5);
+}
+
+.dark .subscription-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4f46e5, #4338ca);
+}

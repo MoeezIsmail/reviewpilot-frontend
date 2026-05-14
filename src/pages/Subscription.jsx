@@ -18,7 +18,7 @@ const Subscription = () => {
     if (pageLoading) return <SubscriptionSkeleton />;
 
     return (
-        <div className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 p-6 md:p-8">
+        <div className="subscription-scroll flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 p-6 md:p-8">
             <div className="max-w-5xl mx-auto space-y-8">
 
                 {/* Founder Club Banner */}
