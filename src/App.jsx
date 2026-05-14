@@ -5,6 +5,7 @@ import Reviews from "./pages/Reviews"
 import Analytics from "./pages/Analytics.jsx";
 import Settings from "./pages/Settings.jsx";
 import Subscription from "./pages/Subscription.jsx";
+import Terms from "./pages/Terms.jsx";
 import axios from "axios";
 import AuthSuccess from "./pages/AuthSuccess.jsx";
 import ConnectPlatforms from "./pages/ConnectPlatforms.jsx";
@@ -53,6 +54,8 @@ const App = () => {
 
     return (
         <Routes>
+            <Route path="/terms" element={<Terms />} />
+
             <Route element={<PublicRoute />}>
                 <Route path="/auth" element={<Auth />} />
             </Route>

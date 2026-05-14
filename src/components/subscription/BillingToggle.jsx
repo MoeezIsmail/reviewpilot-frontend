@@ -14,18 +14,27 @@ const PERIODS = [
 ];
 
 const DoodleArrow = () => (
-    <span className="absolute -top-9 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none select-none whitespace-nowrap">
-        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 italic">3 months free</span>
-        <svg width="16" height="13" viewBox="0 0 16 13" fill="none" className="text-emerald-500 dark:text-emerald-400 mt-0.5">
-            <path d="M8 1 C 6 4, 4 7, 3 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
-            <path d="M3 12 L 7 10 M 3 12 L 2 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <span className="absolute -top-14 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none select-none whitespace-nowrap">
+        <span className="-rotate-3 inline-block text-[11px] font-extrabold text-white bg-gradient-to-r from-orange-400 to-rose-500 px-3 py-1 rounded-full shadow-lg shadow-orange-300/60 dark:shadow-orange-900/50 tracking-wide uppercase">
+            3 months free
+        </span>
+        <svg
+            width="30" height="24" viewBox="0 0 30 24" fill="none"
+            className="text-orange-400 dark:text-orange-400 -mt-0.5 -ml-4"
+        >
+            <path
+                d="M17 1 C 15 5, 12 10, 9 17 C 8.2 19.5 7.5 21.5 6 23"
+                stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" fill="none"
+            />
+            <path d="M6 23 L 12 19.5" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
+            <path d="M6 23 L 7.5 17.5" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
         </svg>
     </span>
 );
 
 const BillingToggle = ({ billingPeriod, setBillingPeriod }) => (
     <div className="flex items-center justify-center">
-        <div className="pt-9">
+        <div className="pt-14">
             <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-2xl">
                 {PERIODS.map(({ value, label, badge, badgeClass, Icon }) => (
                     <button

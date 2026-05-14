@@ -1,4 +1,5 @@
 import { Sparkles, Crown, Users, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 import useSubscription from "../hooks/useSubscription.js";
 import PlanCard from "../components/subscription/PlanCard.jsx";
 import ActivePlanBanner from "../components/subscription/ActivePlanBanner.jsx";
@@ -101,9 +102,17 @@ const Subscription = () => {
                 </div>
 
                 {/* Footer */}
-                <p className="text-center text-xs text-gray-400 dark:text-gray-500 pb-2">
-                    Payments processed securely via Stripe. Cancel anytime — no questions asked.
-                </p>
+                <div className="text-center space-y-1 pb-2">
+                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                        Payments processed securely via Stripe. Cancel anytime — no questions asked.
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                        By subscribing, you agree to our{" "}
+                        <Link to="/terms" className="text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 underline underline-offset-2 transition-colors">
+                            Terms &amp; Conditions
+                        </Link>
+                    </p>
+                </div>
 
             </div>
 
