@@ -41,7 +41,7 @@ const Layout = () => {
                     </div>
                 )}
 
-                <main className="p-4 overflow-y-auto bg-gray-100 dark:bg-gray-900 flex-1">
+                <main className="subscription-scroll p-4 overflow-y-auto bg-gray-100 dark:bg-gray-900 flex-1">
                     <Outlet />
                 </main>
             </div>

@@ -8,6 +8,7 @@ const useSubscription = () => {
     const [plans, setPlans] = useState({});
     const [currentPlan, setCurrentPlan] = useState(null);
     const [subscription, setSubscription] = useState(null);
+    const [hasUsedDiscountedOffer, setHasUsedDiscountedOffer] = useState(false);
     const [gateway, setGateway] = useState("stripe");
     const [billingPeriod, setBillingPeriod] = useState("monthly");
     const [loadingPlan, setLoadingPlan] = useState(null);
@@ -55,6 +56,7 @@ const useSubscription = () => {
                 setPlans(plansRes.data.plans);
                 setCurrentPlan(freshSub.plan);
                 setSubscription(freshSub);
+                setHasUsedDiscountedOffer(freshSub.hasUsedDiscountedOffer === true);
                 updateUser({ ...user, subscription: freshSub });
             } catch (err) {
                 console.error("[Subscription] Load error:", err?.response?.data || err.message);
@@ -108,6 +110,7 @@ const useSubscription = () => {
             const freshSub = res.data.subscription;
             setCurrentPlan(freshSub.plan);
             setSubscription(freshSub);
+            setHasUsedDiscountedOffer(freshSub.hasUsedDiscountedOffer === true);
             updateUser({ ...user, subscription: freshSub });
         } catch (err) {
             console.error("[Subscription] cancelPlan error:", err?.response?.data || err.message);
@@ -126,6 +129,7 @@ const useSubscription = () => {
         plans,
         currentPlan,
         subscription,
+        hasUsedDiscountedOffer,
         gateway,
         setGateway,
         billingPeriod,

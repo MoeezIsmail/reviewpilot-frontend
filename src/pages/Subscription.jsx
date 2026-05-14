@@ -1,4 +1,4 @@
-import { Sparkles, Crown, Users, Zap } from "lucide-react";
+import { Sparkles, Crown, Users, Zap, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import useSubscription from "../hooks/useSubscription.js";
 import PlanCard from "../components/subscription/PlanCard.jsx";
@@ -14,6 +14,7 @@ const Subscription = () => {
         loadingPlan, portalLoading, pageLoading,
         cancelConfirm, setCancelConfirm, cancelLoading,
         handleUpgrade, handlePortal, handleCancel,
+        hasUsedDiscountedOffer,
     } = useSubscription();
 
     if (pageLoading) return <SubscriptionSkeleton />;
@@ -30,34 +31,45 @@ const Subscription = () => {
                         <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-amber-400/10 blur-2xl" />
                         <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-orange-400/10 blur-2xl" />
 
-                        <div className="relative flex flex-col sm:flex-row items-center justify-between gap-4">
-                            {/* Left: Badge + Text */}
-                            <div className="flex items-center gap-4">
-                                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-500/40">
-                                    <Crown size={20} className="text-white" />
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2 mb-0.5">
-                                        <span className="text-amber-400 font-bold text-base tracking-wide">Founder Club</span>
-                                        <span className="inline-flex items-center gap-1 bg-amber-400/20 border border-amber-400/30 text-amber-300 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                                            <Zap size={9} className="fill-amber-300" /> Exclusive
-                                        </span>
+                        <div className="relative flex flex-col gap-3">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                                {/* Left: Badge + Text */}
+                                <div className="flex items-center gap-4">
+                                    <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-500/40">
+                                        <Crown size={20} className="text-white" />
                                     </div>
-                                    <p className="text-amber-100/80 text-sm leading-snug">
-                                        First <span className="text-white font-bold">50 members</span> lock in today's price{" "}
-                                        <span className="text-amber-300 font-semibold">forever</span> — price never increases for you.
-                                    </p>
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-0.5">
+                                            <span className="text-amber-400 font-bold text-base tracking-wide">Founder Club</span>
+                                            <span className="inline-flex items-center gap-1 bg-amber-400/20 border border-amber-400/30 text-amber-300 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                                <Zap size={9} className="fill-amber-300" /> Exclusive
+                                            </span>
+                                        </div>
+                                        <p className="text-amber-100/80 text-sm leading-snug">
+                                            First <span className="text-white font-bold">50 members</span> lock in today's price{" "}
+                                            <span className="text-amber-300 font-semibold">forever</span> — price never increases for you.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Right: Spots counter */}
+                                <div className="flex-shrink-0 flex items-center gap-2 bg-white/10 border border-amber-400/20 rounded-xl px-4 py-2.5">
+                                    <Users size={15} className="text-amber-300" />
+                                    <div className="text-center">
+                                        <div className="text-white font-bold text-sm leading-none">50 spots</div>
+                                        <div className="text-amber-300/70 text-[10px] mt-0.5 leading-none">Lifetime pricing</div>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Right: Spots counter */}
-                            <div className="flex-shrink-0 flex items-center gap-2 bg-white/10 border border-amber-400/20 rounded-xl px-4 py-2.5">
-                                <Users size={15} className="text-amber-300" />
-                                <div className="text-center">
-                                    <div className="text-white font-bold text-sm leading-none">50 spots</div>
-                                    <div className="text-amber-300/70 text-[10px] mt-0.5 leading-none">Lifetime pricing</div>
-                                </div>
-                            </div>
+                            {/* T&C note */}
+                            <p className="text-amber-400/60 text-[10px] leading-snug">
+                                *{" "}
+                                <Link to="/terms" className="underline underline-offset-2 hover:text-amber-300 transition-colors">
+                                    Terms &amp; Conditions
+                                </Link>
+                                {" "}are applied. Promotional pricing is valid for first-time subscribers only and cannot be redeemed again after cancellation.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -83,6 +95,17 @@ const Subscription = () => {
                     portalLoading={portalLoading}
                     onManageBilling={handlePortal}
                 />
+
+                {/* Offer restriction warning */}
+                {hasUsedDiscountedOffer && (
+                    <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-2xl px-4 py-3">
+                        <AlertCircle size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                        <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed">
+                            You have previously used our promotional offer. Discounted pricing is no longer available for this account.
+                            Please contact <span className="font-semibold">support@reviewpilot.io</span> if you have questions.
+                        </p>
+                    </div>
+                )}
 
                 {/* Plan Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 isolate">

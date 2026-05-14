@@ -11,7 +11,7 @@ const Section = ({ title, children }) => (
 );
 
 const Terms = () => (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+    <div className="subscription-scroll h-screen overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
 
         {/* Sticky header */}
         <div className="sticky top-0 z-10 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
@@ -113,7 +113,29 @@ const Terms = () => (
                 </p>
             </Section>
 
-            <Section title="5. Use of AI Features">
+            <Section title="5. Promotional Offers &amp; Discounted Pricing">
+                <p>
+                    From time to time, ReviewPilot may offer promotional or discounted pricing on its subscription
+                    plans. These offers are intended for first-time subscribers and are valid for a single use per account.
+                </p>
+                <p>
+                    <strong className="text-gray-800 dark:text-gray-200">Once a promotional offer has been availed and the subscription is subsequently cancelled
+                    — whether voluntarily or due to non-payment — that offer cannot be redeemed again on the same
+                    account.</strong> Any re-subscription will be subject to the standard pricing applicable at
+                    the time of re-subscription.
+                </p>
+                <p>
+                    This restriction applies regardless of the reason for cancellation, the plan tier, or the
+                    billing period originally subscribed to. Promotional pricing is non-transferable and cannot be
+                    combined with other offers.
+                </p>
+                <p>
+                    If you believe your account has been incorrectly restricted from a promotional offer, please
+                    contact us at support@reviewpilot.io for review on a case-by-case basis.
+                </p>
+            </Section>
+
+            <Section title="6. Use of AI Features">
                 <p>
                     AI-generated reply suggestions are provided as a convenience. You are solely responsible for
                     reviewing, editing, and approving any content before it is posted publicly on review platforms.
@@ -128,7 +150,7 @@ const Terms = () => (
                 </p>
             </Section>
 
-            <Section title="6. Prohibited Uses">
+            <Section title="7. Prohibited Uses">
                 <p>You agree not to use the Service to:</p>
                 <ul className="list-disc pl-5 space-y-1">
                     <li>Post fake, fabricated, or misleading reviews on any platform.</li>
@@ -140,7 +162,7 @@ const Terms = () => (
                 </ul>
             </Section>
 
-            <Section title="7. Intellectual Property">
+            <Section title="8. Intellectual Property">
                 <p>
                     All content, logos, trademarks, and intellectual property related to ReviewPilot are owned by
                     or licensed to us and may not be used without our prior written permission.
@@ -152,7 +174,7 @@ const Terms = () => (
                 </p>
             </Section>
 
-            <Section title="8. Data &amp; Privacy">
+            <Section title="9. Data &amp; Privacy">
                 <p>
                     We collect and process data in accordance with our Privacy Policy. By using the Service, you
                     consent to the collection and use of your information as described therein.
@@ -166,7 +188,7 @@ const Terms = () => (
                 </p>
             </Section>
 
-            <Section title="9. Termination">
+            <Section title="10. Termination">
                 <p>
                     You may cancel your account at any time from your subscription settings. Upon cancellation,
                     your access to paid features will continue until the end of the current billing period.
@@ -180,7 +202,7 @@ const Terms = () => (
                 </p>
             </Section>
 
-            <Section title="10. Disclaimer &amp; Limitation of Liability">
+            <Section title="11. Disclaimer &amp; Limitation of Liability">
                 <p>
                     The Service is provided "as is" and "as available" without warranties of any kind, either express
                     or implied. We do not warrant that the Service will be uninterrupted, error-free, or free of
@@ -197,7 +219,7 @@ const Terms = () => (
                 </p>
             </Section>
 
-            <Section title="11. Changes to These Terms">
+            <Section title="12. Changes to These Terms">
                 <p>
                     We may update these Terms &amp; Conditions from time to time. When we do, we will revise the
                     "Last updated" date at the top of this page and may notify you via email or an in-app notice.
@@ -208,7 +230,7 @@ const Terms = () => (
                 </p>
             </Section>
 
-            <Section title="12. Governing Law">
+            <Section title="13. Governing Law">
                 <p>
                     These Terms shall be governed by and construed in accordance with applicable laws. Any disputes
                     arising from these Terms shall be subject to the exclusive jurisdiction of the competent courts
@@ -216,7 +238,7 @@ const Terms = () => (
                 </p>
             </Section>
 
-            <Section title="13. Contact Us">
+            <Section title="14. Contact Us">
                 <p>
                     If you have any questions about these Terms &amp; Conditions, please contact us at:
                 </p>
