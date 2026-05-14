@@ -40,8 +40,8 @@ const ReviewActions = ({ status, hasReply, isPostingAll, onPost, onAiReply }) =>
                 disabled={isGenerating || isPosted || isPosting || isPostingAll}
                 className={`${
                     !canUseAiReply
-                        ? "!bg-gray-100 !text-gray-400 hover:!bg-gray-200 cursor-pointer"
-                        : "!bg-indigo-50 text-indigo-600 hover:!bg-indigo-100"
+                        ? "!bg-gray-100 dark:!bg-gray-700 !text-gray-400 hover:!bg-gray-200 dark:hover:!bg-gray-600 cursor-pointer"
+                        : "!bg-indigo-50 dark:!bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 hover:!bg-indigo-100 dark:hover:!bg-indigo-900/60"
                 }`}
             >
                 {isGenerating ? (

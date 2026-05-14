@@ -18,7 +18,7 @@ const Subscription = () => {
     if (pageLoading) return <SubscriptionSkeleton />;
 
     return (
-        <div className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-6 md:p-8">
+        <div className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 p-6 md:p-8">
             <div className="max-w-5xl mx-auto space-y-8">
 
                 {/* Founder Club Banner */}
@@ -63,7 +63,7 @@ const Subscription = () => {
 
                 {/* Header */}
                 <div className="text-center space-y-2">
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
                         Simple, transparent pricing
                     </h1>
                     <p className="text-gray-400 text-sm max-w-md mx-auto">
@@ -101,7 +101,7 @@ const Subscription = () => {
                 </div>
 
                 {/* Footer */}
-                <p className="text-center text-xs text-gray-400 pb-2">
+                <p className="text-center text-xs text-gray-400 dark:text-gray-500 pb-2">
                     Payments processed securely via Stripe. Cancel anytime — no questions asked.
                 </p>
 

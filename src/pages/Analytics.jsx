@@ -17,13 +17,13 @@ const AnalyticsGate = () => {
 
             {/* Overlay */}
             <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 max-w-sm w-full mx-4 text-center">
-                    <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 p-8 max-w-sm w-full mx-4 text-center">
+                    <div className="w-14 h-14 bg-indigo-50 dark:bg-indigo-900/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <BarChart3 size={24} className="text-indigo-500" />
                     </div>
                     <div className="flex items-center justify-center gap-1.5 mb-2">
                         <Lock size={14} className="text-gray-400" />
-                        <h2 className="text-lg font-bold text-gray-900">Analytics is a paid feature</h2>
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Analytics is a paid feature</h2>
                     </div>
                     <p className="text-sm text-gray-400 mb-6 leading-relaxed">
                         Upgrade to Growth or Pro to unlock review trends, sentiment analysis, and rating distribution.

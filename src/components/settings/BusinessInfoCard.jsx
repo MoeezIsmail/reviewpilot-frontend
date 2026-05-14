@@ -15,24 +15,24 @@ const BusinessInfoCard = ({
         : businessForm.businessType;
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
                 <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
-                        <Building2 size={16} className="text-indigo-600" />
+                    <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/40 rounded-lg flex items-center justify-center">
+                        <Building2 size={16} className="text-indigo-600 dark:text-indigo-400" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-semibold text-gray-800">Business Info</h2>
-                        <p className="text-xs text-gray-400">Your business name and category</p>
+                        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Business Info</h2>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">Your business name and category</p>
                     </div>
                 </div>
                 {loading ? (
-                    <div className="h-7 w-14 bg-gray-100 rounded-lg animate-pulse" />
+                    <div className="h-7 w-14 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />
                 ) : !isEditingBusiness && (
                     <button
                         onClick={() => setIsEditingBusiness(true)}
-                        className="flex items-center gap-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-all"
+                        className="flex items-center gap-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 px-3 py-1.5 rounded-lg transition-all"
                     >
                         <Pencil size={12} /> Edit
                     </button>
@@ -43,18 +43,18 @@ const BusinessInfoCard = ({
             <div className="px-6 py-5">
                 {loading ? (
                     <div className="space-y-3 animate-pulse">
-                        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                            <div className="w-9 h-9 bg-gray-200 rounded-lg shrink-0" />
+                        <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <div className="w-9 h-9 bg-gray-200 dark:bg-gray-600 rounded-lg shrink-0" />
                             <div className="flex-1">
-                                <div className="h-2.5 w-24 bg-gray-200 rounded mb-2" />
-                                <div className="h-3.5 w-40 bg-gray-200 rounded" />
+                                <div className="h-2.5 w-24 bg-gray-200 dark:bg-gray-600 rounded mb-2" />
+                                <div className="h-3.5 w-40 bg-gray-200 dark:bg-gray-600 rounded" />
                             </div>
                         </div>
-                        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                            <div className="w-9 h-9 bg-gray-200 rounded-lg shrink-0" />
+                        <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <div className="w-9 h-9 bg-gray-200 dark:bg-gray-600 rounded-lg shrink-0" />
                             <div className="flex-1">
-                                <div className="h-2.5 w-24 bg-gray-200 rounded mb-2" />
-                                <div className="h-3.5 w-32 bg-gray-200 rounded" />
+                                <div className="h-2.5 w-24 bg-gray-200 dark:bg-gray-600 rounded mb-2" />
+                                <div className="h-3.5 w-32 bg-gray-200 dark:bg-gray-600 rounded" />
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@ const BusinessInfoCard = ({
                         />
 
                         <div>
-                            <label className="text-sm font-medium text-gray-700 mb-3 block">
+                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 block">
                                 Business Type
                             </label>
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -84,8 +84,8 @@ const BusinessInfoCard = ({
                                             }}
                                             className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 text-left text-sm font-medium transition-all ${
                                                 isSelected
-                                                    ? "bg-indigo-50 border-indigo-500 text-indigo-700"
-                                                    : "bg-white border-gray-200 text-gray-600 hover:border-indigo-200 hover:bg-indigo-50/40"
+                                                    ? "bg-indigo-50 dark:bg-indigo-900/40 border-indigo-500 text-indigo-700 dark:text-indigo-300"
+                                                    : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-indigo-200 hover:bg-indigo-50/40 dark:hover:border-indigo-700 dark:hover:bg-indigo-900/20"
                                             }`}
                                         >
                                             <span className="text-base leading-none">{BUSINESS_TYPE_ICONS[type]}</span>
@@ -130,31 +130,31 @@ const BusinessInfoCard = ({
                     </div>
                 ) : (
                     <div className="space-y-3">
-                        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                            <div className="w-9 h-9 bg-white border border-gray-200 rounded-lg flex items-center justify-center shrink-0">
-                                <Building2 size={16} className="text-gray-500" />
+                        <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <div className="w-9 h-9 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg flex items-center justify-center shrink-0">
+                                <Building2 size={16} className="text-gray-500 dark:text-gray-400" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-xs text-gray-400 mb-0.5">Business Name</p>
-                                <p className="text-sm font-semibold text-gray-800 truncate">
+                                <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Business Name</p>
+                                <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">
                                     {businessForm.businessName || <span className="text-gray-400 font-normal">Not set</span>}
                                 </p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                            <div className="w-9 h-9 bg-white border border-gray-200 rounded-lg flex items-center justify-center shrink-0">
-                                <Tag size={16} className="text-gray-500" />
+                        <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                            <div className="w-9 h-9 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg flex items-center justify-center shrink-0">
+                                <Tag size={16} className="text-gray-500 dark:text-gray-400" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-xs text-gray-400 mb-0.5">Business Type</p>
+                                <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Business Type</p>
                                 <div className="flex items-center gap-2">
                                     {displayType ? (
                                         <>
                                             <span className="text-base leading-none">
                                                 {BUSINESS_TYPE_ICONS[businessForm.businessType] || "🏢"}
                                             </span>
-                                            <p className="text-sm font-semibold text-gray-800">{displayType}</p>
+                                            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{displayType}</p>
                                         </>
                                     ) : (
                                         <p className="text-sm text-gray-400">Not set</p>

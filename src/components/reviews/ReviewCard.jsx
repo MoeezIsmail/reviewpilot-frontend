@@ -5,12 +5,12 @@ import ReviewReplyBox from "./ReviewReplyBox.jsx";
 import ReviewActions from "./ReviewActions.jsx";
 
 const STATUS_CONFIG = {
-    idle:       { label: "Pending",    bg: "bg-yellow-100", text: "text-yellow-700" },
-    generating: { label: "Generating", bg: "bg-blue-100",   text: "text-blue-700"   },
-    ready:      { label: "Ready",      bg: "bg-indigo-100", text: "text-indigo-700" },
-    posting:    { label: "Posting...", bg: "bg-orange-100", text: "text-orange-700" },
-    posted:     { label: "Posted",     bg: "bg-green-100",  text: "text-green-700"  },
-    failed:     { label: "Failed",     bg: "bg-red-100",    text: "text-red-700"    },
+    idle:       { label: "Pending",    bg: "bg-yellow-100 dark:bg-yellow-900/40", text: "text-yellow-700 dark:text-yellow-400" },
+    generating: { label: "Generating", bg: "bg-blue-100 dark:bg-blue-900/40",     text: "text-blue-700 dark:text-blue-400"   },
+    ready:      { label: "Ready",      bg: "bg-indigo-100 dark:bg-indigo-900/40", text: "text-indigo-700 dark:text-indigo-400" },
+    posting:    { label: "Posting...", bg: "bg-orange-100 dark:bg-orange-900/40", text: "text-orange-700 dark:text-orange-400" },
+    posted:     { label: "Posted",     bg: "bg-green-100 dark:bg-green-900/40",   text: "text-green-700 dark:text-green-400"  },
+    failed:     { label: "Failed",     bg: "bg-red-100 dark:bg-red-900/40",       text: "text-red-700 dark:text-red-400"    },
 };
 
 const ReviewerAvatar = ({ profilePic, initials, avatarColor }) => (
@@ -28,7 +28,7 @@ const ReviewerAvatar = ({ profilePic, initials, avatarColor }) => (
 const StarRating = ({ rating }) => (
     <div className="flex gap-0.5">
         {[...Array(5)].map((_, i) => (
-            <span key={i} className={`text-sm ${i < rating ? "text-yellow-400" : "text-gray-200"}`}>
+            <span key={i} className={`text-sm ${i < rating ? "text-yellow-400" : "text-gray-200 dark:text-gray-600"}`}>
                 ★
             </span>
         ))}
@@ -54,7 +54,7 @@ const ReviewCard = ({ review }) => {
     const currentStatus = STATUS_CONFIG[status] || STATUS_CONFIG.idle;
 
     return (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-3">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 flex flex-col gap-3">
 
             {/* Header */}
             <div className="flex justify-between items-start">
@@ -65,7 +65,7 @@ const ReviewCard = ({ review }) => {
                         avatarColor={avatarColor}
                     />
                     <div>
-                        <p className="font-medium text-sm text-gray-900">{reviewerName}</p>
+                        <p className="font-medium text-sm text-gray-900 dark:text-gray-100">{reviewerName}</p>
                         <p className="text-xs text-gray-400">
                             {formatDate(review.createTime)} · Google
                         </p>
@@ -81,7 +81,7 @@ const ReviewCard = ({ review }) => {
             </div>
 
             {/* Review Text */}
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                 {getReviewText(review)}
             </p>
 

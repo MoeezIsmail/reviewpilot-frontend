@@ -14,7 +14,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
     if (!replyText) return null;
 
     return (
-        <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-indigo-500">
+        <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 border-l-4 border-indigo-500">
 
             <div className="flex justify-between items-center mb-1">
                 <p className="text-xs text-gray-400 font-medium">
@@ -22,7 +22,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                 </p>
 
                 {!isPosted && !isEditing && (
-                    <div onClick={startEditing} className="flex cursor-pointer items-center justify-center !text-gray-500 hover:!text-gray-700 p-2 rounded-full border border-gray-200 hover:bg-gray-200">
+                    <div onClick={startEditing} className="flex cursor-pointer items-center justify-center !text-gray-500 dark:!text-gray-400 hover:!text-gray-700 dark:hover:!text-gray-200 p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600">
                         <Pencil size={18}/>
                     </div>
                 )}
@@ -34,7 +34,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                         value={editedText}
                         onChange={(e) => setEditedText(e.target.value)}
                         rows={4}
-                        className="w-full text-sm text-gray-700 bg-white border border-indigo-300 rounded-lg p-2 resize-none focus:outline-none focus:border-indigo-500"
+                        className="w-full text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-indigo-300 dark:border-indigo-700 rounded-lg p-2 resize-none focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-gray-500"
                         placeholder="Edit your reply..."
                         autoFocus
                     />
@@ -47,7 +47,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                         <div className="flex gap-2">
                             <div
                                 onClick={cancelEditing}
-                                className="flex items-center justify-center cursor-pointer !text-red-500 hover:!text-white-700 px-2 py-1 rounded-full border border-red-200 hover:bg-red-200"
+                                className="flex items-center justify-center cursor-pointer !text-red-500 hover:!text-white-700 px-2 py-1 rounded-full border border-red-200 dark:border-red-800 hover:bg-red-200 dark:hover:bg-red-900/40"
                             >
                                 <X size={24}/>
                             </div>
@@ -55,7 +55,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                             <button
                                 onClick={saveEdit}
                                 disabled={!editedText.trim()}
-                                className="flex items-center justify-center !text-green-500 hover:!text-green-700 hover:!bg-green-200 p-2 rounded-full !border !border-green-200 disabled:opacity-50"
+                                className="flex items-center justify-center !text-green-500 hover:!text-green-700 hover:!bg-green-200 dark:hover:!bg-green-900/40 p-2 rounded-full !border !border-green-200 dark:!border-green-800 disabled:opacity-50"
                             >
                                 <Check size={24}/>
                             </button>
@@ -63,7 +63,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                     </div>
                 </div>
             ) : (
-                <p className="text-sm text-gray-600 leading-relaxed">{replyText}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{replyText}</p>
             )}
 
         </div>

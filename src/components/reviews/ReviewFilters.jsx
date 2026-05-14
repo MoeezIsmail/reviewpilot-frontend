@@ -45,15 +45,15 @@ const ReviewFilters = ({
                     placeholder="Search by customer name or review text..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full border border-gray-200 bg-white rounded-lg pl-8 pr-4 py-2 text-sm focus:border-indigo-400 focus:outline-none"
+                    className="w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg pl-8 pr-4 py-2 text-sm focus:border-indigo-400 focus:outline-none"
                 />
             </div>
 
-            <div className="flex items-center justify-between flex-wrap gap-6 rounded-xl p-2 !bg-white">
+            <div className="flex items-center justify-between flex-wrap gap-6 rounded-xl p-2 !bg-white dark:!bg-gray-800">
 
                 <div className="flex gap-6 items-center">
                     {/* Status Filters */}
-                    <div className="flex gap-2 rounded-xl p-2 !bg-gray-100">
+                    <div className="flex gap-2 rounded-xl p-2 !bg-gray-100 dark:!bg-gray-700">
                         {["all", "replied", "pending"].map((f) => (
                             <button
                                 key={f}
@@ -61,7 +61,7 @@ const ReviewFilters = ({
                                 className={`px-4 py-1 rounded-xl text-sm font-medium capitalize transition-all ${
                                     filter === f
                                         ? "!bg-indigo-600 text-white"
-                                        : "!bg-gray-50 border border-gray-200 text-gray-600 hover:border-indigo-300"
+                                        : "!bg-gray-50 dark:!bg-gray-600 border border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-300 hover:border-indigo-300"
                                 }`}
                             >
                                 {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -69,7 +69,7 @@ const ReviewFilters = ({
                         ))}
                     </div>
 
-                    <div className="w-[2px] h-8 !bg-gray-200"/>
+                    <div className="w-[2px] h-8 !bg-gray-200 dark:!bg-gray-600"/>
 
                     {/* Sort + Rating */}
                     <div className="flex items-center gap-2">
@@ -78,7 +78,7 @@ const ReviewFilters = ({
                             <select
                                 value={ratingFilter}
                                 onChange={(e) => setRatingFilter(e.target.value)}
-                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4 text-gray-700 bg-white shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
+                                className="appearance-none text-sm border border-gray-200 dark:border-gray-600 rounded-xl pl-10 pr-10 py-4 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                             >
                                 {RATING_OPTIONS.map((opt) => (
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -92,7 +92,7 @@ const ReviewFilters = ({
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
-                                className="appearance-none text-sm border border-gray-200 rounded-xl pl-10 pr-10 py-4 text-gray-700 bg-white shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
+                                className="appearance-none text-sm border border-gray-200 dark:border-gray-600 rounded-xl pl-10 pr-10 py-4 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
                             >
                                 {SORT_OPTIONS.map((opt) => (
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -104,16 +104,16 @@ const ReviewFilters = ({
                 </div>
 
                 <div className="flex items-center gap-2 p-2">
-                    {/* Bulk Generate — locked for free/non-eligible plan */}
+                    {/* Bulk Generate */}
                     {isFreePlan ? (
                         <button
                             onClick={handleLockedGenerate}
-                            className="flex items-center gap-1.5 text-sm font-medium bg-indigo-50 text-indigo-400 px-4 py-2 rounded-xl hover:bg-indigo-100 hover:text-indigo-600 transition-colors group"
+                            className="flex items-center gap-1.5 text-sm font-medium bg-indigo-50 dark:bg-indigo-900/40 text-indigo-400 dark:text-indigo-300 px-4 py-2 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/60 hover:text-indigo-600 dark:hover:text-indigo-200 transition-colors group"
                         >
                             <Lock size={13} className="group-hover:hidden"/>
                             <Zap size={13} className="hidden group-hover:block text-indigo-500"/>
                             Generate All
-                            <span className="text-xs font-semibold bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200 px-1.5 py-0.5 rounded-full transition-colors">
+                            <span className="text-xs font-semibold bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 group-hover:bg-indigo-200 px-1.5 py-0.5 rounded-full transition-colors">
                                 Pro
                             </span>
                         </button>
@@ -150,7 +150,7 @@ const ReviewFilters = ({
                     <button
                         onClick={refreshReviews}
                         disabled={loading}
-                        className="flex items-center gap-1.5 text-sm text-indigo-600 hover:underline disabled:opacity-50"
+                        className="flex items-center gap-1.5 text-sm text-indigo-600 dark:text-indigo-400 hover:underline disabled:opacity-50"
                     >
                         <RefreshCw size={14} className={loading ? "animate-spin" : ""}/>
                         {loading ? "Loading..." : "Refresh"}

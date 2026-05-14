@@ -4,6 +4,7 @@ import { useToast } from "../components/toast/ToastProvider.jsx";
 import useSettings from "../hooks/useSettings.js";
 import BusinessInfoCard from "../components/settings/BusinessInfoCard.jsx";
 import ConnectedAccountsCard from "../components/settings/ConnectedAccountsCard.jsx";
+import ThemeCard from "../components/settings/ThemeCard.jsx";
 
 const Settings = () => {
     const {
@@ -45,6 +46,7 @@ const Settings = () => {
                 handleDisconnect={handleDisconnect}
                 disconnecting={disconnecting}
             />
+            <ThemeCard />
         </div>
     );
 };

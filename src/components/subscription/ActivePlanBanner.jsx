@@ -7,9 +7,9 @@ const PLAN_ICONS = {
 };
 
 const PLAN_COLORS = {
-    starter: "bg-gray-50 border-gray-200 text-gray-600",
-    growth: "bg-indigo-50 border-indigo-200 text-indigo-700",
-    pro: "bg-violet-50 border-violet-200 text-violet-700",
+    starter: "bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300",
+    growth: "bg-indigo-50 dark:bg-indigo-900/30 border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300",
+    pro: "bg-violet-50 dark:bg-violet-900/30 border-violet-200 dark:border-violet-700 text-violet-700 dark:text-violet-300",
 };
 
 const isExpired = (subscription) => {
@@ -30,24 +30,24 @@ const ActivePlanBanner = ({ plans, currentPlan, subscription, portalLoading, onM
     return (
         <div className={`flex items-center justify-between border rounded-2xl px-5 py-4 ${PLAN_COLORS[currentPlan]}`}>
             <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-white dark:bg-gray-700 shadow-sm flex items-center justify-center">
                     <Icon size={18} className="text-current" />
                 </div>
                 <div>
                     <p className="font-semibold text-sm">
                         {plan.name} Plan
                         {isLifetime && (
-                            <span className="ml-2 text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-medium">
+                            <span className="ml-2 text-xs bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 px-2 py-0.5 rounded-full font-medium">
                                 Lifetime
                             </span>
                         )}
                         {expired && (
-                            <span className="ml-2 text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">
+                            <span className="ml-2 text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-medium">
                                 Expired
                             </span>
                         )}
                         {!expired && subscription?.status === "past_due" && (
-                            <span className="ml-2 text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">
+                            <span className="ml-2 text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-medium">
                                 Payment Failed
                             </span>
                         )}
@@ -71,7 +71,7 @@ const ActivePlanBanner = ({ plans, currentPlan, subscription, portalLoading, onM
                 <button
                     onClick={onManageBilling}
                     disabled={portalLoading}
-                    className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all disabled:opacity-50"
+                    className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-xl bg-white dark:bg-gray-700 shadow-sm hover:shadow-md transition-all disabled:opacity-50 text-gray-700 dark:text-gray-200"
                 >
                     {portalLoading
                         ? <Loader2 size={12} className="animate-spin" />

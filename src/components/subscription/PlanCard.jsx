@@ -4,7 +4,6 @@ import { PLAN_META, PLAN_FEATURES, PLAN_PRICING_DISCOUNT, PLAN_PRICING_ORIGINAL,
 
 const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
     const isStarter = planKey === "starter";
-    // Active only when plan AND billing period both match what user actually purchased
     const isActive = currentPlan === planKey && (isStarter || subscription?.billingPeriod === billingPeriod);
     const meta = PLAN_META[planKey];
     const Icon = meta.icon;
@@ -18,10 +17,10 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
 
     return (
         <div className={`
-            relative flex flex-col rounded-3xl border-2 bg-white transition-[transform,box-shadow,border-color] duration-300
+            relative flex flex-col rounded-3xl border-2 bg-white dark:bg-gray-800 transition-[transform,box-shadow,border-color] duration-300
             ${isActive
                 ? `border-transparent ring-2 ${meta.ringClass} shadow-2xl ${meta.glow} z-10`
-                : "border-gray-100 hover:border-gray-200 hover:shadow-xl hover:-translate-y-1.5 hover:z-10"}
+                : "border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 hover:shadow-xl hover:-translate-y-1.5 hover:z-10"}
         `}>
             {/* Lifetime spots ribbon */}
             {billingPeriod === "lifetime" && !isStarter && (
@@ -38,7 +37,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                         {meta.badge}
                     </span>
                     {isActive && (
-                        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-100 text-emerald-600">
+                        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
                             ✓ Active
                         </span>
                     )}
@@ -50,19 +49,19 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                         <Icon size={18} className="text-white" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-gray-900 leading-tight">{plan.name}</h3>
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{plan.name}</h3>
                         <p className="text-xs text-gray-400">{meta.description}</p>
                     </div>
                 </div>
 
                 {/* Divider */}
-                <div className="h-px bg-gray-100 my-4" />
+                <div className="h-px bg-gray-100 dark:bg-gray-700 my-4" />
 
                 {/* Price */}
                 <div className="mb-5">
                     {isStarter ? (
                         <div className="flex items-end gap-1">
-                            <span className="text-4xl font-extrabold text-gray-900">$0</span>
+                            <span className="text-4xl font-extrabold text-gray-900 dark:text-gray-100">$0</span>
                             <span className="text-gray-400 text-sm mb-1">/ month</span>
                         </div>
                     ) : billingPeriod === "lifetime" ? (
@@ -75,7 +74,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                             </div>
                             <div className="flex items-center gap-2 mt-1">
                                 <span className="text-xs text-gray-400 line-through">${original?.lifetime}</span>
-                                <span className="text-xs font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">
+                                <span className="text-xs font-semibold text-orange-600 bg-orange-50 dark:bg-orange-900/40 dark:text-orange-400 px-2 py-0.5 rounded-full">
                                     Save ${lifetimeSavings}
                                 </span>
                             </div>
@@ -90,7 +89,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                             </div>
                             <div className="flex items-center gap-2 mt-1">
                                 <span className="text-xs text-gray-400 line-through">${original?.monthly}/mo</span>
-                                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-0.5 rounded-full">
                                     Save {yearlySavingsPct}%
                                 </span>
                             </div>
@@ -105,7 +104,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                             </div>
                             <div className="flex items-center gap-2 mt-1">
                                 <span className="text-xs text-gray-400 line-through">${original?.monthly}/mo</span>
-                                <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                                <span className="text-xs font-semibold text-rose-600 bg-rose-50 dark:bg-rose-900/40 dark:text-rose-400 px-2 py-0.5 rounded-full">
                                     {MONTHLY_DISCOUNT_PCT}% off · Limited
                                 </span>
                             </div>
@@ -129,19 +128,19 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                 {/* CTA Button */}
                 {isActive ? (
                     isStarter ? (
-                        <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-slate-400 bg-slate-50 select-none">
+                        <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-800 select-none">
                             Your Current Plan
                         </div>
                     ) : (
                         <button
                             onClick={onCancel}
-                            className="w-full py-3 rounded-2xl text-sm font-semibold text-red-500 bg-red-50 hover:bg-red-100 transition-colors flex items-center justify-center"
+                            className="w-full py-3 rounded-2xl text-sm font-semibold text-red-500 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-950/60 transition-colors flex items-center justify-center"
                         >
                             Cancel Plan
                         </button>
                     )
                 ) : isStarter ? (
-                    <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-gray-400 bg-gray-50 select-none">
+                    <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-gray-400 bg-gray-50 dark:bg-gray-700 select-none">
                         Free Forever
                     </div>
                 ) : (

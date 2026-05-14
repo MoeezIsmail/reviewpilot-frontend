@@ -25,23 +25,22 @@ const ReviewPagination = () => {
                                 disabled={loading || isActive}
                                 className={`relative flex items-center justify-center rounded-full font-bold transition-all duration-300 z-10
                                     ${isActive
-                                        ? "w-9 h-9 !bg-indigo-600 !text-white shadow-md shadow-indigo-300 cursor-default ring-4 ring-indigo-100"
+                                        ? "w-9 h-9 !bg-indigo-600 !text-white shadow-md shadow-indigo-300 cursor-default ring-4 ring-indigo-100 dark:ring-indigo-900"
                                         : isVisited
-                                            ? "w-7 h-7 bg-indigo-500 !text-gray-400 hover:scale-110 cursor-pointer"
-                                            : "w-7 h-7 bg-indigo-200 border-2 !border-gray-200 !text-gray-400 hover:border-indigo-300 hover:!text-indigo-500 cursor-pointer"
+                                            ? "w-7 h-7 bg-indigo-500 !text-gray-100 hover:scale-110 cursor-pointer"
+                                            : "w-7 h-7 bg-indigo-200 dark:bg-indigo-900 border-2 !border-gray-200 dark:!border-gray-600 !text-gray-400 hover:border-indigo-300 hover:!text-indigo-500 cursor-pointer"
                                     } ${loading && !isActive ? "opacity-80 cursor-not-allowed" : ""}`}
                             >
                                 {isLoadingThis
                                     ? <Loader2 size={14} className="animate-spin" />
                                     : <span className={isActive ? "text-sm" : "text-xs"}>{page}</span>
                                 }
-
                             </button>
 
                             {/* Line to next numbered node */}
                             {!isLast && (
                                 <div className={`w-10 h-0.5 transition-all duration-500
-                                    ${page < currentPage ? "!bg-indigo-500" : "!bg-gray-200"}`}
+                                    ${page < currentPage ? "!bg-indigo-500" : "!bg-gray-200 dark:!bg-gray-600"}`}
                                 />
                             )}
 
@@ -49,15 +48,15 @@ const ReviewPagination = () => {
                             {isLast && hasNextPage && (
                                 <>
                                     <div className={`w-10 h-0.5 transition-all duration-500
-                                        ${page <= currentPage ? "!bg-indigo-400" : "!bg-gray-200"}`}
+                                        ${page <= currentPage ? "!bg-indigo-400" : "!bg-gray-200 dark:!bg-gray-600"}`}
                                     />
                                     <button
                                         onClick={() => !loading && goToPage(totalPagesLoaded + 1)}
                                         disabled={loading}
-                                        className={`w-7 h-7 rounded-full border-2 border-dashed flex items-center justify-center font-bold transition-all z-10 bg-white
+                                        className={`w-7 h-7 rounded-full border-2 border-dashed flex items-center justify-center font-bold transition-all z-10 bg-white dark:bg-gray-800
                                             ${loading
-                                                ? "!border-gray-200 !text-gray-500 cursor-not-allowed"
-                                                : "!border-indigo-300 !text-indigo-400 hover:!border-indigo-500 hover:bg-indigo-50 hover:!text-indigo-600 cursor-pointer"
+                                                ? "!border-gray-200 dark:!border-gray-600 !text-gray-500 cursor-not-allowed"
+                                                : "!border-indigo-300 dark:!border-indigo-700 !text-indigo-400 hover:!border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 hover:!text-indigo-600 cursor-pointer"
                                             }`}
                                     >
                                         {loading

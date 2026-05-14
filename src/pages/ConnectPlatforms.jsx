@@ -67,8 +67,8 @@ export default function ConnectPlatforms() {
     };
 
     return (
-        <div className="min-h-screen w-screen flex items-center justify-center !bg-gray-50">
-            <div className="!bg-white p-10 rounded-xl shadow-lg w-[520px]">
+        <div className="min-h-screen w-screen flex items-center justify-center !bg-gray-50 dark:!bg-gray-900">
+            <div className="!bg-white dark:!bg-gray-800 p-10 rounded-xl shadow-lg w-[520px]">
 
                 <div className="flex items-center gap-2 mb-8">
                     <div className="flex items-center gap-2">
@@ -86,17 +86,17 @@ export default function ConnectPlatforms() {
                             Connect Platform
                         </span>
                     </div>
-                    <div className="flex-1 h-px bg-gray-200 mx-2"/>
+                    <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600 mx-2"/>
                     <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-gray-400 text-xs font-bold">2</span>
+                        <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                            <span className="text-gray-400 dark:text-gray-500 text-xs font-bold">2</span>
                         </div>
-                        <span className="text-sm text-gray-400">Business Info</span>
+                        <span className="text-sm text-gray-400 dark:text-gray-500">Business Info</span>
                     </div>
                 </div>
 
-                <h2 className="text-2xl font-bold mb-1 text-black">Connect Your Platforms</h2>
-                <p className="text-gray-500 text-sm mb-6">
+                <h2 className="text-2xl font-bold mb-1 text-black dark:text-white">Connect Your Platforms</h2>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
                     Connect at least one platform to start managing reviews
                 </p>
 

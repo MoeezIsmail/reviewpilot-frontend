@@ -62,8 +62,8 @@ export default function OnboardingInfo() {
     };
 
     return (
-        <div className="min-h-screen w-screen flex items-center justify-center !bg-gray-50">
-            <div className="!bg-white p-10 rounded-xl shadow-lg w-[480px]">
+        <div className="min-h-screen w-screen flex items-center justify-center !bg-gray-50 dark:!bg-gray-900">
+            <div className="!bg-white dark:!bg-gray-800 p-10 rounded-xl shadow-lg w-[480px]">
 
                 {/* Progress Indicator */}
                 <div className="flex items-center gap-2 mb-8">
@@ -71,9 +71,9 @@ export default function OnboardingInfo() {
                         <div className="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center">
                             <span className="text-white text-xs font-bold">✓</span>
                         </div>
-                        <span className="text-sm text-gray-400">Connect Platform</span>
+                        <span className="text-sm text-gray-400 dark:text-gray-500">Connect Platform</span>
                     </div>
-                    <div className="flex-1 h-px bg-gray-200 mx-2" />
+                    <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600 mx-2" />
                     <div className="flex items-center gap-2">
                         <div className="w-7 h-7 rounded-full !bg-indigo-600 flex items-center justify-center">
                             <span className="text-white text-xs font-bold">2</span>
@@ -82,8 +82,8 @@ export default function OnboardingInfo() {
                     </div>
                 </div>
 
-                <h2 className="text-2xl font-bold text-black mb-1">Tell us about your business</h2>
-                <p className="text-gray-500 text-sm mb-6">
+                <h2 className="text-2xl font-bold text-black dark:text-white mb-1">Tell us about your business</h2>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
                     This helps us generate better AI replies for your reviews
                 </p>
 
@@ -107,7 +107,7 @@ export default function OnboardingInfo() {
 
                 {/* Business Type */}
                 <div className="mb-6">
-                    <label className="text-sm font-medium text-gray-700 mb-3 block">
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 block">
                         Business Type
                     </label>
                     <div className="grid grid-cols-2 gap-2">
@@ -125,7 +125,7 @@ export default function OnboardingInfo() {
                                     className={`flex items-center gap-3 px-4 py-3 rounded-lg border-2 transition-all text-left ${
                                         isSelected
                                             ? "!bg-indigo-50 border-indigo-500"
-                                            : "bg-white border-gray-200 hover:border-indigo-300"
+                                            : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-indigo-300"
                                     }`}
                                 >
                                     <span className="text-base">{icons[index]}</span>

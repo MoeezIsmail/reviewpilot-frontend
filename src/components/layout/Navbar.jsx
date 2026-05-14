@@ -5,14 +5,14 @@ const Navbar = ({pageTitle}) => {
     const {user} = useAuth();
 
     return (
-        <header className={`p-2`}>
-            <div className="flex items-center justify-between bg-indigo-600 !text-white px-6 py-4 border-b border-gray-300 rounded-lg">
+        <header className="p-2">
+            <div className="flex items-center justify-between bg-indigo-600 dark:bg-indigo-700 !text-white px-6 py-4 border-b border-gray-300 dark:border-indigo-800 rounded-lg">
                 <p className="text-4xl font-semibold">
                     {pageTitle || "Dashboard"}
                 </p>
 
                 <div className="flex items-center gap-6">
-                    <div className="border-r px-6 py-2">
+                    <div className="border-r border-indigo-400 px-6 py-2">
                         <Bell className="cursor-pointer"/>
                     </div>
 

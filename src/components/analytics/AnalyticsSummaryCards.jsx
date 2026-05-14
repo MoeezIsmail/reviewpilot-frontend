@@ -1,8 +1,8 @@
 const SummaryCard = ({ title, value, subtitle, color }) => (
-    <div className="bg-white rounded-xl shadow-sm p-5">
-        <p className="text-sm text-gray-500 mb-1">{title}</p>
-        <p className={`text-3xl font-bold ${color || "text-gray-900"}`}>{value}</p>
-        {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{title}</p>
+        <p className={`text-3xl font-bold ${color || "text-gray-900 dark:text-gray-100"}`}>{value}</p>
+        {subtitle && <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{subtitle}</p>}
     </div>
 );
 
@@ -15,7 +15,7 @@ const AnalyticsSummaryCards = ({ reviews, allReviews, responseRate, sentiment })
                 title="Total Reviews"
                 value={reviews.totalReviewCount}
                 subtitle="All time"
-                color="text-indigo-600"
+                color="text-indigo-600 dark:text-indigo-400"
             />
             <SummaryCard
                 title="Average Rating"
@@ -27,13 +27,13 @@ const AnalyticsSummaryCards = ({ reviews, allReviews, responseRate, sentiment })
                 title="Response Rate"
                 value={`${responseRate}%`}
                 subtitle="Reviews with replies"
-                color={responseRate >= 70 ? "text-green-600" : "text-orange-500"}
+                color={responseRate >= 70 ? "text-green-600 dark:text-green-400" : "text-orange-500"}
             />
             <SummaryCard
                 title="Positive Reviews"
                 value={`${sentiment.positive}`}
                 subtitle={`${Math.round((sentiment.positive / (total || 1)) * 100)}% of total`}
-                color="text-green-600"
+                color="text-green-600 dark:text-green-400"
             />
         </div>
     );

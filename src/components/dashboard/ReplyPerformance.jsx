@@ -11,9 +11,9 @@ const ReplyPerformance = () => {
     ];
 
     return (
-        <div className="bg-white rounded-xl shadow-sm p-6 h-72 sticky top-0 z-10">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 h-72 sticky top-0 z-10">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-semibold">Reply Performance</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Reply Performance</h2>
                 <span className="text-xs text-gray-400">{stats.total} total reviews</span>
             </div>
 
@@ -21,12 +21,12 @@ const ReplyPerformance = () => {
                 {bars.map((s, i) => (
                     <div key={i}>
                         <div className="flex justify-between text-sm mb-1.5">
-                            <span className="text-gray-600">{s.label}</span>
-                            <span className="font-medium text-gray-800">
+                            <span className="text-gray-600 dark:text-gray-300">{s.label}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">
                                 {s.count} <span className="text-gray-400 font-normal">({s.value}%)</span>
                             </span>
                         </div>
-                        <div className="w-full bg-gray-100 rounded-full h-2">
+                        <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2">
                             <div
                                 className={`${s.color} h-2 rounded-full transition-all duration-500`}
                                 style={{ width: `${s.value}%` }}

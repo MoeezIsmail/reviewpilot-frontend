@@ -35,12 +35,12 @@ const Auth = () => {
             </div>
 
             {/* Right Panel */}
-            <div className="flex items-center justify-center bg-gray-50">
-                <div className="bg-white p-10 rounded-xl shadow-lg w-[400px]">
+            <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                <div className="bg-white dark:bg-gray-800 p-10 rounded-xl shadow-lg w-[400px]">
 
                     {step === "auth" && (
                         <>
-                            <h2 className="text-2xl font-bold text-black mb-6">Welcome to reviewpilot</h2>
+                            <h2 className="text-2xl font-bold text-black dark:text-white mb-6">Welcome to reviewpilot</h2>
                             {/*<p className="text-gray-500 text-sm mb-6">Sign in or create your account</p>*/}
 
                             <GoogleAuthButton />

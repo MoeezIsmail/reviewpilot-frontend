@@ -22,7 +22,6 @@ const ReviewsTable = () => {
     const { user } = useAuth();
     const isFreePlan = !user?.subscription?.plan || user?.subscription?.plan === "starter";
 
-    // ← Filters allReviews pe apply hote hain (search/sort/rating)
     const {
         filter,
         setFilter,
@@ -36,17 +35,14 @@ const ReviewsTable = () => {
         SORT_OPTIONS,
     } = useReviewFilters(allReviews, aiReplies, replyStatus);
 
-    // ← Current page ke IDs
     const currentPageIds = new Set(
         reviewsData.reviews?.map(r => r.reviewId || r.name) || []
     );
 
-    // ← Sirf current page ke reviews dikhao — filtered results mein se
     const displayReviews = filteredReviews.filter(r =>
         currentPageIds.has(r.reviewId || r.name)
     );
 
-    // ← Buttons current page ke reviews pe calculate hon
     const pendingRepliesCount = reviewsData.reviews?.filter(r => {
         const id = r.reviewId || r.name;
         return replyStatus[id] === "ready";
@@ -83,7 +79,6 @@ const ReviewsTable = () => {
                 isFreePlan={isFreePlan}
             />
 
-            {/* ← displayReviews use karo — filteredReviews nahi */}
             {displayReviews?.length > 0 ? (
                 <div className="reviews-card-container flex flex-col gap-3 max-h-[73vh]">
                     {displayReviews.map((review, i) => (
@@ -92,7 +87,7 @@ const ReviewsTable = () => {
                     <ReviewPagination />
                 </div>
             ) : (
-                <div className="bg-white rounded-xl border border-gray-200 flex items-center justify-center h-96">
+                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 flex items-center justify-center h-96">
                     {loading
                         ? null
                         : <p className="text-gray-400 text-sm">No reviews found.</p>

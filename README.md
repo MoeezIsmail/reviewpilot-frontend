@@ -1,1 +1,5 @@
-*JO bhhi plan buy hota ha us ma billingPeriod pr differentiate ni hota, like agr growth plan ka lifetime period buy kia ha to active badge growth valy card pr show hota rahy ga monthly and yearly plan py bhi. Is ko fix kro. And jub lifetime vala buy hota ha to us ki slots ko kam kro idhr slots static pari ha.
+*light and dark mode add krna ha
+
+*Founder Club KA ADD krna ha db ma jo first 50 users hon gy un ko life time yehi pricing deni ha is ka backend set krna ha.
+
+*

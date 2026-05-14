@@ -48,16 +48,16 @@ const RecentReviews = ({ reviews }) => {
 
     if (!latestReviews.length) {
         return (
-            <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-lg font-semibold mb-4">Recent Reviews</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recent Reviews</h2>
                 <p className="text-gray-400 text-sm">No reviews yet.</p>
             </div>
         );
     }
 
     return (
-        <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">Recent Reviews</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recent Reviews</h2>
             <div className="space-y-4">
                 {latestReviews.map((review, i) => {
                     const rating = getRating(review);
@@ -65,26 +65,26 @@ const RecentReviews = ({ reviews }) => {
                         <div
                             key={i}
                             className={`p-4 rounded-lg border ${
-                                rating >= 4 ? "bg-green-50 border-green-200" :
-                                rating === 3 ? "bg-yellow-50 border-amber-200" :
-                                "bg-red-50 border-red-200"
+                                rating >= 4 ? "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-900" :
+                                rating === 3 ? "bg-yellow-50 dark:bg-yellow-950/30 border-amber-200 dark:border-yellow-900" :
+                                "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900"
                             }`}
                         >
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <span className="font-medium block">{getReviewerName(review)}</span>
+                                    <span className="font-medium block text-gray-900 dark:text-gray-100">{getReviewerName(review)}</span>
                                     <span className="text-xs text-gray-400">{formatDate(review)}</span>
                                 </div>
                                 <div className="flex gap-1">
                                     {[...Array(5)].map((_, index) => (
                                         <Star
                                             key={index}
-                                            className={`w-4 h-4 ${index < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+                                            className={`w-4 h-4 ${index < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
                                         />
                                     ))}
                                 </div>
                             </div>
-                            <p className="text-sm text-gray-600 mt-2">{getReviewText(review)}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">{getReviewText(review)}</p>
                         </div>
                     );
                 })}
