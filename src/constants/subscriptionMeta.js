@@ -5,14 +5,14 @@ export const MONTHLY_DISCOUNT_PCT = 69;
 export const YEARLY_DISCOUNT_PCT = 70;
 
 export const PLAN_PRICING_DISCOUNT = {
-    starter: { monthly: 0,  yearly: 0,  lifetime: 0   },
-    growth:  { monthly: 8.99,  yearly: 7.5, lifetime: 200  },
-    pro:     { monthly: 18.29, yearly: 15, lifetime: 350  },
+    starter: { monthly: 0,  yearly: 0,   lifetime: 0   },
+    growth:  { monthly: 8.99,  yearly: 171, lifetime: 200  },
+    pro:     { monthly: 18.29, yearly: 441, lifetime: 350  },
 };
 
 export const PLAN_PRICING_ORIGINAL = {
-    growth: { monthly: 29, yearly: 25, lifetime: 279 },
-    pro:    { monthly: 59, yearly: 50, lifetime: 499 },
+    growth: { monthly: 29, yearly: 228, lifetime: 279 },
+    pro:    { monthly: 59, yearly: 588, lifetime: 499 },
 };
 
 export const PLAN_FEATURES = {

@@ -12,7 +12,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
 
     const price = PLAN_PRICING_DISCOUNT[planKey]?.[billingPeriod] ?? plan.price;
     const original = PLAN_PRICING_ORIGINAL[planKey];
-    const yearlySavingsPct = original ? Math.round((1 - PLAN_PRICING_DISCOUNT[planKey].yearly / original.monthly) * 100) : 0;
+    const yearlySavingsPct = original ? Math.round((1 - PLAN_PRICING_DISCOUNT[planKey].yearly / original.yearly) * 100) : 0;
     const lifetimeSavings = original ? original.lifetime - PLAN_PRICING_DISCOUNT[planKey].lifetime : 0;
 
     return (
@@ -85,10 +85,10 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                                 <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
                                     ${price}
                                 </span>
-                                <span className="text-gray-400 text-sm mb-1">/ month</span>
+                                <span className="text-gray-400 text-sm mb-1">/ year</span>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-400 line-through">${original?.monthly}/mo</span>
+                                <span className="text-xs text-gray-400 line-through">${original?.yearly}/yr</span>
                                 <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-0.5 rounded-full">
                                     Save {yearlySavingsPct}%
                                 </span>
