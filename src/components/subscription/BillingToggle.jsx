@@ -14,12 +14,12 @@ const PERIODS = [
 ];
 
 const DoodleArrow = () => (
-    <span className="absolute -top-14 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none select-none whitespace-nowrap">
+    <span className="absolute -top-14 left-3/5 -translate-x-1/2 flex flex-col items-center pointer-events-none select-none whitespace-nowrap">
         <span className="-rotate-3 inline-block text-[11px] font-extrabold text-white bg-gradient-to-r from-orange-400 to-rose-500 px-3 py-1 rounded-full shadow-lg shadow-orange-300/60 dark:shadow-orange-900/50 tracking-wide uppercase">
             3 months free
         </span>
         <svg
-            width="30" height="24" viewBox="0 0 30 24" fill="none"
+            width="30" height="30" viewBox="0 0 30 24" fill="none"
             className="text-orange-400 dark:text-orange-400 -mt-0.5 -ml-4"
         >
             <path
