@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../components/toast/ToastProvider.jsx";
 import { saveBusinessInfo } from "../api/authApi.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import { ArrowRight } from 'lucide-react';
 import InputField from "../components/ui/InputField.jsx";
 import Button from "../components/ui/Button.jsx";
@@ -14,8 +15,9 @@ const BUSINESS_TYPES = [
 export default function OnboardingInfo() {
     const navigate = useNavigate();
     const { addToast } = useToast();
+    const { updateUser } = useAuth();
 
-    const isGoogleUser = localStorage.getItem("isGoogleUser") === "true";  // ← check karo
+    const isGoogleUser = localStorage.getItem("isGoogleUser") === "true";
 
     const [userName, setUserName] = useState("");
     const [businessName, setBusinessName] = useState("");
@@ -45,13 +47,14 @@ export default function OnboardingInfo() {
         if (Object.keys(validationErrors).length > 0) return;
 
         setLoading(true);
+        const finalType = businessType === "Other" ? customBusinessType : businessType;
         try {
-            console.log('username: ', userName);
             await saveBusinessInfo({
                 userName: isGoogleUser ? null : userName,
                 businessName,
-                businessType: businessType === "Other" ? customBusinessType : businessType,
+                businessType: finalType,
             });
+            updateUser({ businessName, businessType: finalType, onboardingCompleted: true });
             addToast("Setup complete!", "success");
             navigate("/");
         } catch (err) {

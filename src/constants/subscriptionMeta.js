@@ -11,8 +11,8 @@ export const PLAN_PRICING_DISCOUNT = {
 };
 
 export const PLAN_PRICING_ORIGINAL = {
-    growth: { monthly: 29, yearly: 228, lifetime: 279 },
-    pro:    { monthly: 59, yearly: 588, lifetime: 499 },
+    growth: { monthly: 29, yearly: 276, lifetime: 279 },
+    pro:    { monthly: 79, yearly: 564, lifetime: 499 },
 };
 
 export const PLAN_FEATURES = {

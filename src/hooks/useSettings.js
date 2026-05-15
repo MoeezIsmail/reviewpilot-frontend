@@ -96,7 +96,6 @@ const useSettings = () => {
 
             if (user) {
                 updateUser({
-                    ...user,
                     platforms: {
                         ...user.platforms,
                         [platform]: null,
@@ -127,7 +126,7 @@ const useSettings = () => {
         setSavingBusiness(true);
         try {
             await updateBusinessInfo({ businessName: businessForm.businessName.trim(), businessType: finalType });
-            updateUser({ ...user, businessName: businessForm.businessName.trim(), businessType: finalType });
+            updateUser({ businessName: businessForm.businessName.trim(), businessType: finalType });
             addToast("Business info updated successfully.", "success");
             setIsEditingBusiness(false);
         } catch (err) {
