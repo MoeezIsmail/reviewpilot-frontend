@@ -1,294 +1,281 @@
-import { useEffect, useRef } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
+import { Sun, Moon, Star, Zap, BarChart3, Shield, CheckCircle2 } from 'lucide-react';
 import { useToast } from "../components/toast/ToastProvider.jsx";
 import GoogleAuthButton from "../components/auth/GoogleAuthButton.jsx";
-import OtpInput from "../components/auth/OtpInput.jsx";
-import useOtpForm from "../hooks/useOtpForm.js";
-import InputField from "../components/ui/InputField.jsx";
-import Button from "../components/ui/Button.jsx";
-import { ArrowLeft } from 'lucide-react';
+import AuthBackground from "../components/auth/AuthBackground.jsx";
+import { useTheme } from '../context/ThemeContext.jsx';
 import lottieAnimation from "../assets/d13a020f-5569-49bd-87bc-f2d9cd2ed8f5.json";
 
-/* ─────────────────────────────────────────
-   Stat cards data
-───────────────────────────────────────── */
+const FEATURES = [
+    { icon: Star,      text: 'AI-powered review replies' },
+    { icon: BarChart3, text: 'Real-time analytics & insights' },
+    { icon: Zap,       text: 'Bulk reply automation' },
+    { icon: Shield,    text: 'Multi-platform management' },
+];
+
 const STAT_CARDS = [
     {
-        delay: '0s',
-        offset: 0,
         iconColor: '#4ade80',
-        iconBg: 'rgba(74,222,128,0.18)',
+        iconBg: 'rgba(74,222,128,0.15)',
         icon: (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5">
                 <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
                 <polyline points="16 7 22 7 22 13" />
             </svg>
         ),
-        title: 'Rating Improved',
+        label: 'Rating Improved',
         sub: '+1.4 stars this month',
-        val: '4.8★',
+        value: '4.8★',
         valColor: '#4ade80',
+        delay: '0s',
+        offset: '0px',
     },
     {
-        delay: '0.5s',
-        offset: 22,
-        iconColor: '#60a5fa',
-        iconBg: 'rgba(96,165,250,0.18)',
+        iconColor: '#818cf8',
+        iconBg: 'rgba(129,140,248,0.15)',
         icon: (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5">
                 <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
             </svg>
         ),
-        title: 'AI Reply Sent',
+        label: 'AI Reply Sent',
         sub: 'Response time: 2 min',
-        val: 'Auto',
-        valColor: '#60a5fa',
+        value: 'Auto',
+        valColor: '#818cf8',
+        delay: '0.6s',
+        offset: '20px',
     },
     {
-        delay: '1s',
-        offset: 0,
         iconColor: '#c084fc',
-        iconBg: 'rgba(192,132,252,0.18)',
+        iconBg: 'rgba(192,132,252,0.15)',
         icon: (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c084fc" strokeWidth="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c084fc" strokeWidth="2.5">
                 <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
                 <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
             </svg>
         ),
-        title: 'New Reviews',
+        label: 'New Reviews',
         sub: "Today's activity",
-        val: '+24',
+        value: '+24',
         valColor: '#c084fc',
+        delay: '1.2s',
+        offset: '0px',
     },
 ];
 
-/* ─────────────────────────────────────────
-   Main Auth Component
-───────────────────────────────────────── */
 const Auth = () => {
     const { addToast } = useToast();
-    const canvasRef = useRef(null);
-
-    const {
-        step, email, setEmail,
-        otp, loading, errors,
-        handleSendOTP,
-        handleOtpChange,
-        handleOtpKeyDown,
-        handleVerifyOTP,
-        resetOtp,
-    } = useOtpForm(addToast);
-
-    /* Particle canvas */
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        let raf;
-
-        const pts = Array.from({ length: 40 }, () => ({
-            x: Math.random() * canvas.offsetWidth,
-            y: Math.random() * canvas.offsetHeight,
-            dx: (Math.random() - 0.5) * 0.38,
-            dy: (Math.random() - 0.5) * 0.38,
-            r: Math.random() * 1.6 + 0.4,
-            a: Math.random() * 0.38 + 0.13,
-        }));
-
-        const resize = () => {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-        };
-        resize();
-        window.addEventListener('resize', resize);
-
-        const draw = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            pts.forEach(p => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(165,180,252,${p.a})`;
-                ctx.fill();
-                p.x += p.dx; p.y += p.dy;
-                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-            });
-            pts.forEach((p, i) => pts.slice(i + 1).forEach(q => {
-                const d = Math.hypot(p.x - q.x, p.y - q.y);
-                if (d < 78) {
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(q.x, q.y);
-                    ctx.strokeStyle = `rgba(165,180,252,${0.11 * (1 - d / 78)})`;
-                    ctx.lineWidth = 0.5;
-                    ctx.stroke();
-                }
-            }));
-            raf = requestAnimationFrame(draw);
-        };
-        draw();
-
-        return () => {
-            cancelAnimationFrame(raf);
-            window.removeEventListener('resize', resize);
-        };
-    }, []);
+    const { theme, toggleTheme } = useTheme();
+    const isDark = theme === 'dark';
 
     return (
-        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+        <div className="relative min-h-screen overflow-hidden">
 
-            {/* ══════════ LEFT PANEL ══════════ */}
-            <div
-                className="hidden md:flex relative overflow-hidden flex-col justify-center items-center p-8"
-                style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 42%, #4338ca 100%)' }}
+            {/* ── Animated full-page background ── */}
+            <AuthBackground isDark={isDark} />
+
+            {/* ── Theme toggle ── */}
+            <button
+                onClick={toggleTheme}
+                className={`
+                    fixed top-4 right-4 z-50
+                    w-10 h-10 rounded-xl flex items-center justify-center
+                    border transition-all duration-300 shadow-lg
+                    ${isDark
+                        ? 'bg-white/10 border-white/20 text-yellow-300 hover:bg-white/20'
+                        : 'bg-white/70 border-indigo-200 text-indigo-600 hover:bg-white/90'}
+                    backdrop-blur-md
+                `}
+                aria-label="Toggle theme"
             >
-                {/* Particle canvas */}
-                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
 
-                {/* Glowing orbs */}
-                {[
-                    { w: 300, h: 300, bg: 'rgba(99,102,241,0.32)', top: '-80px', left: '-80px', dur: '8s' },
-                    { w: 200, h: 200, bg: 'rgba(139,92,246,0.26)', bottom: '40px', right: '-55px', dur: '10s', dir: 'reverse' },
-                    { w: 130, h: 130, bg: 'rgba(59,130,246,0.2)', bottom: '180px', right: '25px', dur: '7s', delay: '2s' },
-                ].map((o, i) => (
-                    <div key={i} style={{
-                        position: 'absolute',
-                        width: o.w, height: o.h,
-                        background: o.bg,
-                        borderRadius: '50%',
-                        filter: 'blur(55px)',
-                        pointerEvents: 'none',
-                        top: o.top, left: o.left,
-                        bottom: o.bottom, right: o.right,
-                        animation: `orbFloat ${o.dur} ease-in-out infinite ${o.delay || '0s'}`,
-                        animationDirection: o.dir || 'normal',
-                    }} />
-                ))}
+            {/* ── Page content ── */}
+            <div className="relative z-10 min-h-screen flex items-center justify-center p-5 md:p-8">
+                <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
 
-                {/* Inner content */}
-                <div className="relative z-10 w-full max-w-[260px] flex flex-col items-center gap-4">
+                    {/* ════════════════════════════════
+                        LEFT — Brand panel (desktop only)
+                    ════════════════════════════════ */}
+                    <div className="hidden lg:flex flex-col gap-7">
 
-                    <div style={{
-                        width: 200,
-                        filter: 'drop-shadow(0 10px 30px rgba(99,102,241,0.5))',
-                    }}>
-                        <Player
-                            autoplay
-                            loop
-                            src={lottieAnimation}
-                            style={{ height: 200, width: 200 }}
-                        />
-                    </div>
-
-                    {/* Brand */}
-                    <div className="text-center -mt-2">
-                        <div className="flex items-center justify-center gap-2 mb-1">
-                            <div style={{
-                                width: 34, height: 34,
-                                background: 'rgba(255,255,255,0.1)',
-                                borderRadius: 10,
-                                border: '1px solid rgba(255,255,255,0.2)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            }}>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.7">
-                                    <path d="M9 11l3 3L22 4" />
-                                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-                                </svg>
+                        {/* Logo wordmark */}
+                        <div className="flex items-center gap-3">
+                            <div className={`
+                                w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg
+                                ${isDark ? 'bg-indigo-600 shadow-indigo-900/50' : 'bg-indigo-600 shadow-indigo-300/60'}
+                            `}>
+                                RP
                             </div>
-                            <span style={{ color: 'white', fontSize: 20, fontWeight: 700, letterSpacing: '-0.4px' }}>
+                            <span className={`text-xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-indigo-900'}`}>
                                 ReviewPilot
                             </span>
                         </div>
-                        <p style={{ color: 'rgba(199,210,254,0.7)', fontSize: 12 }}>
-                            Intelligent review management
+
+                        {/* Headline */}
+                        <div>
+                            <h1 className={`text-4xl font-extrabold leading-tight mb-3 ${isDark ? 'text-white' : 'text-indigo-950'}`}>
+                                Manage reviews<br />
+                                <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
+                                    with intelligence.
+                                </span>
+                            </h1>
+                            <p className={`text-sm leading-relaxed ${isDark ? 'text-indigo-200/70' : 'text-indigo-800/60'}`}>
+                                AI-powered replies, real-time analytics, and multi-platform<br />
+                                management — all in one beautiful dashboard.
+                            </p>
+                        </div>
+
+                        {/* Lottie animation */}
+                        <div className="flex justify-center">
+                            <div style={{ filter: isDark ? 'drop-shadow(0 8px 24px rgba(99,102,241,0.5))' : 'drop-shadow(0 8px 24px rgba(99,102,241,0.25))' }}>
+                                <Player
+                                    autoplay
+                                    loop
+                                    src={lottieAnimation}
+                                    style={{ height: 160, width: 160 }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Feature list */}
+                        <ul className="flex flex-col gap-2.5">
+                            {FEATURES.map(({ icon: Icon, text }, i) => (
+                                <li key={i} className="flex items-center gap-3">
+                                    <div className={`
+                                        w-7 h-7 rounded-lg flex items-center justify-center shrink-0
+                                        ${isDark ? 'bg-indigo-500/20' : 'bg-indigo-100'}
+                                    `}>
+                                        <Icon size={14} className={isDark ? 'text-indigo-300' : 'text-indigo-600'} />
+                                    </div>
+                                    <span className={`text-sm font-medium ${isDark ? 'text-indigo-100/80' : 'text-indigo-900/75'}`}>
+                                        {text}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+
+                        {/* Floating stat cards */}
+                        <div className="flex flex-col gap-2.5">
+                            {STAT_CARDS.map((card, i) => (
+                                <div
+                                    key={i}
+                                    style={{
+                                        marginLeft: card.offset,
+                                        animation: `floatCard 4s ease-in-out infinite ${card.delay}`,
+                                    }}
+                                    className={`
+                                        flex items-center gap-3 px-4 py-3 rounded-2xl
+                                        border backdrop-blur-md
+                                        ${isDark
+                                            ? 'bg-white/7 border-white/10'
+                                            : 'bg-white/60 border-indigo-200/60 shadow-sm'}
+                                    `}
+                                >
+                                    <div style={{ background: card.iconBg }} className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
+                                        {card.icon}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className={`text-xs font-semibold ${isDark ? 'text-white' : 'text-indigo-900'}`}>{card.label}</p>
+                                        <p className={`text-[11px] ${isDark ? 'text-indigo-200/60' : 'text-indigo-700/60'}`}>{card.sub}</p>
+                                    </div>
+                                    <span style={{ color: card.valColor }} className="text-sm font-bold shrink-0">{card.value}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Trust line */}
+                        <div className="flex items-center gap-2">
+                            <CheckCircle2 size={13} className={isDark ? 'text-indigo-400' : 'text-indigo-500'} />
+                            <p className={`text-xs ${isDark ? 'text-indigo-300/50' : 'text-indigo-700/50'}`}>
+                                Trusted by 2,000+ businesses worldwide
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* ════════════════════════════════
+                        RIGHT — Login card
+                    ════════════════════════════════ */}
+                    <div className={`
+                        rounded-3xl p-8 md:p-10 shadow-2xl border backdrop-blur-xl
+                        ${isDark
+                            ? 'bg-white/6 border-white/10 shadow-black/40'
+                            : 'bg-white/75 border-indigo-200/50 shadow-indigo-200/30'}
+                    `}>
+
+                        {/* Mobile-only logo */}
+                        <div className="flex items-center gap-2.5 mb-8 lg:hidden">
+                            <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-lg shadow-indigo-400/30">
+                                RP
+                            </div>
+                            <span className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-indigo-900'}`}>
+                                ReviewPilot
+                            </span>
+                        </div>
+
+                        {/* Heading */}
+                        <div className="mb-8">
+                            <h2 className={`text-2xl font-bold mb-1.5 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                Welcome back
+                            </h2>
+                            <p className={`text-sm ${isDark ? 'text-indigo-200/60' : 'text-gray-500'}`}>
+                                Sign in to manage your reviews
+                            </p>
+                        </div>
+
+                        {/* Google Auth Button */}
+                        <GoogleAuthButton isDark={isDark} />
+
+                        {/* Divider */}
+                        <div className="flex items-center gap-3 my-6">
+                            <div className={`flex-1 h-px ${isDark ? 'bg-white/10' : 'bg-gray-200'}`} />
+                            <span className={`text-xs ${isDark ? 'text-white/30' : 'text-gray-400'}`}>secure sign-in</span>
+                            <div className={`flex-1 h-px ${isDark ? 'bg-white/10' : 'bg-gray-200'}`} />
+                        </div>
+
+                        {/* Trust badges */}
+                        <div className="grid grid-cols-3 gap-3">
+                            {[
+                                { icon: Shield, label: 'Secure' },
+                                { icon: Zap,    label: 'Instant' },
+                                { icon: Star,   label: 'Trusted' },
+                            ].map(({ icon: Icon, label }) => (
+                                <div
+                                    key={label}
+                                    className={`
+                                        flex flex-col items-center gap-1.5 py-3 rounded-xl border
+                                        ${isDark
+                                            ? 'bg-white/5 border-white/10'
+                                            : 'bg-indigo-50/60 border-indigo-100'}
+                                    `}
+                                >
+                                    <Icon size={15} className={isDark ? 'text-indigo-300' : 'text-indigo-500'} />
+                                    <span className={`text-[11px] font-medium ${isDark ? 'text-white/50' : 'text-indigo-700/70'}`}>
+                                        {label}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Footer note */}
+                        <p className={`text-center text-[11px] mt-6 leading-relaxed ${isDark ? 'text-white/25' : 'text-gray-400'}`}>
+                            By continuing, you agree to our Terms of Service<br />and Privacy Policy.
                         </p>
                     </div>
 
-                    {/* Stat cards */}
-                    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {STAT_CARDS.map((card, i) => (
-                            <div key={i} style={{
-                                marginLeft: card.offset,
-                                background: 'rgba(255,255,255,0.07)',
-                                backdropFilter: 'blur(12px)',
-                                border: '1px solid rgba(255,255,255,0.11)',
-                                borderRadius: 13,
-                                padding: '10px 12px',
-                                display: 'flex', alignItems: 'center', gap: 10,
-                                animation: `floatCard 4s ease-in-out infinite ${card.delay}`,
-                            }}>
-                                <div style={{
-                                    width: 30, height: 30, borderRadius: 8, flexShrink: 0,
-                                    background: card.iconBg,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                }}>
-                                    {card.icon}
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    <p style={{ color: 'white', fontSize: 12, fontWeight: 600, margin: 0 }}>{card.title}</p>
-                                    <p style={{ color: 'rgba(199,210,254,0.68)', fontSize: 11, margin: 0 }}>{card.sub}</p>
-                                </div>
-                                <span style={{ color: card.valColor, fontWeight: 700, fontSize: 13 }}>
-                                    {card.val}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-
-                    <p style={{ color: 'rgba(165,180,252,0.42)', fontSize: 11, textAlign: 'center' }}>
-                        Trusted by 2,000+ businesses worldwide
-                    </p>
-                </div>
-
-                <style>{`
-                    @keyframes orbFloat {
-                        0%, 100% { transform: translateY(0px) scale(1); }
-                        50%       { transform: translateY(-18px) scale(1.04); }
-                    }
-                    @keyframes floatCard {
-                        0%, 100% { transform: translateY(0px); }
-                        50%       { transform: translateY(-5px); }
-                    }
-                `}</style>
-            </div>
-
-            {/* ══════════ RIGHT PANEL ══════════ */}
-            <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900 col-span-1">
-                <div className="bg-white dark:bg-gray-800 p-8 md:p-10 rounded-xl shadow-lg w-full max-w-[400px] mx-4">
-
-                    {step === "auth" && (
-                        <>
-                            <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
-                                Welcome to ReviewPilot
-                            </h2>
-                            <GoogleAuthButton />
-                        </>
-                    )}
-
-                    {/*{step === "otp" && (*/}
-                    {/*    <>*/}
-                    {/*        <Button variant="gray" size="lg" fullWidth loading={loading} onClick={resetOtp}>*/}
-                    {/*            <ArrowLeft /> Back*/}
-                    {/*        </Button>*/}
-                    {/*        <h2 className="text-2xl font-bold text-black mb-2">Check your email</h2>*/}
-                    {/*        <p className="text-gray-500 text-sm mb-6">*/}
-                    {/*            We sent a 6-digit OTP to{" "}*/}
-                    {/*            <span className="text-indigo-600 font-medium">{email}</span>*/}
-                    {/*        </p>*/}
-                    {/*        <OtpInput otp={otp} onChange={handleOtpChange} onKeyDown={handleOtpKeyDown} error={errors.otp} />*/}
-                    {/*        <Button variant="primary" size="lg" fullWidth loading={loading} onClick={handleVerifyOTP}>*/}
-                    {/*            {loading ? "Verifying..." : "Verify OTP"}*/}
-                    {/*        </Button>*/}
-                    {/*        <p className="text-sm text-center text-gray-500 mt-4">*/}
-                    {/*            Didn't receive it?{" "}*/}
-                    {/*            <button onClick={handleSendOTP} className="text-indigo-600 hover:underline">Resend OTP</button>*/}
-                    {/*        </p>*/}
-                    {/*    </>*/}
-                    {/*)}*/}
-
                 </div>
             </div>
+
+            {/* Float animation keyframe */}
+            <style>{`
+                @keyframes floatCard {
+                    0%, 100% { transform: translateY(0px);   }
+                    50%       { transform: translateY(-5px);  }
+                }
+            `}</style>
+
         </div>
     );
 };
