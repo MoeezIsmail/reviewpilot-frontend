@@ -7,7 +7,7 @@ import useOtpForm from "../hooks/useOtpForm.js";
 import InputField from "../components/ui/InputField.jsx";
 import Button from "../components/ui/Button.jsx";
 import { ArrowLeft } from 'lucide-react';
-import { lottieAnimation } from ".././assets/d13a020f-5569-49bd-87bc-f2d9cd2ed8f5.json";
+import lottieAnimation from "../assets/d13a020f-5569-49bd-87bc-f2d9cd2ed8f5.json";
 
 /* ─────────────────────────────────────────
    Stat cards data
