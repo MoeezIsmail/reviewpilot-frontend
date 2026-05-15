@@ -127,16 +127,16 @@ export default function OnboardingInfo() {
                                     }}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-lg border-2 transition-all text-left ${
                                         isSelected
-                                            ? "!bg-indigo-50 border-indigo-500"
-                                            : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-indigo-300"
+                                            ? "!bg-indigo-50 dark:!bg-indigo-900/40 border-indigo-500"
+                                            : "bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-500"
                                     }`}
                                 >
                                     <span className="text-base">{icons[index]}</span>
-                                    <span className={`text-sm font-medium flex-1 ${isSelected ? "text-indigo-600" : "text-gray-700"}`}>
+                                    <span className={`text-sm font-medium flex-1 ${isSelected ? "text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-gray-200"}`}>
                         {type}
                     </span>
                                     <span className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                                        isSelected ? "bg-indigo-600 border-indigo-600" : "border-gray-300"
+                                        isSelected ? "bg-indigo-600 border-indigo-600" : "border-gray-300 dark:border-gray-500"
                                     }`}>
                         {isSelected && (
                             <svg width="8" height="8" viewBox="0 0 10 10">
