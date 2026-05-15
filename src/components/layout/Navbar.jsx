@@ -1,8 +1,10 @@
-import {Bell} from "lucide-react";
+import { Bell, UserCircle } from "lucide-react";
+import { useState } from "react";
 import {useAuth} from "../../context/AuthContext.jsx";
 
 const Navbar = ({pageTitle}) => {
     const {user} = useAuth();
+    const [imgError, setImgError] = useState(false);
 
     return (
         <header className="p-2">
@@ -17,10 +19,16 @@ const Navbar = ({pageTitle}) => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <img
-                            src={user?.profileImage}
-                            className="w-10 h-10 rounded-full"
-                        />
+                        {user?.profileImage && !imgError ? (
+                            <img
+                                src={user.profileImage}
+                                className="w-10 h-10 rounded-full object-cover"
+                                onError={() => setImgError(true)}
+                                alt={user?.name || "User"}
+                            />
+                        ) : (
+                            <UserCircle className="w-10 h-10 text-indigo-200" />
+                        )}
                         <div className="flex flex-col font-bold">
                             <span>{user?.name}</span>
                             <span className="text-xs">Admin</span>

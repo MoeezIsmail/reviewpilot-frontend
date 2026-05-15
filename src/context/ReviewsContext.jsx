@@ -73,7 +73,7 @@ export const ReviewsProvider = ({ children }) => {
         if (!user?._id) return;
         setLoading(true);
         try {
-            const response = await fetchReviews(user._id, token);
+            const response = await fetchReviews(token);
             const data = {
                 ...response,
                 averageRating: Math.floor((response.averageRating || 0) * 10) / 10,
@@ -97,7 +97,7 @@ export const ReviewsProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, [user, initReplyStatus]);
+    }, [user, initReplyStatus, addToast, navigate]);
 
     // ─── Load Page 1 ─────────────────────────────────────────
     const loadReviews = useCallback(async () => {
@@ -110,7 +110,7 @@ export const ReviewsProvider = ({ children }) => {
 
     useEffect(() => {
         if (user && !hasFetched) loadReviews();
-    }, [user, hasFetched]);
+    }, [user, hasFetched, loadReviews]);
 
     // ─── Go To Page ───────────────────────────────────────────
     const goToPage = useCallback(async (pageNum) => {

@@ -7,19 +7,22 @@ import {AuthProvider} from "./context/AuthContext.jsx";
 import {ReviewsProvider} from "./context/ReviewsContext.jsx";
 import {BrowserRouter} from "react-router-dom";
 import {ThemeProvider} from "./context/ThemeContext.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <ThemeProvider>
-            <AuthProvider>
-                <ToastProvider>
-                    <BrowserRouter>
-                        <ReviewsProvider>
-                            <App/>
-                        </ReviewsProvider>
-                    </BrowserRouter>
-                </ToastProvider>
-            </AuthProvider>
-        </ThemeProvider>
+        <ErrorBoundary>
+            <ThemeProvider>
+                <AuthProvider>
+                    <ToastProvider>
+                        <BrowserRouter>
+                            <ReviewsProvider>
+                                <App/>
+                            </ReviewsProvider>
+                        </BrowserRouter>
+                    </ToastProvider>
+                </AuthProvider>
+            </ThemeProvider>
+        </ErrorBoundary>
     </StrictMode>,
 )

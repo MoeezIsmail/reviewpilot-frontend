@@ -1,8 +1,8 @@
 import { reviewsApi } from "./axios.js";
 
-export const fetchReviews = async (id, pageToken = null) => {
+export const fetchReviews = async (pageToken = null) => {
     const params = pageToken ? { pageToken } : {};
-    const res = await reviewsApi.get(`/${id}`, { params });
+    const res = await reviewsApi.get('/', { params });
     return res.data;
 }
 
