@@ -26,7 +26,7 @@ const AnalyticsCharts = () => {
     if (!reviewsData?.reviews.length) {
         return (
             <div className="flex items-center justify-center h-64">
-                <p className="text-gray-400 text-sm">No reviews data available.</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">No reviews data available.</p>
             </div>
         );
     }
@@ -34,7 +34,7 @@ const AnalyticsCharts = () => {
     return (
         <div className="flex flex-col gap-6">
 
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
                 * Based on {allReviews.length} loaded reviews
                 {reviewsData.totalReviewCount > allReviews.length
                     ? ` out of ${reviewsData.totalReviewCount} total`

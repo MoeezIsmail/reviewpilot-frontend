@@ -28,7 +28,7 @@ const ReviewPagination = () => {
                                         ? "w-9 h-9 !bg-indigo-600 !text-white shadow-md shadow-indigo-300 cursor-default ring-4 ring-indigo-100 dark:ring-indigo-900"
                                         : isVisited
                                             ? "w-7 h-7 bg-indigo-500 !text-gray-100 hover:scale-110 cursor-pointer"
-                                            : "w-7 h-7 bg-indigo-200 dark:bg-indigo-900 border-2 !border-gray-200 dark:!border-gray-600 !text-gray-400 hover:border-indigo-300 hover:!text-indigo-500 cursor-pointer"
+                                            : "w-7 h-7 bg-indigo-200 dark:bg-indigo-900 border-2 !border-gray-200 dark:!border-gray-600 !text-gray-600 dark:!text-gray-300 hover:border-indigo-300 hover:!text-indigo-600 cursor-pointer"
                                     } ${loading && !isActive ? "opacity-80 cursor-not-allowed" : ""}`}
                             >
                                 {isLoadingThis

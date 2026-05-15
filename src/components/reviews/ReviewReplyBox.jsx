@@ -17,7 +17,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
         <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 border-l-4 border-indigo-500">
 
             <div className="flex justify-between items-center mb-1">
-                <p className="text-xs text-gray-400 font-medium">
+                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                     {isPosted ? "✓ Posted Reply" : "AI Reply"}
                 </p>
 
@@ -40,7 +40,7 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
                     />
 
                     <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
                             {editedText.length} characters
                         </span>
 

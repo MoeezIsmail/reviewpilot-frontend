@@ -14,7 +14,7 @@ const ReplyPerformance = () => {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 h-72 sticky top-0 z-10">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Reply Performance</h2>
-                <span className="text-xs text-gray-400">{stats.total} total reviews</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{stats.total} total reviews</span>
             </div>
 
             <div className="space-y-5">
@@ -23,7 +23,7 @@ const ReplyPerformance = () => {
                         <div className="flex justify-between text-sm mb-1.5">
                             <span className="text-gray-600 dark:text-gray-300">{s.label}</span>
                             <span className="font-medium text-gray-800 dark:text-gray-200">
-                                {s.count} <span className="text-gray-400 font-normal">({s.value}%)</span>
+                                {s.count} <span className="text-gray-500 dark:text-gray-400 font-normal">({s.value}%)</span>
                             </span>
                         </div>
                         <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2">

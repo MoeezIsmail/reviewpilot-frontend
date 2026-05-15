@@ -20,10 +20,9 @@ const DashboardCards = ({ stats }) => {
                         <div className="bg-indigo-100 dark:bg-indigo-900/40 p-3 rounded-xl">
                             <s.icon className="text-indigo-600 dark:text-indigo-400 w-5 h-5" />
                         </div>
-                        <span className="text-gray-400 dark:text-gray-500 text-sm">{s.label}</span>
                     </div>
-
-                    <div className="text-3xl font-bold mt-8 text-gray-900 dark:text-gray-100">
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mt-3">{s.label}</p>
+                    <div className="text-3xl font-bold mt-1 text-gray-900 dark:text-gray-100">
                         {s.value}
                     </div>
                 </div>

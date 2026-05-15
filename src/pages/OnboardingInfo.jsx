@@ -74,7 +74,7 @@ export default function OnboardingInfo() {
                         <div className="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center">
                             <span className="text-white text-xs font-bold">✓</span>
                         </div>
-                        <span className="text-sm text-gray-400 dark:text-gray-500">Connect Platform</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">Connect Platform</span>
                     </div>
                     <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600 mx-2" />
                     <div className="flex items-center gap-2">

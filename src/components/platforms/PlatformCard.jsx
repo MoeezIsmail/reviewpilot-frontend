@@ -27,7 +27,7 @@ const PlatformCard = ({ platform, connected, onConnect }) => {
                             </span>
                         )}
                     </div>
-                    <p className="text-gray-400 text-xs mt-0.5">{platform.description}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">{platform.description}</p>
                 </div>
             </div>
 

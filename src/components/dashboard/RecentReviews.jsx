@@ -50,7 +50,7 @@ const RecentReviews = ({ reviews }) => {
         return (
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recent Reviews</h2>
-                <p className="text-gray-400 text-sm">No reviews yet.</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">No reviews yet.</p>
             </div>
         );
     }
@@ -73,7 +73,7 @@ const RecentReviews = ({ reviews }) => {
                             <div className="flex justify-between items-center">
                                 <div>
                                     <span className="font-medium block text-gray-900 dark:text-gray-100">{getReviewerName(review)}</span>
-                                    <span className="text-xs text-gray-400">{formatDate(review)}</span>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">{formatDate(review)}</span>
                                 </div>
                                 <div className="flex gap-1">
                                     {[...Array(5)].map((_, index) => (

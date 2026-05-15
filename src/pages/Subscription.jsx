@@ -79,7 +79,7 @@ const Subscription = () => {
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
                         Simple, transparent pricing
                     </h1>
-                    <p className="text-gray-400 text-sm max-w-md mx-auto">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm max-w-md mx-auto">
                         All plans include unlimited review syncing. Only pay for AI replies and automation.
                     </p>
                 </div>
@@ -126,10 +126,10 @@ const Subscription = () => {
 
                 {/* Footer */}
                 <div className="text-center space-y-1 pb-2">
-                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                         Payments processed securely via Stripe. Cancel anytime — no questions asked.
                     </p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                         By subscribing, you agree to our{" "}
                         <Link to="/terms" className="text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 underline underline-offset-2 transition-colors">
                             Terms &amp; Conditions

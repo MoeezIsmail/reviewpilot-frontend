@@ -50,7 +50,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                     </div>
                     <div>
                         <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{plan.name}</h3>
-                        <p className="text-xs text-gray-400">{meta.description}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{meta.description}</p>
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                     {isStarter ? (
                         <div className="flex items-end gap-1">
                             <span className="text-4xl font-extrabold text-gray-900 dark:text-gray-100">$0</span>
-                            <span className="text-gray-400 text-sm mb-1">/ month</span>
+                            <span className="text-gray-500 dark:text-gray-400 text-sm mb-1">/ month</span>
                         </div>
                     ) : billingPeriod === "lifetime" ? (
                         <div>
@@ -70,10 +70,10 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                                 <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
                                     ${price}
                                 </span>
-                                <span className="text-gray-400 text-sm mb-1">one-time</span>
+                                <span className="text-gray-500 dark:text-gray-400 text-sm mb-1">one-time</span>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-400 line-through">${original?.lifetime}</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original?.lifetime}</span>
                                 <span className="text-xs font-semibold text-orange-600 bg-orange-50 dark:bg-orange-900/40 dark:text-orange-400 px-2 py-0.5 rounded-full">
                                     Save ${lifetimeSavings}
                                 </span>
@@ -85,10 +85,10 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                                 <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
                                     ${price}
                                 </span>
-                                <span className="text-gray-400 text-sm mb-1">/ year</span>
+                                <span className="text-gray-500 dark:text-gray-400 text-sm mb-1">/ year</span>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-400 line-through">${original?.yearly}/yr</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original?.yearly}/yr</span>
                                 <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-0.5 rounded-full">
                                     Save {yearlySavingsPct}%
                                 </span>
@@ -100,10 +100,10 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                                 <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
                                     ${price}
                                 </span>
-                                <span className="text-gray-400 text-sm mb-1">/ month</span>
+                                <span className="text-gray-500 dark:text-gray-400 text-sm mb-1">/ month</span>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-400 line-through">${original?.monthly}/mo</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original?.monthly}/mo</span>
                                 <span className="text-xs font-semibold text-rose-600 bg-rose-50 dark:bg-rose-900/40 dark:text-rose-400 px-2 py-0.5 rounded-full">
                                     {MONTHLY_DISCOUNT_PCT}% off · Limited
                                 </span>
@@ -128,7 +128,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                 {/* CTA Button */}
                 {isActive ? (
                     isStarter ? (
-                        <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-800 select-none">
+                        <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 select-none">
                             Your Current Plan
                         </div>
                     ) : (
@@ -140,7 +140,7 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                         </button>
                     )
                 ) : isStarter ? (
-                    <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-gray-400 bg-gray-50 dark:bg-gray-700 select-none">
+                    <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 select-none">
                         Free Forever
                     </div>
                 ) : (

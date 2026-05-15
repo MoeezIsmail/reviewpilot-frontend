@@ -18,7 +18,7 @@ const ThemeCard = () => {
                 </div>
                 <div>
                     <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Appearance</h2>
-                    <p className="text-xs text-gray-400 dark:text-gray-500">Choose your preferred theme</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Choose your preferred theme</p>
                 </div>
             </div>
 

@@ -1,7 +1,7 @@
 const ReviewTrendChart = ({ data }) => {
     if (!data.length) return (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 flex items-center justify-center h-48">
-            <p className="text-gray-400 text-sm">Not enough data to show trends.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Not enough data to show trends.</p>
         </div>
     );
 
@@ -19,7 +19,7 @@ const ReviewTrendChart = ({ data }) => {
                             style={{ height: `${(d.count / maxCount) * 100}%`, minHeight: "4px" }}
                             title={`${d.label}: ${d.count} reviews`}
                         />
-                        <span className="text-xs text-gray-400 dark:text-gray-500 text-center leading-tight">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 text-center leading-tight">
                             {d.label}
                         </span>
                     </div>

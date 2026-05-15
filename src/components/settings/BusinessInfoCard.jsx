@@ -24,7 +24,7 @@ const BusinessInfoCard = ({
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Business Info</h2>
-                        <p className="text-xs text-gray-400 dark:text-gray-500">Your business name and category</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Your business name and category</p>
                     </div>
                 </div>
                 {loading ? (
@@ -135,9 +135,9 @@ const BusinessInfoCard = ({
                                 <Building2 size={16} className="text-gray-500 dark:text-gray-400" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Business Name</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Business Name</p>
                                 <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">
-                                    {businessForm.businessName || <span className="text-gray-400 font-normal">Not set</span>}
+                                    {businessForm.businessName || <span className="text-gray-500 dark:text-gray-400 font-normal">Not set</span>}
                                 </p>
                             </div>
                         </div>
@@ -147,7 +147,7 @@ const BusinessInfoCard = ({
                                 <Tag size={16} className="text-gray-500 dark:text-gray-400" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Business Type</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Business Type</p>
                                 <div className="flex items-center gap-2">
                                     {displayType ? (
                                         <>
@@ -157,7 +157,7 @@ const BusinessInfoCard = ({
                                             <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{displayType}</p>
                                         </>
                                     ) : (
-                                        <p className="text-sm text-gray-400">Not set</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">Not set</p>
                                     )}
                                 </div>
                             </div>

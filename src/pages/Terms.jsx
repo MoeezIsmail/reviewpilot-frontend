@@ -38,7 +38,7 @@ const Terms = () => (
                 </div>
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Terms &amp; Conditions</h1>
-                    <p className="text-sm text-gray-400 mt-1">Last updated: May 14, 2025</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Last updated: May 14, 2025</p>
                 </div>
             </div>
 
@@ -247,7 +247,7 @@ const Terms = () => (
 
             <div className="h-px bg-gray-200 dark:bg-gray-700" />
 
-            <p className="text-xs text-gray-400 text-center pb-4">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center pb-4">
                 &copy; {new Date().getFullYear()} ReviewPilot. All rights reserved.
             </p>
         </div>

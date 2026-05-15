@@ -66,7 +66,7 @@ const ReviewCard = ({ review }) => {
                     />
                     <div>
                         <p className="font-medium text-sm text-gray-900 dark:text-gray-100">{reviewerName}</p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                             {formatDate(review.createTime)} · Google
                         </p>
                     </div>

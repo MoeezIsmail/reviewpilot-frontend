@@ -44,7 +44,7 @@ const BillingToggle = ({ billingPeriod, setBillingPeriod }) => (
                             relative flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
                             ${billingPeriod === value
                                 ? "bg-white dark:bg-gray-800 shadow-sm text-gray-900 dark:text-gray-100 font-bold border !border-indigo-600"
-                                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"}
+                                : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"}
                         `}
                     >
                         {value === "yearly" && <DoodleArrow />}

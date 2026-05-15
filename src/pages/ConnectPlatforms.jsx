@@ -89,9 +89,9 @@ export default function ConnectPlatforms() {
                     <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600 mx-2"/>
                     <div className="flex items-center gap-2">
                         <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                            <span className="text-gray-400 dark:text-gray-500 text-xs font-bold">2</span>
+                            <span className="text-gray-500 dark:text-gray-400 text-xs font-bold">2</span>
                         </div>
-                        <span className="text-sm text-gray-400 dark:text-gray-500">Business Info</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">Business Info</span>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@ export default function ConnectPlatforms() {
                     Continue <ArrowRight size={18}/>
                 </Button>
 
-                <p className="text-xs text-gray-400 text-center mt-4">
+                <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
                     You can connect more platforms later from Settings
                 </p>
             </div>

@@ -40,7 +40,7 @@ const ReviewFilters = ({
     return (
         <div className="flex flex-col gap-3">
             <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"/>
                 <input
                     placeholder="Search by customer name or review text..."
                     value={search}
@@ -84,7 +84,7 @@ const ReviewFilters = ({
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"> ▼ </span>
                         </div>
 
                         <div className="relative">
@@ -98,7 +98,7 @@ const ReviewFilters = ({
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"> ▼ </span>
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"> ▼ </span>
                         </div>
                     </div>
                 </div>

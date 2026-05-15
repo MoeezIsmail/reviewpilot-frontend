@@ -90,7 +90,7 @@ const ReviewsTable = () => {
                 <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 flex items-center justify-center h-96">
                     {loading
                         ? null
-                        : <p className="text-gray-400 text-sm">No reviews found.</p>
+                        : <p className="text-gray-500 dark:text-gray-400 text-sm">No reviews found.</p>
                     }
                 </div>
             )}

@@ -22,10 +22,10 @@ const AnalyticsGate = () => {
                         <BarChart3 size={24} className="text-indigo-500" />
                     </div>
                     <div className="flex items-center justify-center gap-1.5 mb-2">
-                        <Lock size={14} className="text-gray-400" />
+                        <Lock size={14} className="text-gray-500 dark:text-gray-400" />
                         <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Analytics is a paid feature</h2>
                     </div>
-                    <p className="text-sm text-gray-400 mb-6 leading-relaxed">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
                         Upgrade to Growth or Pro to unlock review trends, sentiment analysis, and rating distribution.
                     </p>
                     <button
@@ -34,7 +34,7 @@ const AnalyticsGate = () => {
                     >
                         View Plans →
                     </button>
-                    <p className="text-xs text-gray-400 mt-3">No credit card required to start</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">No credit card required to start</p>
                 </div>
             </div>
         </div>

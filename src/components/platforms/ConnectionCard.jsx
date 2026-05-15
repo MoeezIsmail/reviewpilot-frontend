@@ -38,7 +38,7 @@ const ConnectionCard = ({
                             </span>
                         )}
                     </div>
-                    <p className="text-gray-400 dark:text-gray-500 text-xs mt-0.5">
+                    <p className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
                         {connected && connectedAt
                             ? `Connected on ${formatDate(connectedAt)}`
                             : description

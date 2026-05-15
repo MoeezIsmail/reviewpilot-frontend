@@ -29,7 +29,7 @@ const SentimentChart = ({ sentiment }) => {
                     <div key={item.label} className={`flex-1 rounded-lg p-3 ${item.bg} text-center`}>
                         <p className={`text-xl font-bold ${item.textColor}`}>{item.count}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{item.label}</p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500">{Math.round((item.count / total) * 100)}%</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{Math.round((item.count / total) * 100)}%</p>
                     </div>
                 ))}
             </div>

@@ -57,7 +57,7 @@ const ReviewActions = ({ status, hasReply, isPostingAll, onPost, onAiReply }) =>
             </Button>
 
             {remainingAiReplies !== Infinity && remainingAiReplies <= 5 && !isPosted && (
-                <span className="text-xs text-orange-500">
+                <span className="text-xs text-orange-600 dark:text-orange-400">
                     {remainingAiReplies} left
                 </span>
             )}
