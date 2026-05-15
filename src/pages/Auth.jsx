@@ -19,10 +19,10 @@ const Auth = () => {
     } = useOtpForm(addToast);
 
     return (
-        <div className="min-h-screen grid grid-cols-2">
+        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
 
             {/* Left Panel */}
-            <div className="bg-indigo-600 text-white flex flex-col justify-center items-center p-10">
+            <div className="hidden md:flex bg-indigo-600 text-white flex-col justify-center items-center p-10">
                 <h1 className="text-4xl font-bold mb-6">ReviewPilot</h1>
                 <p className="text-lg text-center max-w-md">
                     Manage your business reviews, generate AI replies and improve customer engagement.
@@ -35,8 +35,8 @@ const Auth = () => {
             </div>
 
             {/* Right Panel */}
-            <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-                <div className="bg-white dark:bg-gray-800 p-10 rounded-xl shadow-lg w-[400px]">
+            <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900 col-span-1">
+                <div className="bg-white dark:bg-gray-800 p-8 md:p-10 rounded-xl shadow-lg w-full max-w-[400px] mx-4">
 
                     {step === "auth" && (
                         <>

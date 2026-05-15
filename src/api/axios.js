@@ -19,24 +19,23 @@ export const authProtectedApi = axios.create({
     },
 });
 
-reviewsApi.interceptors.request.use(config => {
+const attachAuthHeader = (config) => {
+    const token = localStorage.getItem("token");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+};
 
-    const token = localStorage.getItem("token")
-
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
+const handle401 = (error) => {
+    if (error.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("isGoogleUser");
+        window.location.href = "/auth";
     }
+    return Promise.reject(error);
+};
 
-    return config
-})
+reviewsApi.interceptors.request.use(attachAuthHeader);
+reviewsApi.interceptors.response.use(r => r, handle401);
 
-authProtectedApi.interceptors.request.use(config => {
-
-    const token = localStorage.getItem("token")
-
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-    }
-
-    return config
-})
+authProtectedApi.interceptors.request.use(attachAuthHeader);
+authProtectedApi.interceptors.response.use(r => r, handle401);

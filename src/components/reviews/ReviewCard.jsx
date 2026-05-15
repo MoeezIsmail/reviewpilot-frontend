@@ -99,7 +99,7 @@ const ReviewCard = ({ review }) => {
                 hasReply={!!replyText}
                 isPostingAll={isPostingAll}
                 onPost={() => postSingleReply(reviewId, replyText)}
-                onAiReply={() => generateAiReply(reviewId, getReviewText(review))}
+                onAiReply={() => generateAiReply(reviewId, getReviewText(review), rating)}
             />
 
         </div>

@@ -12,6 +12,18 @@ subscriptionApi.interceptors.request.use(config => {
     return config;
 });
 
+subscriptionApi.interceptors.response.use(
+    r => r,
+    error => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("isGoogleUser");
+            window.location.href = "/auth";
+        }
+        return Promise.reject(error);
+    }
+);
+
 export const fetchCurrentPlan = () => subscriptionApi.get('/current');
 export const fetchPlans = () => subscriptionApi.get('/plans');
 export const createCheckoutSession = ({ plan, gateway, billingPeriod }) => subscriptionApi.post('/checkout', { plan, gateway, billingPeriod });

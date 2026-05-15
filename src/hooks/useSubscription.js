@@ -17,7 +17,7 @@ const useSubscription = () => {
     const [cancelConfirm, setCancelConfirm] = useState(false);
     const [cancelLoading, setCancelLoading] = useState(false);
     const { addToast: showToast } = useToast();
-    const { user, updateUser } = useAuth();
+    const { updateUser } = useAuth();
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
@@ -57,7 +57,7 @@ const useSubscription = () => {
                 setCurrentPlan(freshSub.plan);
                 setSubscription(freshSub);
                 setHasUsedDiscountedOffer(freshSub.hasUsedDiscountedOffer === true);
-                updateUser({ ...user, subscription: freshSub });
+                updateUser({ subscription: freshSub });
             } catch (err) {
                 console.error("[Subscription] Load error:", err?.response?.data || err.message);
                 showToast("Failed to load subscription info.", "error");
@@ -111,11 +111,12 @@ const useSubscription = () => {
             setCurrentPlan(freshSub.plan);
             setSubscription(freshSub);
             setHasUsedDiscountedOffer(freshSub.hasUsedDiscountedOffer === true);
-            updateUser({ ...user, subscription: freshSub });
+            updateUser({ subscription: freshSub });
         } catch (err) {
             console.error("[Subscription] cancelPlan error:", err?.response?.data || err.message);
-            if (err?.message === "Lifetime plans cannot be cancelled") {
-                showToast(err?.message, "error")
+            const serverMsg = err?.response?.data?.message;
+            if (serverMsg === "Lifetime plans cannot be cancelled") {
+                showToast(serverMsg, "error");
             } else {
                 showToast("Failed to cancel plan.", "error");
             }

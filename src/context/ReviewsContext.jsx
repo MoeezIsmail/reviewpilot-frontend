@@ -161,11 +161,11 @@ export const ReviewsProvider = ({ children }) => {
     }, []);
 
     // ─── Generate AI Reply ────────────────────────────────────
-    const generateAiReply = async (reviewId, reviewText) => {
+    const generateAiReply = async (reviewId, reviewText, rating) => {
         setReplyStatus(prev => ({ ...prev, [reviewId]: "generating" }));
         setAiReplies(prev => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
         try {
-            const reply = await fetchAiReply(reviewId, reviewText);
+            const reply = await fetchAiReply(reviewId, reviewText, rating);
             setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply } }));
             setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
             addToast("AI reply generated!", "success");
@@ -176,6 +176,8 @@ export const ReviewsProvider = ({ children }) => {
             addToast("Failed to generate AI reply", "error");
         }
     };
+
+    const RATING_MAP_BULK = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
 
     // ─── Generate All ─────────────────────────────────────────
     const generateAllReplies = async () => {
@@ -197,10 +199,11 @@ export const ReviewsProvider = ({ children }) => {
         for (const review of pending) {
             const reviewId = review.reviewId || review.name;
             const reviewText = review.comment || "";
+            const rating = RATING_MAP_BULK[review.starRating] || review.rating || 3;
             setReplyStatus(prev => ({ ...prev, [reviewId]: "generating" }));
             setAiReplies(prev => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
             try {
-                const reply = await fetchAiReply(reviewId, reviewText);
+                const reply = await fetchAiReply(reviewId, reviewText, rating);
                 setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply } }));
                 setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
                 ok++;

@@ -6,13 +6,14 @@ export const fetchReviews = async (id, pageToken = null) => {
     return res.data;
 }
 
-export const fetchAiReply = async (reviewId, reviewText) => {
-    const res = await reviewsApi.post(`/${reviewId}/ai-reply`, { reviewText });
+export const fetchAiReply = async (reviewId, reviewText, rating) => {
+    const res = await reviewsApi.post('/ai-reply', { reviewId, reviewText, rating });
     return res.data.reply;
 };
 
 export const postReply = async (reviewId, reply, rating, accountId, locationId) => {
-    const res = await reviewsApi.post(`/${reviewId}/post-reply`, {
+    const res = await reviewsApi.post('/post-reply', {
+        reviewId,
         reply,
         rating,
         accountId,

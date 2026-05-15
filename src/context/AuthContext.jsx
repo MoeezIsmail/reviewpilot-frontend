@@ -16,7 +16,9 @@ export const AuthProvider = ({ children }) => {
 
     const signOut = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('isGoogleUser');
         setToken(null);
+        setUser(null);
     }
 
     const clearAuth = () => {
@@ -26,8 +28,8 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
-    const updateUser = (updatedUser) => {
-        setUser(updatedUser);
+    const updateUser = (updates) => {
+        setUser(prev => ({ ...prev, ...updates }));
     };
 
     useEffect(() => {

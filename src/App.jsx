@@ -6,7 +6,6 @@ import Analytics from "./pages/Analytics.jsx";
 import Settings from "./pages/Settings.jsx";
 import Subscription from "./pages/Subscription.jsx";
 import Terms from "./pages/Terms.jsx";
-import axios from "axios";
 import AuthSuccess from "./pages/AuthSuccess.jsx";
 import ConnectPlatforms from "./pages/ConnectPlatforms.jsx";
 import Auth from "./pages/Auth.jsx";
@@ -17,20 +16,6 @@ import Layout from "./components/layout/Layout.jsx";
 import AppShellSkeleton from "./components/skeletons/AppShellSkeleton.jsx";
 import {useAuth} from "./context/AuthContext.jsx";
 import { useToast } from "./components/toast/ToastProvider.jsx";
-
-axios.interceptors.response.use(
-    response => response,
-    error => {
-        if (error.response && error.response.status === 401) {
-            const token = localStorage.getItem("token")
-            if (token) {
-                localStorage.removeItem("token")
-                window.location.href = "/auth"
-            }
-        }
-        return Promise.reject(error)
-    }
-)
 
 const OnboardingGuard = () => {
     const { user, loading } = useAuth();
