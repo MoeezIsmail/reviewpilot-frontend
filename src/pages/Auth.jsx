@@ -7,6 +7,7 @@ import useOtpForm from "../hooks/useOtpForm.js";
 import InputField from "../components/ui/InputField.jsx";
 import Button from "../components/ui/Button.jsx";
 import { ArrowLeft } from 'lucide-react';
+import { lottieAnimation } from ".././assets/d13a020f-5569-49bd-87bc-f2d9cd2ed8f5.json";
 
 /* ─────────────────────────────────────────
    Stat cards data
@@ -168,17 +169,6 @@ const Auth = () => {
                 {/* Inner content */}
                 <div className="relative z-10 w-full max-w-[260px] flex flex-col items-center gap-4">
 
-                    {/* ── Lottie Character ── */}
-                    {/*
-                        Using a free public Lottie animation from LottieFiles CDN.
-                        Animation: "Hi" waving character by LottieFiles
-                        Source: https://assets9.lottiefiles.com/packages/lf20_ksrtxvg1.json
-
-                        You can replace the `src` URL with any Lottie JSON from:
-                        - https://lottiefiles.com/free-animations/character
-                        - Download the JSON and import it locally: import anim from './my-character.json'
-                          then use: <Player src={anim} ... />
-                    */}
                     <div style={{
                         width: 200,
                         filter: 'drop-shadow(0 10px 30px rgba(99,102,241,0.5))',
@@ -186,7 +176,7 @@ const Auth = () => {
                         <Player
                             autoplay
                             loop
-                            src="https://assets9.lottiefiles.com/packages/lf20_ksrtxvg1.json"
+                            src={lottieAnimation}
                             style={{ height: 200, width: 200 }}
                         />
                     </div>
