@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardCards from "../components/dashboard/DashboardCards.jsx";
 import RecentReviews from "../components/dashboard/RecentReviews.jsx";
 import ReplyPerformance from "../components/dashboard/ReplyPerformance.jsx";
+import ReviewsSummary from "../components/dashboard/ReviewsSummary.jsx";
 import { useReviews } from "../context/ReviewsContext.jsx";
 import calculateStats from "../utils/reviewAnalytics.js";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +68,10 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <RecentReviews reviews={allReviews} />
-                <ReplyPerformance />
+                <div className="flex flex-col gap-6">
+                    <ReplyPerformance />
+                    <ReviewsSummary reviews={allReviews} />
+                </div>
             </div>
         </div>
     );

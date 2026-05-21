@@ -1,4 +1,4 @@
-import { ThumbsUp, Minus, ThumbsDown } from "lucide-react";
+import { ThumbsUp, Minus, ThumbsDown, FileText, Star } from "lucide-react";
 
 const ITEMS = [
     {
@@ -15,11 +15,11 @@ const ITEMS = [
         key: "neutral",
         label: "Neutral",
         icon: Minus,
-        bar: "bg-yellow-400",
-        bg: "bg-yellow-50 dark:bg-yellow-950/40",
-        border: "border-yellow-100 dark:border-yellow-900/50",
-        text: "text-yellow-700 dark:text-yellow-400",
-        iconBg: "bg-yellow-100 dark:bg-yellow-900/60",
+        bar: "bg-amber-400",
+        bg: "bg-amber-50 dark:bg-amber-950/40",
+        border: "border-amber-100 dark:border-amber-900/50",
+        text: "text-amber-700 dark:text-amber-400",
+        iconBg: "bg-amber-100 dark:bg-amber-900/60",
     },
     {
         key: "negative",
@@ -34,13 +34,35 @@ const ITEMS = [
 ];
 
 const SentimentChart = ({ sentiment }) => {
-    const total = sentiment.positive + sentiment.neutral + sentiment.negative || 1;
+    const total = (sentiment.positive + sentiment.neutral + sentiment.negative) || 1;
+    const textAnalyzed = sentiment.textAnalyzed ?? 0;
+    const ratingFallback = sentiment.ratingFallback ?? 0;
 
     return (
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <div className="mb-5">
-                <h3 className="font-semibold text-gray-800 dark:text-gray-100">Sentiment Breakdown</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Customer sentiment based on ratings</p>
+            {/* Header */}
+            <div className="flex items-start justify-between mb-5">
+                <div>
+                    <h3 className="font-semibold text-gray-800 dark:text-gray-100">Sentiment Breakdown</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                        Based on actual review text analysis
+                    </p>
+                </div>
+                {/* Analysis method badge */}
+                <div className="flex items-center gap-1.5">
+                    {textAnalyzed > 0 && (
+                        <span className="flex items-center gap-1 text-[10px] font-medium bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 px-2 py-0.5 rounded-full border border-indigo-100 dark:border-indigo-800">
+                            <FileText size={9} />
+                            {textAnalyzed} text
+                        </span>
+                    )}
+                    {ratingFallback > 0 && (
+                        <span className="flex items-center gap-1 text-[10px] font-medium bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-600">
+                            <Star size={9} />
+                            {ratingFallback} rating
+                        </span>
+                    )}
+                </div>
             </div>
 
             {/* Stacked bar */}
@@ -60,7 +82,7 @@ const SentimentChart = ({ sentiment }) => {
                 })}
             </div>
 
-            {/* Legend cards */}
+            {/* Cards */}
             <div className="grid grid-cols-3 gap-3">
                 {ITEMS.map((item) => {
                     const Icon = item.icon;
@@ -78,6 +100,14 @@ const SentimentChart = ({ sentiment }) => {
                     );
                 })}
             </div>
+
+            {/* Method explanation note */}
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-4 leading-relaxed">
+                {textAnalyzed > 0
+                    ? `Sentiment determined from review text for ${textAnalyzed} review${textAnalyzed !== 1 ? 's' : ''}${ratingFallback > 0 ? `, star rating used for ${ratingFallback} review${ratingFallback !== 1 ? 's' : ''} with no text.` : '.'}`
+                    : 'Sentiment based on star ratings (no review text available for NLP analysis).'
+                }
+            </p>
         </div>
     );
 };

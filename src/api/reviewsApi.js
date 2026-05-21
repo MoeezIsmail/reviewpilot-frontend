@@ -21,3 +21,8 @@ export const postReply = async (reviewId, reply, rating, accountId, locationId) 
     });
     return res;
 };
+
+export const fetchReviewsSummary = async (reviews) => {
+    const res = await reviewsApi.post('/summary', { reviews });
+    return res.data;   // { success, summary, analyzedCount }
+};
