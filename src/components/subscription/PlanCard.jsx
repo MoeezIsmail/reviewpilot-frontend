@@ -1,6 +1,6 @@
 import { Loader2, Flame } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
-import { PLAN_META, PLAN_FEATURES, PLAN_PRICING_DISCOUNT, PLAN_PRICING_ORIGINAL, LIFETIME_SPOTS_LEFT, MONTHLY_DISCOUNT_PCT } from "../../constants/subscriptionMeta.js";
+import { PLAN_META, PLAN_FEATURES, PLAN_PRICING_DISCOUNT, PLAN_PRICING_ORIGINAL, PLAN_PRICING_YEARLY_MONTHLY_EQUIV, LIFETIME_SPOTS_LEFT, MONTHLY_DISCOUNT_PCT } from "../../constants/subscriptionMeta.js";
 
 const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
     const isStarter = planKey === "starter";
@@ -12,7 +12,10 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
 
     const price = PLAN_PRICING_DISCOUNT[planKey]?.[billingPeriod] ?? plan.price;
     const original = PLAN_PRICING_ORIGINAL[planKey];
-    const yearlySavingsPct = original ? Math.round((1 - PLAN_PRICING_DISCOUNT[planKey].yearly / original.yearly) * 100) : 0;
+    const yearlyEquiv = PLAN_PRICING_YEARLY_MONTHLY_EQUIV[planKey];
+    const yearlySavingsPct = yearlyEquiv
+        ? Math.round((1 - yearlyEquiv.discounted / yearlyEquiv.original) * 100)
+        : 0;
     const lifetimeSavings = original ? original.lifetime - PLAN_PRICING_DISCOUNT[planKey].lifetime : 0;
 
     return (
@@ -81,16 +84,21 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                         </div>
                     ) : billingPeriod === "yearly" ? (
                         <div>
-                            <div className="flex items-end gap-1.5">
+                            <div className="flex items-end gap-1">
                                 <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
-                                    ${price}
+                                    ${yearlyEquiv?.discounted ?? price}
                                 </span>
-                                <span className="text-gray-500 dark:text-gray-400 text-sm mb-1">/ year</span>
+                                <span className="text-gray-500 dark:text-gray-400 text-sm mb-1.5">/mo</span>
                             </div>
-                            <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original?.yearly}/yr</span>
-                                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-0.5 rounded-full">
-                                    Save {yearlySavingsPct}%
+                            <div className="flex flex-col gap-1 mt-1">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${yearlyEquiv?.original}/mo</span>
+                                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-0.5 rounded-full">
+                                        Save {yearlySavingsPct}%
+                                    </span>
+                                </div>
+                                <span className="text-xs text-gray-400 dark:text-gray-500">
+                                    Billed ${price}/year
                                 </span>
                             </div>
                         </div>

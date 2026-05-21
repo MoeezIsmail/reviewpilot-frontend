@@ -23,9 +23,9 @@ const AnalyticsCharts = () => {
 
     if (loading && !allReviews.length) return <AnalyticsSkeleton />;
 
-    if (!reviewsData?.reviews.length) {
+    if (!reviewsData?.reviews?.length) {
         return (
-            <div className="flex items-center justify-center h-64">
+            <div className="flex items-center justify-center h-64 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
                 <p className="text-gray-500 dark:text-gray-400 text-sm">No reviews data available.</p>
             </div>
         );

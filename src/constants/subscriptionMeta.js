@@ -5,7 +5,7 @@ export const MONTHLY_DISCOUNT_PCT = 69;
 export const YEARLY_DISCOUNT_PCT = 70;
 
 export const PLAN_PRICING_DISCOUNT = {
-    starter: { monthly: 0,  yearly: 0,   lifetime: 0   },
+    starter: { monthly: 0,     yearly: 0,   lifetime: 0   },
     growth:  { monthly: 8.99,  yearly: 171, lifetime: 200  },
     pro:     { monthly: 18.29, yearly: 441, lifetime: 350  },
 };
@@ -13,6 +13,12 @@ export const PLAN_PRICING_DISCOUNT = {
 export const PLAN_PRICING_ORIGINAL = {
     growth: { monthly: 29, yearly: 276, lifetime: 279 },
     pro:    { monthly: 79, yearly: 564, lifetime: 499 },
+};
+
+// Monthly-equivalent prices when billed yearly (total ÷ 12, rounded to 2 dp)
+export const PLAN_PRICING_YEARLY_MONTHLY_EQUIV = {
+    growth: { discounted: 14.25, original: 23 },  // 171/12, 276/12
+    pro:    { discounted: 36.75, original: 47 },  // 441/12, 564/12
 };
 
 export const PLAN_FEATURES = {

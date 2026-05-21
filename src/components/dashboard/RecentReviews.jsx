@@ -1,94 +1,125 @@
-import React, { useMemo } from "react";
-import { Star } from "lucide-react";
+import { useMemo } from "react";
+import { Star, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const parseReviewDate = (review) => {
+const parseDate = (review) => {
     if (review.createTime) return new Date(review.createTime).getTime();
-    if (review.date) return new Date().getTime();
     return 0;
 };
 
 const formatDate = (review) => {
-    if (review.createTime) {
-        return new Date(review.createTime).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric'
-        });
-    }
-    return review.date || "";
+    if (!review.createTime) return review.date || "";
+    return new Date(review.createTime).toLocaleDateString("en-US", {
+        month: "short", day: "numeric", year: "numeric"
+    });
 };
 
-const getReviewerName = (review) => {
-    if (review.reviewer?.displayName) return review.reviewer.displayName;
-    if (review.user?.name) return review.user.name;
-    return "Anonymous";
-};
+const getReviewerName = (review) =>
+    review.reviewer?.displayName || review.user?.name || "Anonymous";
 
-const getReviewText = (review) => {
-    if (review.comment) return review.comment;
-    if (review.snippet) return review.snippet;
-    return "";
-};
+const getReviewText = (review) =>
+    review.comment || review.snippet || "";
 
 const getRating = (review) => {
     if (review.starRating) {
-        const map = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
-        return map[review.starRating] || 0;
+        return { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 }[review.starRating] || 0;
     }
     return review.rating || 0;
 };
 
-const sortReviewsByDate = (reviews) => {
-    if (!reviews || !reviews.length) return [];
-    return [...reviews]
-        .map((review) => ({ ...review, parsedDate: parseReviewDate(review) }))
-        .sort((a, b) => b.parsedDate - a.parsedDate);
+const ratingStyle = (rating) => {
+    if (rating >= 4) return "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-100 dark:border-emerald-900/50";
+    if (rating === 3) return "bg-amber-50 dark:bg-amber-950/30 border-amber-100 dark:border-amber-900/50";
+    return "bg-rose-50 dark:bg-rose-950/30 border-rose-100 dark:border-rose-900/50";
+};
+
+const getInitials = (name) =>
+    name.split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase();
+
+const AVATAR_COLORS = [
+    { bg: "#e0e7ff", text: "#4338ca" },
+    { bg: "#fce7f3", text: "#9d174d" },
+    { bg: "#d1fae5", text: "#065f46" },
+    { bg: "#fef3c7", text: "#92400e" },
+    { bg: "#ede9fe", text: "#5b21b6" },
+];
+
+const getAvatarColor = (name) => {
+    const idx = name.charCodeAt(0) % AVATAR_COLORS.length;
+    return AVATAR_COLORS[idx];
 };
 
 const RecentReviews = ({ reviews }) => {
-    const latestReviews = useMemo(() => sortReviewsByDate(reviews).slice(0, 4), [reviews]);
-
-    if (!latestReviews.length) {
-        return (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recent Reviews</h2>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">No reviews yet.</p>
-            </div>
-        );
-    }
+    const latestReviews = useMemo(
+        () => [...(reviews || [])].sort((a, b) => parseDate(b) - parseDate(a)).slice(0, 5),
+        [reviews]
+    );
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recent Reviews</h2>
-            <div className="space-y-4">
-                {latestReviews.map((review, i) => {
-                    const rating = getRating(review);
-                    return (
-                        <div
-                            key={i}
-                            className={`p-4 rounded-lg border ${
-                                rating >= 4 ? "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-900" :
-                                rating === 3 ? "bg-yellow-50 dark:bg-yellow-950/30 border-amber-200 dark:border-yellow-900" :
-                                "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900"
-                            }`}
-                        >
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <span className="font-medium block text-gray-900 dark:text-gray-100">{getReviewerName(review)}</span>
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{formatDate(review)}</span>
-                                </div>
-                                <div className="flex gap-1">
-                                    {[...Array(5)].map((_, index) => (
-                                        <Star
-                                            key={index}
-                                            className={`w-4 h-4 ${index < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300 dark:text-gray-600"}`}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">{getReviewText(review)}</p>
-                        </div>
-                    );
-                })}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+            <div className="flex items-center justify-between mb-4">
+                <div>
+                    <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">Recent Reviews</h2>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Latest customer feedback</p>
+                </div>
+                <Link
+                    to="/reviews"
+                    className="flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
+                >
+                    View all
+                    <ArrowRight size={12} />
+                </Link>
             </div>
+
+            {latestReviews.length === 0 ? (
+                <div className="flex items-center justify-center h-32 text-sm text-gray-400 dark:text-gray-500">
+                    No reviews yet
+                </div>
+            ) : (
+                <div className="space-y-3">
+                    {latestReviews.map((review, i) => {
+                        const rating = getRating(review);
+                        const name = getReviewerName(review);
+                        const avatar = getAvatarColor(name);
+                        const text = getReviewText(review);
+                        return (
+                            <div
+                                key={review.reviewId || review.name || i}
+                                className={`p-3.5 rounded-xl border transition-all duration-200 hover:shadow-sm ${ratingStyle(rating)}`}
+                            >
+                                <div className="flex items-start justify-between gap-2 mb-2">
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                        <div
+                                            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                                            style={{ backgroundColor: avatar.bg, color: avatar.text }}
+                                        >
+                                            {getInitials(name)}
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{name}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">{formatDate(review)}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-0.5 shrink-0">
+                                        {Array.from({ length: 5 }, (_, idx) => (
+                                            <Star
+                                                key={idx}
+                                                size={11}
+                                                className={idx < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-200 dark:text-gray-600"}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                                {text && (
+                                    <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
+                                        {text}
+                                    </p>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 };

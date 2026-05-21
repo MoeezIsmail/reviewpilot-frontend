@@ -11,3 +11,7 @@ export const saveBusinessInfo = async ({ userName, businessName, businessType })
 export const updateBusinessInfo = async ({ businessName, businessType }) => {
     return await authProtectedApi.patch('/business-info', { businessName, businessType });
 };
+
+export const deleteAccount = async () => {
+    return await authProtectedApi.delete('/account');
+};

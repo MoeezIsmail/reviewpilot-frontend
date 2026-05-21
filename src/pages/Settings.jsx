@@ -5,6 +5,8 @@ import useSettings from "../hooks/useSettings.js";
 import BusinessInfoCard from "../components/settings/BusinessInfoCard.jsx";
 import ConnectedAccountsCard from "../components/settings/ConnectedAccountsCard.jsx";
 import ThemeCard from "../components/settings/ThemeCard.jsx";
+import DangerZoneCard from "../components/settings/DangerZoneCard.jsx";
+import { Settings2 } from "lucide-react";
 
 const Settings = () => {
     const {
@@ -26,7 +28,18 @@ const Settings = () => {
     }, []);
 
     return (
-        <div className="max-w-screen space-y-6">
+        <div className="space-y-6">
+            {/* Page header */}
+            <div>
+                <div className="flex items-center gap-2 mb-1">
+                    <Settings2 size={18} className="text-indigo-500" />
+                    <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Manage your business profile, connected platforms, and account preferences.
+                </p>
+            </div>
+
             <BusinessInfoCard
                 loading={loading}
                 businessForm={businessForm}
@@ -47,6 +60,7 @@ const Settings = () => {
                 disconnecting={disconnecting}
             />
             <ThemeCard />
+            <DangerZoneCard />
         </div>
     );
 };

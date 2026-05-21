@@ -3,7 +3,7 @@ import {useToast} from "../components/toast/ToastProvider.jsx";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {ArrowRight, CheckCircle2} from 'lucide-react';
 import Button from "../components/ui/Button.jsx";
-import axios from "axios";
+import { authProtectedApi } from "../api/axios.js";
 import PlatformCard from "../components/platforms/PlatformCard.jsx";
 import PLATFORMS from "../utils/connectPlatformUtils.jsx";
 import {BACKEND_URL} from "../constants/urls.js";
@@ -51,17 +51,9 @@ export default function ConnectPlatforms() {
 
     const handleConnectGoogle = async () => {
         try {
-            const token = localStorage.getItem("token");
-            await axios.post(
-                `${BACKEND_URL}/api/auth/google/init`,
-                {from: 'connect-platforms'},
-                {
-                    headers: {Authorization: `Bearer ${token}`},
-                    withCredentials: true,
-                }
-            );
+            await authProtectedApi.post('/google/init', { from: 'connect-platforms' }, { withCredentials: true });
             window.location.href = `${BACKEND_URL}/api/auth/google`;
-        } catch (err) {
+        } catch {
             addToast("Failed to connect Google. Try again.", "error");
         }
     };

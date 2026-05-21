@@ -1,13 +1,13 @@
 import { Flame } from "lucide-react";
 import { LIFETIME_SPOTS_LEFT } from "../../constants/subscriptionMeta.js";
 
-const PERIODS = [
+const buildPeriods = (lifetimeSpotsLeft) => [
     { value: "monthly",  label: "Monthly" },
     { value: "yearly",   label: "Yearly"  },
     {
         value: "lifetime",
         label: "Lifetime",
-        badge: `${LIFETIME_SPOTS_LEFT} spots left`,
+        badge: `${lifetimeSpotsLeft ?? LIFETIME_SPOTS_LEFT} spots left`,
         badgeClass: "bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400",
         Icon: Flame,
     },
@@ -32,7 +32,9 @@ const DoodleArrow = () => (
     </span>
 );
 
-const BillingToggle = ({ billingPeriod, setBillingPeriod }) => (
+const BillingToggle = ({ billingPeriod, setBillingPeriod, lifetimeSpotsLeft }) => {
+    const PERIODS = buildPeriods(lifetimeSpotsLeft);
+    return (
     <div className="flex items-center justify-center">
         <div className="pt-14">
             <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-2xl">
@@ -60,6 +62,7 @@ const BillingToggle = ({ billingPeriod, setBillingPeriod }) => (
             </div>
         </div>
     </div>
-);
+    );
+};
 
 export default BillingToggle;

@@ -5,6 +5,7 @@ import PlanCard from "../components/subscription/PlanCard.jsx";
 import ActivePlanBanner from "../components/subscription/ActivePlanBanner.jsx";
 import BillingToggle from "../components/subscription/BillingToggle.jsx";
 import CancelModal from "../components/subscription/CancelModal.jsx";
+import AiUsageBar from "../components/subscription/AiUsageBar.jsx";
 import SubscriptionSkeleton from "../components/skeletons/SubscriptionSkeleton.jsx";
 
 const Subscription = () => {
@@ -85,7 +86,14 @@ const Subscription = () => {
                 </div>
 
                 {/* Billing Toggle */}
-                <BillingToggle billingPeriod={billingPeriod} setBillingPeriod={setBillingPeriod} />
+                <BillingToggle
+                    billingPeriod={billingPeriod}
+                    setBillingPeriod={setBillingPeriod}
+                    lifetimeSpotsLeft={plans?.growth?.lifetimeSpotsLeft ?? plans?.pro?.lifetimeSpotsLeft}
+                />
+
+                {/* AI Usage bar */}
+                <AiUsageBar />
 
                 {/* Active Plan Banner */}
                 <ActivePlanBanner

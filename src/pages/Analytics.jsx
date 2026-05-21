@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, Lock } from "lucide-react";
+import { BarChart3, Lock, TrendingUp } from "lucide-react";
 import { useReviews } from "../context/ReviewsContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../components/toast/ToastProvider.jsx";
@@ -42,7 +42,7 @@ const AnalyticsGate = () => {
 };
 
 const Analytics = () => {
-    const { isAnyPlatformConnected, loading } = useReviews();
+    const { isAnyPlatformConnected, loading, allReviews } = useReviews();
     const { user, loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const { addToast } = useToast();
@@ -57,9 +57,29 @@ const Analytics = () => {
         }
     }, [isAnyPlatformConnected, authLoading, loading]);
 
-    if (isFreePlan) return <AnalyticsGate />;
+    return (
+        <div className="space-y-5">
+            {/* Page header */}
+            <div className="flex items-start justify-between gap-4">
+                <div>
+                    <div className="flex items-center gap-2 mb-1">
+                        <TrendingUp size={18} className="text-indigo-500" />
+                        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Analytics</h1>
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Deep insights into your review performance, trends, and customer sentiment.
+                        {!isFreePlan && allReviews.length > 0 && (
+                            <span className="ml-1 font-medium text-indigo-600 dark:text-indigo-400">
+                                {allReviews.length} reviews analyzed
+                            </span>
+                        )}
+                    </p>
+                </div>
+            </div>
 
-    return <AnalyticsCharts />;
+            {isFreePlan ? <AnalyticsGate /> : <AnalyticsCharts />}
+        </div>
+    );
 };
 
 export default Analytics;
