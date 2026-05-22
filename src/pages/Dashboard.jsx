@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Zap, ArrowRight } from "lucide-react";
 import DashboardCards from "../components/dashboard/DashboardCards.jsx";
 import RecentReviews from "../components/dashboard/RecentReviews.jsx";
 import ReplyPerformance from "../components/dashboard/ReplyPerformance.jsx";
@@ -18,7 +20,7 @@ const getGreeting = () => {
 };
 
 const Dashboard = () => {
-    const { reviewsData, allReviews, isAnyPlatformConnected, loading } = useReviews();
+    const { reviewsData, allReviews, isAnyPlatformConnected, loading, getReplyPerformanceStats } = useReviews();
     const { user, loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const { addToast } = useToast();
@@ -51,27 +53,45 @@ const Dashboard = () => {
     if (loading && !allReviews.length) return <DashboardSkeleton />;
 
     const firstName = user?.name?.split(" ")[0] || "there";
+    const perfStats = getReplyPerformanceStats();
+    const actionCount = (perfStats.pendingCount || 0) + (perfStats.readyCount || 0);
 
     return (
         <div className="space-y-6">
             {/* Page header */}
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    {getGreeting()}, {firstName} 👋
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-                    Here's an overview of your review performance.
-                </p>
+            <div className="flex items-start justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {getGreeting()}, {firstName} 👋
+                    </h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                        Here's your review performance overview.
+                    </p>
+                </div>
+                {actionCount > 0 && (
+                    <Link
+                        to="/reviews"
+                        className="flex items-center gap-2 shrink-0 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 rounded-xl px-4 py-2 text-sm font-medium hover:bg-amber-100 dark:hover:bg-amber-950/60 transition-colors"
+                    >
+                        <Zap size={14} />
+                        {actionCount} review{actionCount !== 1 ? "s" : ""} need action
+                        <ArrowRight size={12} />
+                    </Link>
+                )}
             </div>
 
+            {/* Stat cards */}
             <DashboardCards stats={stats} />
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <RecentReviews reviews={allReviews} />
-                <div className="flex flex-col gap-6">
-                    <ReplyPerformance />
-                    <ReviewsSummary reviews={allReviews} />
+            {/* AI Summary Hero */}
+            <ReviewsSummary reviews={allReviews} stats={stats} />
+
+            {/* Bottom grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                    <RecentReviews reviews={allReviews} />
                 </div>
+                <ReplyPerformance />
             </div>
         </div>
     );

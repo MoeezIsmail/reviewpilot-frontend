@@ -1,99 +1,115 @@
-import { Sparkles, RefreshCw, Loader2, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import { Sparkles, RefreshCw, Loader2, AlertCircle } from "lucide-react";
 import { useReviews } from "../../context/ReviewsContext.jsx";
 
-const ReviewsSummary = ({ reviews }) => {
+const ReviewsSummary = ({ reviews, stats }) => {
     const { reviewSummary, summaryLoading, summaryError, summaryAnalyzedCount, generateReviewSummary } = useReviews();
-    const [expanded, setExpanded] = useState(true);
+
+    const positive = stats?.positiveReviews ?? 0;
+    const neutral = stats?.averageReviews ?? 0;
+    const negative = stats?.negativeReviews ?? 0;
+    const sentimentTotal = positive + neutral + negative || 1;
+    const positivePct = Math.round((positive / sentimentTotal) * 100);
+    const neutralPct = Math.round((neutral / sentimentTotal) * 100);
+    const negativePct = Math.round((negative / sentimentTotal) * 100);
 
     const isEmpty = !reviews?.length;
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-                <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 bg-violet-50 dark:bg-violet-900/40 rounded-lg flex items-center justify-center">
-                        <Sparkles size={15} className="text-violet-600 dark:text-violet-400" />
-                    </div>
-                    <div>
-                        <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                            AI Review Summary
-                        </h2>
-                        {summaryAnalyzedCount > 0 && !summaryLoading && (
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                Based on {summaryAnalyzedCount} recent review{summaryAnalyzedCount !== 1 ? "s" : ""}
-                            </p>
-                        )}
-                    </div>
-                </div>
+        <div className="relative overflow-hidden rounded-2xl shadow-lg"
+            style={{ background: "linear-gradient(135deg, #6d28d9 0%, #4f46e5 60%, #3730a3 100%)" }}
+        >
+            {/* Decorative blobs */}
+            <div className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5" />
+            <div className="pointer-events-none absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-white/5" />
+            <div className="pointer-events-none absolute top-1/2 right-1/4 w-32 h-32 rounded-full bg-indigo-400/10" />
 
-                <div className="flex items-center gap-2">
+            <div className="relative p-6 sm:p-7">
+                {/* Header row */}
+                <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center">
+                            <Sparkles size={15} className="text-violet-200" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold text-white/90 uppercase tracking-wider">
+                                AI Review Summary
+                            </p>
+                            {summaryAnalyzedCount > 0 && !summaryLoading && (
+                                <p className="text-xs text-white/50 mt-0.5">
+                                    Based on {summaryAnalyzedCount} review{summaryAnalyzedCount !== 1 ? "s" : ""}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
                     <button
                         onClick={() => generateReviewSummary(reviews)}
                         disabled={summaryLoading || isEmpty}
                         title="Regenerate summary"
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/70 hover:text-white text-xs font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                        <RefreshCw size={14} className={summaryLoading ? "animate-spin" : ""} />
-                    </button>
-                    <button
-                        onClick={() => setExpanded(p => !p)}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                    >
-                        {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                        <RefreshCw size={12} className={summaryLoading ? "animate-spin" : ""} />
+                        Refresh
                     </button>
                 </div>
-            </div>
 
-            {/* Body */}
-            {expanded && (
-                <div className="px-5 py-4">
-                    {isEmpty ? (
-                        <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4">
-                            No reviews loaded yet.
+                {/* Content */}
+                {isEmpty ? (
+                    <p className="text-white/50 text-sm py-4">No reviews loaded yet.</p>
+
+                ) : summaryLoading ? (
+                    <div className="space-y-3 py-2">
+                        <div className="flex items-center gap-3 mb-4">
+                            <Loader2 size={16} className="text-violet-300 animate-spin shrink-0" />
+                            <span className="text-sm text-white/60">AI is reading your reviews…</span>
+                        </div>
+                        <div className="h-3 bg-white/10 rounded-full animate-pulse w-full" />
+                        <div className="h-3 bg-white/10 rounded-full animate-pulse w-11/12" />
+                        <div className="h-3 bg-white/10 rounded-full animate-pulse w-4/5" />
+                        <div className="h-3 bg-white/10 rounded-full animate-pulse w-2/3" />
+                    </div>
+
+                ) : summaryError ? (
+                    <div className="flex items-start gap-2.5 bg-white/10 border border-white/20 rounded-xl px-4 py-3 mb-4">
+                        <AlertCircle size={15} className="text-rose-300 shrink-0 mt-0.5" />
+                        <p className="text-xs text-rose-200 leading-relaxed">{summaryError}</p>
+                    </div>
+
+                ) : reviewSummary ? (
+                    <div className="mb-5">
+                        <span
+                            aria-hidden
+                            className="block text-6xl font-serif text-white/10 leading-none -mb-3 select-none"
+                        >
+                            "
+                        </span>
+                        <p className="text-white text-base sm:text-lg font-light leading-relaxed pl-2">
+                            {reviewSummary}
                         </p>
+                    </div>
+                ) : null}
 
-                    ) : summaryLoading ? (
-                        <div className="flex items-start gap-3 py-2">
-                            <Loader2 size={16} className="text-violet-500 animate-spin shrink-0 mt-0.5" />
-                            <div className="flex-1 space-y-2">
-                                <div className="h-3 bg-gray-100 dark:bg-gray-700 rounded-full animate-pulse w-full" />
-                                <div className="h-3 bg-gray-100 dark:bg-gray-700 rounded-full animate-pulse w-5/6" />
-                                <div className="h-3 bg-gray-100 dark:bg-gray-700 rounded-full animate-pulse w-4/6" />
-                                <p className="text-xs text-gray-400 dark:text-gray-500 pt-1">
-                                    AI is reading your reviews…
-                                </p>
-                            </div>
+                {/* Sentiment pills */}
+                {!summaryLoading && !isEmpty && (
+                    <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-white/10">
+                        <div className="flex items-center gap-1.5 bg-white/10 hover:bg-white/15 transition-colors rounded-full px-3 py-1.5">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                            <span className="text-xs text-white font-medium">{positivePct}% Positive</span>
                         </div>
-
-                    ) : summaryError ? (
-                        <div className="flex items-start gap-2.5 bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/50 rounded-xl px-4 py-3">
-                            <AlertCircle size={15} className="text-rose-500 shrink-0 mt-0.5" />
-                            <p className="text-xs text-rose-600 dark:text-rose-400 leading-relaxed">{summaryError}</p>
+                        <div className="flex items-center gap-1.5 bg-white/10 hover:bg-white/15 transition-colors rounded-full px-3 py-1.5">
+                            <span className="w-2 h-2 rounded-full bg-amber-300 shrink-0" />
+                            <span className="text-xs text-white font-medium">{neutralPct}% Neutral</span>
                         </div>
-
-                    ) : reviewSummary ? (
-                        <div className="relative">
-                            <span
-                                aria-hidden
-                                className="absolute -top-1 -left-1 text-5xl font-serif text-violet-100 dark:text-violet-900/60 select-none leading-none"
-                            >
-                                "
-                            </span>
-                            <p className="relative text-sm text-gray-700 dark:text-gray-300 leading-relaxed pl-4">
-                                {reviewSummary}
-                            </p>
-                            <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
-                                <Sparkles size={11} className="text-violet-400" />
-                                <span className="text-[10px] text-gray-400 dark:text-gray-500">
-                                    Generated by AI · Not a substitute for reading individual reviews
-                                </span>
-                            </div>
+                        <div className="flex items-center gap-1.5 bg-white/10 hover:bg-white/15 transition-colors rounded-full px-3 py-1.5">
+                            <span className="w-2 h-2 rounded-full bg-rose-400 shrink-0" />
+                            <span className="text-xs text-white font-medium">{negativePct}% Negative</span>
                         </div>
-                    ) : null}
-                </div>
-            )}
+                        <span className="ml-auto text-[10px] text-white/30 hidden sm:block">
+                            Generated by AI · Not a substitute for reading individual reviews
+                        </span>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
