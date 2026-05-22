@@ -1,7 +1,7 @@
-import {Check, X, Pencil} from "lucide-react";
+import { CheckCircle2, Pencil, X, Check, Sparkles } from "lucide-react";
 import useEditReply from "../../hooks/useEditReply.js";
 
-const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
+const ReviewReplyBox = ({ reviewId, replyText, status, isPosted }) => {
     const {
         isEditing,
         editedText,
@@ -13,51 +13,69 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
 
     if (!replyText) return null;
 
-    return (
-        <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 border-l-4 border-indigo-500">
+    const containerClass = isPosted
+        ? "bg-emerald-50 dark:bg-emerald-950/30 border-l-[3px] border-emerald-400 rounded-xl"
+        : "bg-indigo-50 dark:bg-indigo-950/30 border-l-[3px] border-indigo-400 rounded-xl";
 
-            <div className="flex justify-between items-center mb-1">
-                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                    {isPosted ? "✓ Posted Reply" : "AI Reply"}
-                </p>
+    return (
+        <div className={`${containerClass} p-3.5 mb-3`}>
+            {/* Label row */}
+            <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-1.5">
+                    {isPosted
+                        ? <CheckCircle2 size={12} className="text-emerald-500" />
+                        : <Sparkles size={12} className="text-indigo-500" />
+                    }
+                    <p className={`text-xs font-semibold ${
+                        isPosted
+                            ? "text-emerald-700 dark:text-emerald-400"
+                            : "text-indigo-700 dark:text-indigo-400"
+                    }`}>
+                        {isPosted ? "Posted Reply" : "AI Reply"}
+                    </p>
+                </div>
 
                 {!isPosted && !isEditing && (
-                    <div onClick={startEditing} className="flex cursor-pointer items-center justify-center !text-gray-500 dark:!text-gray-400 hover:!text-gray-700 dark:hover:!text-gray-200 p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600">
-                        <Pencil size={18}/>
-                    </div>
+                    <button
+                        onClick={startEditing}
+                        className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                    >
+                        <Pencil size={11} />
+                        Edit
+                    </button>
                 )}
             </div>
 
+            {/* Content */}
             {isEditing ? (
                 <div className="flex flex-col gap-2">
                     <textarea
                         value={editedText}
                         onChange={(e) => setEditedText(e.target.value)}
                         rows={4}
-                        className="w-full text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-indigo-300 dark:border-indigo-700 rounded-lg p-2 resize-none focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-gray-500"
-                        placeholder="Edit your reply..."
                         autoFocus
+                        className="w-full text-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-indigo-200 dark:border-indigo-700 rounded-lg p-2.5 resize-none focus:outline-none focus:border-indigo-400 transition-colors placeholder-gray-400"
+                        placeholder="Edit your reply…"
                     />
-
                     <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                            {editedText.length} characters
+                        <span className="text-xs text-gray-400 dark:text-gray-500 tabular-nums">
+                            {editedText.length} chars
                         </span>
-
-                        <div className="flex gap-2">
-                            <div
+                        <div className="flex gap-1.5">
+                            <button
                                 onClick={cancelEditing}
-                                className="flex items-center justify-center cursor-pointer !text-red-500 hover:!text-white-700 px-2 py-1 rounded-full border border-red-200 dark:border-red-800 hover:bg-red-200 dark:hover:bg-red-900/40"
+                                className="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-rose-600 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                             >
-                                <X size={24}/>
-                            </div>
-
+                                <X size={11} />
+                                Cancel
+                            </button>
                             <button
                                 onClick={saveEdit}
                                 disabled={!editedText.trim()}
-                                className="flex items-center justify-center !text-green-500 hover:!text-green-700 hover:!bg-green-200 dark:hover:!bg-green-900/40 p-2 rounded-full !border !border-green-200 dark:!border-green-800 disabled:opacity-50"
+                                className="flex items-center gap-1 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 px-2.5 py-1.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
-                                <Check size={24}/>
+                                <Check size={11} />
+                                Save
                             </button>
                         </div>
                     </div>
@@ -65,7 +83,6 @@ const ReviewReplyBox = ({reviewId, replyText, status, isPosted}) => {
             ) : (
                 <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{replyText}</p>
             )}
-
         </div>
     );
 };

@@ -1,31 +1,36 @@
-import {Search, Star, ArrowUpDown, RefreshCw, Lock, Zap} from "lucide-react";
-import {useNavigate} from "react-router-dom";
-import Button from "../ui/Button.jsx";
+import { Search, ArrowUpDown, RefreshCw, Lock, Zap, Send, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import usePlanFeatures from "../../hooks/usePlanFeatures.js";
 import { useToast } from "../toast/ToastProvider.jsx";
 
 const RATING_OPTIONS = [
-    {value: "all", label: "All Ratings"},
-    {value: "5", label: "⭐⭐⭐⭐⭐"},
-    {value: "4", label: "⭐⭐⭐⭐"},
-    {value: "3", label: "⭐⭐⭐"},
-    {value: "2", label: "⭐⭐"},
-    {value: "1", label: "⭐"},
+    { value: "all",  label: "All Ratings" },
+    { value: "5",    label: "5 ★" },
+    { value: "4",    label: "4 ★" },
+    { value: "3",    label: "3 ★" },
+    { value: "2",    label: "2 ★" },
+    { value: "1",    label: "1 ★" },
+];
+
+const STATUS_TABS = [
+    { value: "all",     label: "All" },
+    { value: "replied", label: "Replied" },
+    { value: "pending", label: "Pending" },
 ];
 
 const ReviewFilters = ({
-                           filter, setFilter,
-                           search, setSearch,
-                           sortBy, setSortBy,
-                           ratingFilter, setRatingFilter,
-                           SORT_OPTIONS,
-                           pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll,
-                           pendingRepliesCount, postAllReplies, refreshReviews, loading,
-                           isFreePlan,
-                       }) => {
+    filter, setFilter,
+    search, setSearch,
+    sortBy, setSortBy,
+    ratingFilter, setRatingFilter,
+    SORT_OPTIONS,
+    pendingGenerateCount, generateAllReplies, isGeneratingAll, isPostingAll,
+    pendingRepliesCount, postAllReplies, refreshReviews, loading,
+    isFreePlan, displayCount,
+}) => {
     const navigate = useNavigate();
     const { addToast } = useToast();
-    const {canBulkGenerate, canBulkPost} = usePlanFeatures();
+    const { canBulkGenerate, canBulkPost } = usePlanFeatures();
 
     const handleLockedGenerate = () => {
         addToast("Upgrade your plan to unlock Bulk AI Generate.", "warning");
@@ -38,122 +43,138 @@ const ReviewFilters = ({
     };
 
     return (
-        <div className="flex flex-col gap-3">
-            <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"/>
-                <input
-                    placeholder="Search by customer name or review text..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg pl-8 pr-4 py-2 text-sm focus:border-indigo-400 focus:outline-none"
-                />
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
+
+            {/* Search row */}
+            <div className="px-4 pt-4 pb-3 border-b border-gray-100 dark:border-gray-700">
+                <div className="relative">
+                    <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    <input
+                        placeholder="Search by name or review text…"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl pl-9 pr-24 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-indigo-400 focus:bg-white dark:focus:bg-gray-700 transition-all"
+                    />
+                    {displayCount !== undefined && (
+                        <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-gray-400 dark:text-gray-500 tabular-nums pointer-events-none">
+                            {displayCount} shown
+                        </span>
+                    )}
+                </div>
             </div>
 
-            <div className="flex items-center justify-between flex-wrap gap-6 rounded-xl p-2 !bg-white dark:!bg-gray-800">
+            {/* Controls row */}
+            <div className="px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
 
-                <div className="flex gap-6 items-center">
-                    {/* Status Filters */}
-                    <div className="flex gap-2 rounded-xl p-2 !bg-gray-100 dark:!bg-gray-700">
-                        {["all", "replied", "pending"].map((f) => (
+                {/* Left: status tabs + selects */}
+                <div className="flex items-center gap-2.5 flex-wrap">
+                    {/* Status segmented control */}
+                    <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
+                        {STATUS_TABS.map(({ value, label }) => (
                             <button
-                                key={f}
-                                onClick={() => setFilter(f)}
-                                className={`px-4 py-1 rounded-xl text-sm font-medium capitalize transition-all ${
-                                    filter === f
-                                        ? "!bg-indigo-600 text-white"
-                                        : "!bg-gray-50 dark:!bg-gray-600 border border-gray-200 dark:border-gray-500 text-gray-600 dark:text-gray-300 hover:border-indigo-300"
+                                key={value}
+                                onClick={() => setFilter(value)}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                                    filter === value
+                                        ? "bg-white dark:bg-gray-600 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                                        : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                                 }`}
                             >
-                                {f.charAt(0).toUpperCase() + f.slice(1)}
+                                {label}
                             </button>
                         ))}
                     </div>
 
-                    <div className="w-[2px] h-8 !bg-gray-200 dark:!bg-gray-600"/>
+                    <div className="w-px h-5 bg-gray-200 dark:bg-gray-600" />
 
-                    {/* Sort + Rating */}
-                    <div className="flex items-center gap-2">
-                        <div className="relative">
-                            <Star className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
-                            <select
-                                value={ratingFilter}
-                                onChange={(e) => setRatingFilter(e.target.value)}
-                                className="appearance-none text-sm border border-gray-200 dark:border-gray-600 rounded-xl pl-10 pr-10 py-4 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
-                            >
-                                {RATING_OPTIONS.map((opt) => (
-                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                ))}
-                            </select>
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"> ▼ </span>
-                        </div>
+                    {/* Rating select */}
+                    <div className="relative">
+                        <Star size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-400 pointer-events-none" />
+                        <select
+                            value={ratingFilter}
+                            onChange={(e) => setRatingFilter(e.target.value)}
+                            className="text-xs border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl pl-7 pr-3 py-2 focus:outline-none focus:border-indigo-400 cursor-pointer transition-colors appearance-none"
+                        >
+                            {RATING_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
+                    </div>
 
-                        <div className="relative">
-                            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 w-4 h-4"/>
-                            <select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
-                                className="appearance-none text-sm border border-gray-200 dark:border-gray-600 rounded-xl pl-10 pr-10 py-4 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 shadow-sm cursor-pointer hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400"
-                            >
-                                {SORT_OPTIONS.map((opt) => (
-                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                ))}
-                            </select>
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"> ▼ </span>
-                        </div>
+                    {/* Sort select */}
+                    <div className="relative">
+                        <ArrowUpDown size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className="text-xs border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl pl-7 pr-3 py-2 focus:outline-none focus:border-indigo-400 cursor-pointer transition-colors appearance-none"
+                        >
+                            {SORT_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 p-2">
-                    {/* Bulk Generate */}
+                {/* Right: action buttons */}
+                <div className="flex items-center gap-2">
+                    {/* Generate All */}
                     {isFreePlan ? (
                         <button
                             onClick={handleLockedGenerate}
-                            className="flex items-center gap-1.5 text-sm font-medium bg-indigo-50 dark:bg-indigo-900/40 text-indigo-400 dark:text-indigo-300 px-4 py-2 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/60 hover:text-indigo-600 dark:hover:text-indigo-200 transition-colors group"
+                            className="flex items-center gap-1.5 text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-400 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 px-3 py-2 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors"
                         >
-                            <Lock size={13} className="group-hover:hidden"/>
-                            <Zap size={13} className="hidden group-hover:block text-indigo-500"/>
+                            <Lock size={11} />
                             Generate All
-                            <span className="text-xs font-semibold bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 group-hover:bg-indigo-200 px-1.5 py-0.5 rounded-full transition-colors">
-                                Pro
-                            </span>
+                            <span className="bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full">Pro</span>
                         </button>
                     ) : (
                         pendingGenerateCount > 0 && (
-                            <Button
+                            <button
                                 onClick={canBulkGenerate ? generateAllReplies : handleLockedGenerate}
                                 disabled={isGeneratingAll || isPostingAll}
-                                variant={canBulkGenerate ? "primary" : "gray"}
+                                className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                                    canBulkGenerate
+                                        ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/50"
+                                        : "bg-gray-100 dark:bg-gray-700 text-gray-500 border-gray-200 dark:border-gray-600"
+                                }`}
                             >
                                 {!canBulkGenerate
-                                    ? <span className="flex items-center gap-1.5"><Lock size={13} /> Bulk Generate</span>
+                                    ? <><Lock size={11} /> Generate All</>
                                     : isGeneratingAll
-                                        ? "Generating..."
-                                        : `Generate All (${pendingGenerateCount})`
+                                        ? <><Zap size={11} className="animate-pulse" /> Generating…</>
+                                        : <><Zap size={11} /> Generate All ({pendingGenerateCount})</>
                                 }
-                            </Button>
+                            </button>
                         )
                     )}
 
-                    <Button
+                    {/* Post All */}
+                    <button
                         onClick={canBulkPost ? postAllReplies : handleLockedPost}
                         disabled={isPostingAll || isGeneratingAll}
-                        variant={canBulkPost ? "success" : "gray"}
+                        className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                            canBulkPost
+                                ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/50"
+                                : "bg-gray-100 dark:bg-gray-700 text-gray-500 border-gray-200 dark:border-gray-600"
+                        }`}
                     >
                         {!canBulkPost
-                            ? <span className="flex items-center gap-1.5"><Lock size={13} /> Post All</span>
+                            ? <><Lock size={11} /> Post All</>
                             : isPostingAll
-                                ? "Posting..."
-                                : `Post All (${pendingRepliesCount})`
+                                ? <><Send size={11} className="animate-pulse" /> Posting…</>
+                                : <><Send size={11} /> Post All ({pendingRepliesCount})</>
                         }
-                    </Button>
+                    </button>
 
+                    {/* Refresh */}
                     <button
                         onClick={refreshReviews}
                         disabled={loading}
-                        className="flex items-center gap-1.5 text-sm text-indigo-600 dark:text-indigo-400 hover:underline disabled:opacity-50"
+                        title="Refresh reviews"
+                        className="flex items-center justify-center w-8 h-8 rounded-xl border border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        <RefreshCw size={14} className={loading ? "animate-spin" : ""}/>
-                        {loading ? "Loading..." : "Refresh"}
+                        <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
                     </button>
                 </div>
             </div>
