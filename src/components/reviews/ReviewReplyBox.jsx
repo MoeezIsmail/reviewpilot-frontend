@@ -18,7 +18,7 @@ const ReviewReplyBox = ({ reviewId, replyText, status, isPosted }) => {
         : "bg-indigo-50 dark:bg-indigo-950/30 border-l-[3px] border-indigo-400 rounded-xl";
 
     return (
-        <div className={`${containerClass} p-3.5 mb-3`}>
+        <div className={`${containerClass} p-3.5`}>
             {/* Label row */}
             <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5">

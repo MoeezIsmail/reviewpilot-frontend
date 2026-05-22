@@ -5,20 +5,21 @@ import ReviewReplyBox from "./ReviewReplyBox.jsx";
 import ReviewActions from "./ReviewActions.jsx";
 
 const STATUS_CONFIG = {
-    idle:       { label: "Pending",     bg: "bg-amber-50 dark:bg-amber-950/40",   text: "text-amber-700 dark:text-amber-400",   dot: "bg-amber-400" },
-    generating: { label: "Generating",  bg: "bg-blue-50 dark:bg-blue-950/40",     text: "text-blue-700 dark:text-blue-400",     dot: "bg-blue-400 animate-pulse" },
-    ready:      { label: "Ready",       bg: "bg-indigo-50 dark:bg-indigo-950/40", text: "text-indigo-700 dark:text-indigo-400", dot: "bg-indigo-500" },
-    posting:    { label: "Posting…",    bg: "bg-orange-50 dark:bg-orange-950/40", text: "text-orange-700 dark:text-orange-400", dot: "bg-orange-400 animate-pulse" },
-    posted:     { label: "Posted",      bg: "bg-emerald-50 dark:bg-emerald-950/40", text: "text-emerald-700 dark:text-emerald-400", dot: "bg-emerald-500" },
-    failed:     { label: "Failed",      bg: "bg-rose-50 dark:bg-rose-950/40",     text: "text-rose-700 dark:text-rose-400",     dot: "bg-rose-500" },
+    idle:       { label: "Pending",    bg: "bg-amber-50 dark:bg-amber-950/40",    text: "text-amber-700 dark:text-amber-400",    dot: "bg-amber-400" },
+    generating: { label: "Generating", bg: "bg-blue-50 dark:bg-blue-950/40",      text: "text-blue-700 dark:text-blue-400",      dot: "bg-blue-400 animate-pulse" },
+    ready:      { label: "Ready",      bg: "bg-indigo-50 dark:bg-indigo-950/40",  text: "text-indigo-700 dark:text-indigo-400",  dot: "bg-indigo-500" },
+    posting:    { label: "Posting…",   bg: "bg-orange-50 dark:bg-orange-950/40",  text: "text-orange-700 dark:text-orange-400",  dot: "bg-orange-400 animate-pulse" },
+    posted:     { label: "Posted",     bg: "bg-emerald-50 dark:bg-emerald-950/40",text: "text-emerald-700 dark:text-emerald-400",dot: "bg-emerald-500" },
+    failed:     { label: "Failed",     bg: "bg-rose-50 dark:bg-rose-950/40",      text: "text-rose-700 dark:text-rose-400",      dot: "bg-rose-500" },
 };
 
-const RATING_BORDER = {
-    5: "border-l-[3px] border-l-emerald-400",
-    4: "border-l-[3px] border-l-lime-400",
-    3: "border-l-[3px] border-l-amber-400",
-    2: "border-l-[3px] border-l-orange-400",
-    1: "border-l-[3px] border-l-rose-400",
+// Inline style for left accent — avoids Tailwind v4 border shorthand conflicts
+const RATING_ACCENT = {
+    5: "#34d399", // emerald-400
+    4: "#a3e635", // lime-400
+    3: "#fbbf24", // amber-400
+    2: "#fb923c", // orange-400
+    1: "#fb7185", // rose-400
 };
 
 const ReviewerAvatar = ({ profilePic, initials, avatarColor }) => (
@@ -46,29 +47,29 @@ const StarRating = ({ rating }) => (
 const ReviewCard = ({ review }) => {
     const { aiReplies, generateAiReply, isPostingAll, replyStatus, postSingleReply } = useReviews();
 
-    const reviewId = review.reviewId || review.name;
-    const aiData = aiReplies[reviewId] || {};
-    const status = replyStatus[reviewId] || "idle";
-
+    const reviewId      = review.reviewId || review.name;
+    const aiData        = aiReplies[reviewId] || {};
+    const status        = replyStatus[reviewId] || "idle";
     const existingReply = review.reviewReply?.comment || "";
-    const replyText = aiData.reply || existingReply;
-    const isPosted = status === "posted";
+    const replyText     = aiData.reply || existingReply;
+    const isPosted      = status === "posted";
 
-    const rating = getRating(review.starRating);
-    const reviewerName = getReviewerName(review);
-    const avatarColor = getAvatarColor(reviewerName);
-    const initials = getInitials(reviewerName);
-    const profilePic = getReviewerProfileImage(review);
+    const rating        = getRating(review.starRating);
+    const reviewerName  = getReviewerName(review);
+    const avatarColor   = getAvatarColor(reviewerName);
+    const initials      = getInitials(reviewerName);
+    const profilePic    = getReviewerProfileImage(review);
     const currentStatus = STATUS_CONFIG[status] || STATUS_CONFIG.idle;
-    const ratingBorder = RATING_BORDER[rating] || RATING_BORDER[3];
+    const accentColor   = RATING_ACCENT[rating] || RATING_ACCENT[3];
 
     return (
-        <div className={`bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 ${ratingBorder}`}>
-
-            {/* Card body */}
-            <div className="p-5">
-                {/* Header: avatar + name + stars + status */}
-                <div className="flex items-start justify-between gap-3 mb-3">
+        <div
+            className="relative bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200"
+            style={{ borderLeft: `3px solid ${accentColor}` }}
+        >
+            <div className="p-5 space-y-3">
+                {/* Header: avatar + name/date + stars + status */}
+                <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
                         <ReviewerAvatar
                             profilePic={profilePic}
@@ -96,7 +97,7 @@ const ReviewCard = ({ review }) => {
 
                 {/* Review text */}
                 {getReviewText(review) && (
-                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                         {getReviewText(review)}
                     </p>
                 )}
@@ -110,17 +111,17 @@ const ReviewCard = ({ review }) => {
                         isPosted={isPosted}
                     />
                 )}
-            </div>
 
-            {/* Actions bar */}
-            <div className="px-5 py-3 bg-gray-50 dark:bg-gray-800/80 border-t border-gray-100 dark:border-gray-700">
-                <ReviewActions
-                    status={status}
-                    hasReply={!!replyText}
-                    isPostingAll={isPostingAll}
-                    onPost={() => postSingleReply(reviewId, replyText)}
-                    onAiReply={() => generateAiReply(reviewId, getReviewText(review), rating)}
-                />
+                {/* Actions — always visible, part of the same flow */}
+                <div className="pt-1 border-t border-gray-100 dark:border-gray-700">
+                    <ReviewActions
+                        status={status}
+                        hasReply={!!replyText}
+                        isPostingAll={isPostingAll}
+                        onPost={() => postSingleReply(reviewId, replyText)}
+                        onAiReply={() => generateAiReply(reviewId, getReviewText(review), rating)}
+                    />
+                </div>
             </div>
         </div>
     );

@@ -25,9 +25,9 @@ const ReviewsSkeleton = () => (
         <div className="flex flex-col gap-3">
             {[1, 2, 3, 4].map(i => (
                 <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden animate-pulse">
-                    <div className="p-5">
+                    <div className="p-5 space-y-3">
                         {/* Header */}
-                        <div className="flex items-start justify-between gap-3 mb-3">
+                        <div className="flex items-start justify-between gap-3">
                             <div className="flex items-center gap-3">
                                 <div className="w-9 h-9 bg-gray-200 dark:bg-gray-700 rounded-full shrink-0" />
                                 <div>
@@ -41,18 +41,18 @@ const ReviewsSkeleton = () => (
                             </div>
                         </div>
                         {/* Review text */}
-                        <div className="space-y-2 mb-3">
+                        <div className="space-y-2">
                             <div className="h-3 bg-gray-100 dark:bg-gray-700/60 rounded w-full" />
                             <div className="h-3 bg-gray-100 dark:bg-gray-700/60 rounded w-5/6" />
                             <div className="h-3 bg-gray-100 dark:bg-gray-700/60 rounded w-2/3" />
                         </div>
                         {/* Reply box */}
-                        <div className="h-16 bg-indigo-50 dark:bg-indigo-950/20 rounded-xl border-l-[3px] border-indigo-200 dark:border-indigo-800" />
-                    </div>
-                    {/* Actions bar */}
-                    <div className="px-5 py-3 bg-gray-50 dark:bg-gray-800/80 border-t border-gray-100 dark:border-gray-700 flex gap-2">
-                        <div className="h-7 w-20 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl" />
-                        <div className="h-7 w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl" />
+                        <div className="h-14 bg-indigo-50 dark:bg-indigo-950/20 rounded-xl" style={{ borderLeft: "3px solid #a5b4fc" }} />
+                        {/* Actions */}
+                        <div className="pt-1 border-t border-gray-100 dark:border-gray-700 flex gap-2">
+                            <div className="h-7 w-20 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl" />
+                            <div className="h-7 w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl" />
+                        </div>
                     </div>
                 </div>
             ))}
