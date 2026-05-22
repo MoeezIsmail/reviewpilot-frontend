@@ -4,13 +4,13 @@ import { LIFETIME_SPOTS_LEFT } from "../../constants/subscriptionMeta.js";
 const buildPeriods = (lifetimeSpotsLeft) => [
     { value: "monthly",  label: "Monthly" },
     { value: "yearly",   label: "Yearly"  },
-    {
-        value: "lifetime",
-        label: "Lifetime",
-        badge: `${lifetimeSpotsLeft ?? LIFETIME_SPOTS_LEFT} spots left`,
-        badgeClass: "bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400",
-        Icon: Flame,
-    },
+    // {
+    //     value: "lifetime",
+    //     label: "Lifetime",
+    //     badge: `${lifetimeSpotsLeft ?? LIFETIME_SPOTS_LEFT} spots left`,
+    //     badgeClass: "bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400",
+    //     Icon: Flame,
+    // },
 ];
 
 const DoodleArrow = () => (
