@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect, useContext, useCallback, useMemo } from "react";
+import React, { createContext, useState, useEffect, useContext, useCallback, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext.jsx";
-import { fetchReviews, fetchAiReply, postReply } from "../api/reviewsApi.js";
+import { fetchReviews, fetchAiReply, postReply, fetchReviewsSummary } from "../api/reviewsApi.js";
 import { useToast } from "../components/toast/ToastProvider.jsx";
 
 const ReviewsContext = createContext();
@@ -271,6 +271,40 @@ export const ReviewsProvider = ({ children }) => {
         if (fail) addToast(`${fail} failed.`, "error");
     };
 
+    // ─── AI Review Summary (persists across navigation) ──────
+    const [reviewSummary, setReviewSummary] = useState(null);
+    const [summaryLoading, setSummaryLoading] = useState(false);
+    const [summaryError, setSummaryError] = useState(null);
+    const [summaryAnalyzedCount, setSummaryAnalyzedCount] = useState(0);
+    const summaryForCount = useRef(0); // review count when summary was last generated
+
+    const generateReviewSummary = useCallback(async (reviews) => {
+        if (!reviews?.length) return;
+        setSummaryLoading(true);
+        setSummaryError(null);
+        try {
+            const data = await fetchReviewsSummary(reviews);
+            setReviewSummary(data.summary);
+            setSummaryAnalyzedCount(data.analyzedCount ?? reviews.length);
+            summaryForCount.current = reviews.length;
+        } catch (err) {
+            if (err?.response?.status === 429) {
+                setSummaryError("Rate limit reached — please wait a few minutes before refreshing.");
+            } else {
+                setSummaryError(err?.response?.data?.message || "Could not generate summary. Please try again.");
+            }
+        } finally {
+            setSummaryLoading(false);
+        }
+    }, []);
+
+    // Auto-generate only when the allReviews count changes (new data fetched)
+    useEffect(() => {
+        if (allReviews.length && allReviews.length !== summaryForCount.current && !summaryLoading) {
+            generateReviewSummary(allReviews);
+        }
+    }, [allReviews.length]);
+
     // ─── Update AI Reply (Edit) ───────────────────────────────
     const updateAiReply = (reviewId, newReply) => {
         setAiReplies(prev => ({ ...prev, [reviewId]: { ...prev[reviewId], reply: newReply } }));
@@ -318,6 +352,11 @@ export const ReviewsProvider = ({ children }) => {
             refreshReviews,
             updateAiReply,
             getReplyPerformanceStats,
+            reviewSummary,
+            summaryLoading,
+            summaryError,
+            summaryAnalyzedCount,
+            generateReviewSummary,
             isAnyPlatformConnected: isAnyPlatformConnected(user),
             currentPage,
             totalPagesLoaded,
