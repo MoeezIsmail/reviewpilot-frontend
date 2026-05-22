@@ -1,12 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, createElement } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Player } from '@lottiefiles/react-lottie-player';
-import { Sun, Moon, CheckCircle2 } from 'lucide-react';
-import { useToast } from "../components/toast/ToastProvider.jsx";
+import { Sun, Moon, CheckCircle2, ShieldCheck, Zap, Star } from 'lucide-react';
 import GoogleAuthButton from "../components/auth/GoogleAuthButton.jsx";
 import AuthBackground from "../components/auth/AuthBackground.jsx";
 import SplashScreen from "../components/auth/SplashScreen.jsx";
 import { useTheme } from '../context/ThemeContext.jsx';
 import lottieAnimation from "../assets/d13a020f-5569-49bd-87bc-f2d9cd2ed8f5.json";
+
+const MotionDiv = motion.div;
+const MotionButton = motion.button;
+const MotionP = motion.p;
 
 const STAT_CARDS = [
     {
@@ -50,10 +54,37 @@ const STAT_CARDS = [
     },
 ];
 
+const pageVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            delayChildren: 0.16,
+            staggerChildren: 0.08,
+        },
+    },
+};
+
+const riseIn = {
+    hidden: { opacity: 0, y: 28, filter: 'blur(12px)' },
+    show: {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        transition: { duration: 0.72, ease: [0.16, 1, 0.3, 1] },
+    },
+};
+
+const trustBadges = [
+    { label: 'Secure', Icon: ShieldCheck },
+    { label: 'Instant', Icon: Zap },
+    { label: 'Trusted', Icon: Star },
+];
+
 const Auth = () => {
-    const { addToast } = useToast();
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === 'dark';
+    const prefersReducedMotion = useReducedMotion();
 
     const [splashExiting, setSplashExiting] = useState(false);
     const [splashDone, setSplashDone] = useState(false);
@@ -61,7 +92,7 @@ const Auth = () => {
     const handleSplashTrigger = useCallback(() => {
         if (splashExiting || splashDone) return;
         setSplashExiting(true);
-        setTimeout(() => setSplashDone(true), 880);
+        setTimeout(() => setSplashDone(true), 1120);
     }, [splashExiting, splashDone]);
 
     return (
@@ -71,10 +102,15 @@ const Auth = () => {
             <AuthBackground isDark={isDark} />
 
             {/* ── Auth page ── fades in as splash exits */}
-            <div className={`relative z-10 h-full transition-opacity duration-700 ${splashExiting ? 'opacity-100' : 'opacity-0'}`}>
+            <MotionDiv
+                className="relative z-10 h-full"
+                variants={pageVariants}
+                initial="hidden"
+                animate={splashExiting ? 'show' : 'hidden'}
+            >
 
                 {/* Theme toggle */}
-                <button
+                <MotionButton
                     onClick={toggleTheme}
                     className={`
                         fixed top-4 right-4 z-20
@@ -85,68 +121,88 @@ const Auth = () => {
                             : 'bg-white/70 border-indigo-200 text-indigo-600 hover:bg-white/90'}
                     `}
                     aria-label="Toggle theme"
+                    initial={{ opacity: 0, scale: 0.82, y: -10 }}
+                    animate={splashExiting ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.82, y: -10 }}
+                    whileHover={{ scale: 1.06, rotate: isDark ? -8 : 8 }}
+                    whileTap={{ scale: 0.94 }}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 >
                     {isDark ? <Sun size={16} /> : <Moon size={16} />}
-                </button>
+                </MotionButton>
 
                 {/* Page content */}
                 <div className="h-full flex items-center justify-center px-4 sm:px-6 md:px-8 py-4">
-                    <div className="w-full max-w-6xl mx-auto flex flex-col items-center gap-4 sm:gap-5 lg:grid lg:grid-cols-2 lg:gap-14 lg:items-center">
+                    <MotionDiv
+                        className="w-full max-w-6xl mx-auto flex flex-col items-center gap-4 sm:gap-5 lg:grid lg:grid-cols-2 lg:gap-14 lg:items-center"
+                        variants={pageVariants}
+                    >
 
                         {/* ═══════════════════════════════════════
                             LEFT — Logo + HUGE Lottie + stat cards
                         ═══════════════════════════════════════ */}
-                        <div className="flex flex-col items-center text-center gap-3 w-full lg:items-start lg:text-left lg:gap-4">
+                        <MotionDiv className="flex flex-col items-center text-center gap-3 w-full lg:items-start lg:text-left lg:gap-4" variants={riseIn}>
 
                             {/* Logo */}
-                            <div className="flex items-center gap-2.5">
-                                <div className={`
+                            <MotionDiv className="flex items-center gap-2.5" variants={riseIn}>
+                                <MotionDiv
+                                    className={`
                                     w-8 h-8 lg:w-9 lg:h-9 rounded-xl flex items-center justify-center
                                     text-white font-bold text-xs shadow-lg
                                     ${isDark ? 'bg-indigo-600 shadow-indigo-900/60' : 'bg-indigo-600 shadow-indigo-300/60'}
-                                `}>
+                                    `}
+                                    whileHover={{ scale: 1.08, rotate: -4 }}
+                                >
                                     RP
-                                </div>
-                                <span className={`text-base lg:text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-indigo-900'}`}>
+                                </MotionDiv>
+                                <span className={`text-base lg:text-lg font-bold ${isDark ? 'text-white' : 'text-indigo-900'}`}>
                                     ReviewPilot
                                 </span>
-                            </div>
+                            </MotionDiv>
 
                             {/* Headline — mobile only (desktop: in right panel) */}
-                            <div className="lg:hidden">
+                            <MotionDiv className="lg:hidden" variants={riseIn}>
                                 <h1
-                                    className={`font-black tracking-tight leading-[1.04] mb-1.5 ${isDark ? 'text-white' : 'text-indigo-950'}`}
-                                    style={{ fontSize: 'clamp(1.7rem, 8vw, 2.4rem)' }}
+                                    className={`text-3xl sm:text-4xl font-black leading-[1.04] mb-1.5 ${isDark ? 'text-white' : 'text-indigo-950'}`}
                                 >
                                     Manage reviews.<br />
                                     <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
                                         Grow faster.
                                     </span>
                                 </h1>
-                            </div>
+                            </MotionDiv>
 
                             {/* ── Lottie hero — HUGE ── */}
-                            <div className="relative flex justify-center items-center auth-lottie-wrap">
+                            <MotionDiv
+                                className={`relative flex justify-center items-center auth-lottie-wrap${prefersReducedMotion ? '' : ' auth-lottie-float'}`}
+                                variants={riseIn}
+                            >
                                 <div className="auth-halo auth-halo-1" />
                                 <div className="auth-halo auth-halo-2" />
                                 <div className="auth-halo auth-halo-3" />
+                                <div className="auth-lottie-ring" />
                                 {/* Responsive Lottie container */}
-                                <div className="w-[200px] h-[200px] lg:w-[380px] lg:h-[380px] relative z-10">
+                                <MotionDiv
+                                    className="w-[200px] h-[200px] lg:w-[380px] lg:h-[380px] relative z-10"
+                                    initial={{ opacity: 0, scale: 0.76, rotate: -8 }}
+                                    animate={splashExiting ? { opacity: 1, scale: 1, rotate: 0 } : { opacity: 0, scale: 0.76, rotate: -8 }}
+                                    transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                                >
                                     <Player
                                         autoplay
                                         loop
                                         src={lottieAnimation}
                                         style={{ height: '100%', width: '100%' }}
                                     />
-                                </div>
-                            </div>
+                                </MotionDiv>
+                            </MotionDiv>
 
                             {/* Stat cards — desktop only */}
                             <div className="hidden lg:grid grid-cols-3 gap-2.5 w-full">
                                 {STAT_CARDS.map((card, i) => (
-                                    <div
+                                    <MotionDiv
                                         key={i}
-                                        style={{ animation: `floatCard 4s ease-in-out infinite ${i * 0.6}s` }}
+                                        variants={riseIn}
+                                        whileHover={{ y: -7, scale: 1.03 }}
                                         className={`
                                             flex flex-col items-center gap-1.5 px-3 py-3 rounded-2xl border backdrop-blur-md
                                             ${isDark
@@ -162,21 +218,20 @@ const Auth = () => {
                                             <p className={`text-[11px] font-semibold leading-none mb-0.5 ${isDark ? 'text-white' : 'text-indigo-900'}`}>{card.label}</p>
                                             <p className={`text-[10px] leading-none ${isDark ? 'text-indigo-200/50' : 'text-indigo-700/55'}`}>{card.sub}</p>
                                         </div>
-                                    </div>
+                                    </MotionDiv>
                                 ))}
                             </div>
-                        </div>
+                        </MotionDiv>
 
                         {/* ═══════════════════════════════════════
                             RIGHT — Headline (desktop) + Login card
                         ═══════════════════════════════════════ */}
-                        <div className="w-full flex flex-col gap-5 lg:gap-6">
+                        <MotionDiv className="w-full flex flex-col gap-5 lg:gap-6" variants={riseIn}>
 
                             {/* Headline — desktop only */}
-                            <div className="hidden lg:block">
+                            <MotionDiv className="hidden lg:block" variants={riseIn}>
                                 <h1
-                                    className={`font-black tracking-tight leading-[1.04] mb-2 ${isDark ? 'text-white' : 'text-indigo-950'}`}
-                                    style={{ fontSize: 'clamp(2.6rem, 4vw, 3.5rem)' }}
+                                    className={`text-5xl xl:text-6xl font-black leading-[1.04] mb-2 ${isDark ? 'text-white' : 'text-indigo-950'}`}
                                 >
                                     Manage reviews.<br />
                                     <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
@@ -187,10 +242,10 @@ const Auth = () => {
                                     AI replies, real-time analytics, and multi-platform<br />
                                     management — all in one dashboard.
                                 </p>
-                            </div>
+                            </MotionDiv>
 
                             {/* Gradient border card wrapper */}
-                            <div
+                            <MotionDiv
                                 className="w-full"
                                 style={{
                                     background: isDark
@@ -202,43 +257,47 @@ const Auth = () => {
                                         ? '0 24px 60px rgba(99,102,241,0.28), 0 0 0 1px rgba(255,255,255,0.03) inset'
                                         : '0 24px 60px rgba(99,102,241,0.18), 0 0 0 1px rgba(255,255,255,0.7) inset',
                                 }}
+                                variants={riseIn}
+                                whileHover={{ y: -4 }}
+                                transition={{ duration: 0.35, ease: 'easeOut' }}
                             >
                                 <div
-                                    className="rounded-[22.5px] p-5 sm:p-7 lg:p-8 backdrop-blur-2xl"
+                                    className="auth-card-inner relative overflow-hidden rounded-[22.5px] p-5 sm:p-7 lg:p-8 backdrop-blur-2xl"
                                     style={{
                                         background: isDark
                                             ? 'rgba(5, 5, 20, 0.9)'
                                             : 'rgba(255, 255, 255, 0.9)',
                                     }}
                                 >
+                                    <div className="auth-card-sheen" />
                                     {/* Heading */}
-                                    <div className="mb-5 sm:mb-6">
+                                    <MotionDiv className="mb-5 sm:mb-6 relative z-10" variants={riseIn}>
                                         <h2 className={`text-xl sm:text-2xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                             Welcome back
                                         </h2>
                                         <p className={`text-sm ${isDark ? 'text-indigo-200/55' : 'text-gray-500'}`}>
                                             Sign in to manage your reviews
                                         </p>
-                                    </div>
+                                    </MotionDiv>
 
-                                    <GoogleAuthButton isDark={isDark} />
+                                    <MotionDiv className="relative z-10" variants={riseIn} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.985 }}>
+                                        <GoogleAuthButton isDark={isDark} />
+                                    </MotionDiv>
 
                                     {/* Divider — tablet+ */}
-                                    <div className="hidden sm:flex items-center gap-3 my-5">
+                                    <MotionDiv className="hidden sm:flex items-center gap-3 my-5 relative z-10" variants={riseIn}>
                                         <div className={`flex-1 h-px ${isDark ? 'bg-white/10' : 'bg-gray-200'}`} />
                                         <span className={`text-xs ${isDark ? 'text-white/28' : 'text-gray-400'}`}>secure sign-in</span>
                                         <div className={`flex-1 h-px ${isDark ? 'bg-white/10' : 'bg-gray-200'}`} />
-                                    </div>
+                                    </MotionDiv>
 
                                     {/* Trust badges — tablet+ */}
-                                    <div className="hidden sm:grid grid-cols-3 gap-2.5">
-                                        {[
-                                            { label: 'Secure',  emoji: '🔒' },
-                                            { label: 'Instant', emoji: '⚡' },
-                                            { label: 'Trusted', emoji: '⭐' },
-                                        ].map(({ label, emoji }) => (
-                                            <div
+                                    <MotionDiv className="hidden sm:grid grid-cols-3 gap-2.5 relative z-10" variants={pageVariants}>
+                                        {trustBadges.map(({ label, Icon }) => (
+                                            <MotionDiv
                                                 key={label}
+                                                variants={riseIn}
+                                                whileHover={{ y: -4, scale: 1.03 }}
                                                 className={`
                                                     flex flex-col items-center gap-1.5 py-3 rounded-xl border
                                                     ${isDark
@@ -246,33 +305,33 @@ const Auth = () => {
                                                         : 'bg-indigo-50/60 border-indigo-100'}
                                                 `}
                                             >
-                                                <span className="text-base leading-none">{emoji}</span>
+                                                {createElement(Icon, { size: 17, className: isDark ? 'text-cyan-200/75' : 'text-indigo-500' })}
                                                 <span className={`text-[11px] font-medium ${isDark ? 'text-white/48' : 'text-indigo-700/70'}`}>
                                                     {label}
                                                 </span>
-                                            </div>
+                                            </MotionDiv>
                                         ))}
-                                    </div>
+                                    </MotionDiv>
 
                                     {/* Footer */}
-                                    <p className={`text-center text-[11px] mt-4 sm:mt-5 leading-relaxed ${isDark ? 'text-white/22' : 'text-gray-400'}`}>
+                                    <MotionP className={`relative z-10 text-center text-[11px] mt-4 sm:mt-5 leading-relaxed ${isDark ? 'text-white/22' : 'text-gray-400'}`} variants={riseIn}>
                                         By continuing, you agree to our Terms of Service<br />and Privacy Policy.
-                                    </p>
+                                    </MotionP>
                                 </div>
-                            </div>
+                            </MotionDiv>
 
                             {/* Trust line — desktop only */}
-                            <div className="hidden lg:flex items-center gap-2">
+                            <MotionDiv className="hidden lg:flex items-center gap-2" variants={riseIn}>
                                 <CheckCircle2 size={12} className={isDark ? 'text-indigo-400' : 'text-indigo-500'} />
                                 <p className={`text-xs ${isDark ? 'text-indigo-300/40' : 'text-indigo-700/45'}`}>
                                     Trusted by 2,000+ businesses worldwide
                                 </p>
-                            </div>
-                        </div>
+                            </MotionDiv>
+                        </MotionDiv>
 
-                    </div>
+                    </MotionDiv>
                 </div>
-            </div>
+            </MotionDiv>
 
             {/* ── Splash screen overlay ── */}
             {!splashDone && (
@@ -289,6 +348,36 @@ const Auth = () => {
                 /* Lottie glow halos */
                 .auth-lottie-wrap { padding: 4px 0; }
                 .auth-halo { position: absolute; border-radius: 50%; pointer-events: none; }
+                .auth-lottie-float { animation: lottieFloat 5.8s ease-in-out infinite; }
+                .auth-lottie-ring {
+                    position: absolute;
+                    border-radius: 9999px;
+                    pointer-events: none;
+                    border: 1px solid ${isDark ? 'rgba(125,211,252,0.18)' : 'rgba(99,102,241,0.2)'};
+                    box-shadow: ${isDark
+                        ? '0 0 42px rgba(34,211,238,0.12), inset 0 0 36px rgba(99,102,241,0.12)'
+                        : '0 0 36px rgba(99,102,241,0.12), inset 0 0 34px rgba(14,165,233,0.08)'};
+                    animation: premiumRing 10s linear infinite;
+                }
+                .auth-card-inner::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    border-radius: inherit;
+                    pointer-events: none;
+                    background:
+                        linear-gradient(120deg, transparent 0%, ${isDark ? 'rgba(125,211,252,0.1)' : 'rgba(99,102,241,0.08)'} 28%, transparent 46%),
+                        radial-gradient(circle at 12% 8%, ${isDark ? 'rgba(34,211,238,0.13)' : 'rgba(14,165,233,0.1)'}, transparent 30%);
+                    opacity: 0.75;
+                }
+                .auth-card-sheen {
+                    position: absolute;
+                    inset: -45% -70%;
+                    pointer-events: none;
+                    background: linear-gradient(115deg, transparent 42%, ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.72)'} 50%, transparent 58%);
+                    transform: translateX(-38%) rotate(6deg);
+                    animation: cardSheen 4.8s ease-in-out infinite;
+                }
 
                 .auth-halo-1 {
                     background: ${isDark
@@ -314,21 +403,33 @@ const Auth = () => {
                     .auth-halo-1 { width: 280px; height: 280px; filter: blur(22px); }
                     .auth-halo-2 { width: 215px; height: 215px; filter: blur(14px); }
                     .auth-halo-3 { width: 135px; height: 135px; filter: blur(9px);  }
+                    .auth-lottie-ring { width: 230px; height: 230px; }
                 }
                 /* Desktop halo sizes */
                 @media (min-width: 1024px) {
                     .auth-halo-1 { width: 490px; height: 490px; filter: blur(36px); }
                     .auth-halo-2 { width: 370px; height: 370px; filter: blur(22px); }
                     .auth-halo-3 { width: 230px; height: 230px; filter: blur(13px); }
+                    .auth-lottie-ring { width: 430px; height: 430px; }
                 }
 
-                @keyframes floatCard {
-                    0%, 100% { transform: translateY(0px); }
-                    50%       { transform: translateY(-5px); }
+                @keyframes lottieFloat {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-8px); }
                 }
                 @keyframes lottieGlow {
                     0%, 100% { opacity: 0.55; transform: scale(1); }
                     50%       { opacity: 1;    transform: scale(1.1); }
+                }
+                @keyframes premiumRing {
+                    0% { transform: rotate(0deg) scale(1); opacity: 0.7; }
+                    50% { transform: rotate(180deg) scale(1.04); opacity: 1; }
+                    100% { transform: rotate(360deg) scale(1); opacity: 0.7; }
+                }
+                @keyframes cardSheen {
+                    0%, 38% { transform: translateX(-38%) rotate(6deg); opacity: 0; }
+                    52% { opacity: 1; }
+                    78%, 100% { transform: translateX(38%) rotate(6deg); opacity: 0; }
                 }
             `}</style>
 
