@@ -53,7 +53,7 @@ const SplashScreen = ({ isDark, exiting, onTrigger }) => {
             style={{ background: rootBackground }}
             initial={{ opacity: 1 }}
             animate={exiting ? { opacity: 0 } : { opacity: 1 }}
-            transition={{ duration: 0.55, delay: exiting ? 0.55 : 0 }}
+            transition={{ duration: 0.75, delay: exiting ? 0.18 : 0, ease: 'easeOut' }}
             onWheel={handleWheel}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
@@ -117,7 +117,7 @@ const SplashScreen = ({ isDark, exiting, onTrigger }) => {
                 className="splash-content relative z-10 flex flex-col items-center gap-5 px-6 text-center"
                 initial={{ opacity: 0, scale: 0.88, y: 28, filter: 'blur(14px)' }}
                 animate={exiting
-                    ? { opacity: 0, scale: 12, y: -20, filter: 'blur(22px)' }
+                    ? { opacity: 0, scale: 16, y: -24, filter: 'blur(24px)' }
                     : { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
                 transition={exiting
                     ? { duration: 0.78, ease: [0.76, 0, 0.24, 1] }

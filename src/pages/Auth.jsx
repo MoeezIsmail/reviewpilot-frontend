@@ -65,6 +65,24 @@ const pageVariants = {
     },
 };
 
+const authRevealVariants = {
+    hidden: {
+        opacity: 0,
+        clipPath: 'circle(34px at 50% calc(50% - 118px))',
+        filter: 'brightness(1.18) blur(10px)',
+    },
+    show: {
+        opacity: 1,
+        clipPath: 'circle(150% at 50% calc(50% - 118px))',
+        filter: 'brightness(1) blur(0px)',
+        transition: {
+            opacity: { duration: 0.24, ease: 'easeOut' },
+            clipPath: { duration: 1.05, ease: [0.76, 0, 0.24, 1] },
+            filter: { duration: 0.85, ease: 'easeOut' },
+        },
+    },
+};
+
 const riseIn = {
     hidden: { opacity: 0, y: 28, filter: 'blur(12px)' },
     show: {
@@ -101,10 +119,10 @@ const Auth = () => {
             {/* Shared background — visible through splash and auth */}
             <AuthBackground isDark={isDark} />
 
-            {/* ── Auth page ── fades in as splash exits */}
+            {/* ── Auth page ── revealed from the splash logo mask */}
             <MotionDiv
-                className="relative z-10 h-full"
-                variants={pageVariants}
+                className="auth-reveal-layer relative z-10 h-full"
+                variants={authRevealVariants}
                 initial="hidden"
                 animate={splashExiting ? 'show' : 'hidden'}
             >
