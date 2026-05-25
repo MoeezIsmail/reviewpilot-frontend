@@ -32,6 +32,13 @@ export const AuthProvider = ({ children }) => {
         setUser(prev => ({ ...prev, ...updates }));
     };
 
+    const updateAiUsage = (used) => {
+        setUser(prev => ({
+            ...prev,
+            subscription: { ...prev.subscription, aiRepliesUsed: used },
+        }));
+    };
+
     useEffect(() => {
         const fetchProfile = async () => {
             if (!token) {
@@ -57,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     return (
-        <AuthContext.Provider value={{ user, setUser, updateUser, loading, error, saveToken, signOut, clearAuth }}>
+        <AuthContext.Provider value={{ user, setUser, updateUser, updateAiUsage, loading, error, saveToken, signOut, clearAuth }}>
             {children}
         </AuthContext.Provider>
     );

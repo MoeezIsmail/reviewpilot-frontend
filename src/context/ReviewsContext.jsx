@@ -29,7 +29,7 @@ export const ReviewsProvider = ({ children }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pagesCache, setPagesCache] = useState({});
 
-    const { user, updateUser } = useAuth();
+    const { user, updateAiUsage } = useAuth();
     const { addToast } = useToast();
     const navigate = useNavigate();
 
@@ -169,7 +169,7 @@ export const ReviewsProvider = ({ children }) => {
             setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply: data.reply } }));
             setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
             if (data.used !== undefined) {
-                updateUser({ subscription: { ...user.subscription, aiRepliesUsed: data.used } });
+                updateAiUsage(data.used);
             }
             addToast("AI reply generated!", "success");
             return data.reply;
@@ -222,7 +222,7 @@ export const ReviewsProvider = ({ children }) => {
         }
 
         if (lastUsed !== undefined) {
-            updateUser({ subscription: { ...user.subscription, aiRepliesUsed: lastUsed } });
+            updateAiUsage(lastUsed);
         }
 
         setIsGeneratingAll(false);
