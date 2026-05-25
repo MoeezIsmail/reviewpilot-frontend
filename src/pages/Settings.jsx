@@ -85,6 +85,14 @@ const Settings = () => {
 
     return (
         <div className="space-y-5">
+            {/* Page header */}
+            <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                    Manage your account, business info, and preferences
+                </p>
+            </div>
+
             <ProfileCard user={user} />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

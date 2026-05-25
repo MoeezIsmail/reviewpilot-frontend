@@ -1,17 +1,20 @@
-import {useEffect, useRef, useState} from "react";
-import {useToast} from "../components/toast/ToastProvider.jsx";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {ArrowRight, CheckCircle2} from 'lucide-react';
-import Button from "../components/ui/Button.jsx";
+import { useEffect, useRef, useState } from "react";
+import { useToast } from "../components/toast/ToastProvider.jsx";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ArrowRight, Sun, Moon } from 'lucide-react';
 import { authProtectedApi } from "../api/axios.js";
 import PlatformCard from "../components/platforms/PlatformCard.jsx";
 import PLATFORMS from "../utils/connectPlatformUtils.jsx";
-import {BACKEND_URL} from "../constants/urls.js";
-import {useAuth} from "../context/AuthContext.jsx";
+import { BACKEND_URL } from "../constants/urls.js";
+import { useAuth } from "../context/AuthContext.jsx";
+import AuthBackground from "../components/auth/AuthBackground.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 export default function ConnectPlatforms() {
-    const {addToast} = useToast();
-    const {user, loading} = useAuth();
+    const { addToast } = useToast();
+    const { user, loading } = useAuth();
+    const { theme, toggleTheme } = useTheme();
+    const isDark = theme === 'dark';
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [googleConnected, setGoogleConnected] = useState(false);
@@ -37,7 +40,6 @@ export default function ConnectPlatforms() {
             addToast("Google Business connected!", "success");
         }
 
-        // ← Errors handle karo
         if (error === "no_business") {
             addToast("No Google Business found on this account. Please use a business account.", "error");
         } else if (error === "state_expired") {
@@ -59,63 +61,134 @@ export default function ConnectPlatforms() {
     };
 
     return (
-        <div className="min-h-screen w-screen flex items-center justify-center !bg-gray-50 dark:!bg-gray-900">
-            <div className="!bg-white dark:!bg-gray-800 p-10 rounded-xl shadow-lg w-[520px]">
+        <div className="relative" style={{ height: '100dvh', overflow: 'hidden' }}>
+            <AuthBackground isDark={isDark} />
 
-                <div className="flex items-center gap-2 mb-8">
-                    <div className="flex items-center gap-2">
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center ${
-                            googleConnected ? "bg-green-500" : "!bg-indigo-600"
-                        }`}>
-                            {googleConnected
-                                ? <span className="text-white text-xs font-bold">✓</span>
-                                : <span className="text-white text-xs font-bold">1</span>
-                            }
+            {/* Theme toggle */}
+            <button
+                onClick={toggleTheme}
+                className={`
+                    fixed top-4 right-4 z-20
+                    w-9 h-9 rounded-xl flex items-center justify-center
+                    border transition-all duration-300 shadow-lg backdrop-blur-md
+                    ${isDark
+                        ? 'bg-white/10 border-white/20 text-yellow-300 hover:bg-white/20'
+                        : 'bg-white/70 border-indigo-200 text-indigo-600 hover:bg-white/90'}
+                `}
+                aria-label="Toggle theme"
+            >
+                {isDark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+
+            {/* Scrollable content */}
+            <div className="relative z-10 h-full overflow-y-auto">
+                <div className="min-h-full flex items-center justify-center px-4 py-10">
+
+                    {/* Glass card */}
+                    <div
+                        className="w-full max-w-[460px]"
+                        style={{
+                            background: isDark
+                                ? 'linear-gradient(145deg, rgba(99,102,241,0.52), rgba(139,92,246,0.42), rgba(168,85,247,0.52))'
+                                : 'linear-gradient(145deg, rgba(99,102,241,0.38), rgba(139,92,246,0.26), rgba(168,85,247,0.38))',
+                            padding: '1.5px',
+                            borderRadius: '22px',
+                            boxShadow: isDark
+                                ? '0 20px 56px rgba(99,102,241,0.22), 0 0 0 1px rgba(255,255,255,0.03) inset'
+                                : '0 20px 56px rgba(99,102,241,0.14), 0 0 0 1px rgba(255,255,255,0.65) inset',
+                        }}
+                    >
+                        <div
+                            className="relative rounded-[20.5px] p-7 backdrop-blur-2xl overflow-hidden"
+                            style={{
+                                background: isDark ? 'rgba(6, 6, 22, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+                            }}
+                        >
+                            {/* Logo */}
+                            <div className="flex items-center gap-2.5 mb-7">
+                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg bg-indigo-600 ${isDark ? 'shadow-indigo-900/50' : 'shadow-indigo-300/60'}`}>
+                                    RP
+                                </div>
+                                <span className={`text-base font-bold tracking-tight ${isDark ? 'text-white' : 'text-indigo-900'}`}>
+                                    ReviewPilot
+                                </span>
+                            </div>
+
+                            {/* Step indicator */}
+                            <div className="flex items-center mb-7">
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold
+                                        ${googleConnected ? 'bg-emerald-500 text-white' : 'bg-indigo-500 text-white'}`}>
+                                        {googleConnected ? '✓' : '1'}
+                                    </div>
+                                    <span className={`text-xs font-semibold
+                                        ${googleConnected
+                                            ? isDark ? 'text-emerald-400' : 'text-emerald-600'
+                                            : isDark ? 'text-white' : 'text-indigo-700'}`}>
+                                        Connect Platform
+                                    </span>
+                                </div>
+
+                                <div className={`flex-1 h-px mx-3 ${isDark ? 'bg-white/12' : 'bg-indigo-100'}`} />
+
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold
+                                        ${isDark ? 'bg-white/10 text-white/30' : 'bg-gray-100 text-gray-400'}`}>
+                                        2
+                                    </div>
+                                    <span className={`text-xs font-medium ${isDark ? 'text-white/30' : 'text-gray-400'}`}>
+                                        Business Info
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Heading */}
+                            <div className="mb-5">
+                                <h2 className={`text-xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                    Connect your platforms
+                                </h2>
+                                <p className={`text-sm ${isDark ? 'text-indigo-200/50' : 'text-gray-500'}`}>
+                                    Connect at least one platform to start managing reviews
+                                </p>
+                            </div>
+
+                            {/* Platform list */}
+                            <div className="flex flex-col gap-2.5 mb-6">
+                                {PLATFORMS.map((platform) => (
+                                    <PlatformCard
+                                        key={platform.id}
+                                        platform={platform}
+                                        connected={platform.id === "google" && googleConnected}
+                                        onConnect={platform.id === "google" ? handleConnectGoogle : undefined}
+                                        isDark={isDark}
+                                    />
+                                ))}
+                            </div>
+
+                            {/* Continue button */}
+                            <button
+                                disabled={!googleConnected}
+                                onClick={() => navigate("/onboarding")}
+                                className={`
+                                    w-full py-3.5 rounded-2xl text-sm font-semibold
+                                    flex items-center justify-center gap-2 transition-all duration-200
+                                    ${googleConnected
+                                        ? 'bg-gradient-to-r from-indigo-500 to-violet-500 text-white hover:from-indigo-600 hover:to-violet-600 shadow-lg shadow-indigo-500/25 cursor-pointer'
+                                        : isDark
+                                            ? 'bg-white/[0.06] text-white/25 cursor-not-allowed border border-white/[0.07]'
+                                            : 'bg-gray-100 text-gray-300 cursor-not-allowed border border-gray-200'}
+                                `}
+                            >
+                                Continue <ArrowRight size={15} />
+                            </button>
+
+                            <p className={`text-xs text-center mt-4 ${isDark ? 'text-white/22' : 'text-gray-400'}`}>
+                                You can connect more platforms later from Settings
+                            </p>
                         </div>
-                        <span className={`text-sm font-semibold ${
-                            googleConnected ? "text-green-500" : "text-indigo-600"
-                        }`}>
-                            Connect Platform
-                        </span>
                     </div>
-                    <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600 mx-2"/>
-                    <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                            <span className="text-gray-500 dark:text-gray-400 text-xs font-bold">2</span>
-                        </div>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">Business Info</span>
-                    </div>
+
                 </div>
-
-                <h2 className="text-2xl font-bold mb-1 text-black dark:text-white">Connect Your Platforms</h2>
-                <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-                    Connect at least one platform to start managing reviews
-                </p>
-
-                <div className="flex flex-col gap-3 mb-6">
-                    {PLATFORMS.map((platform) => (
-                        <PlatformCard
-                            key={platform.id}
-                            platform={platform}
-                            connected={platform.id === "google" && googleConnected}
-                            onConnect={platform.id === "google" ? handleConnectGoogle : undefined}
-                        />
-                    ))}
-                </div>
-
-                <Button
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    disabled={!googleConnected}
-                    onClick={() => navigate("/onboarding")}
-                >
-                    Continue <ArrowRight size={18}/>
-                </Button>
-
-                <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
-                    You can connect more platforms later from Settings
-                </p>
             </div>
         </div>
     );

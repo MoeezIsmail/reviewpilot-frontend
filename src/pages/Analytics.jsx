@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, Lock, TrendingUp, Sparkles } from "lucide-react";
+import { BarChart3, Lock, Sparkles } from "lucide-react";
 import { useReviews } from "../context/ReviewsContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../components/toast/ToastProvider.jsx";
@@ -57,28 +57,19 @@ const Analytics = () => {
     return (
         <div className="space-y-6">
             {/* Page header */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-5 shadow-lg">
-                {/* Decorative circles */}
-                <div className="pointer-events-none absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
-                <div className="pointer-events-none absolute -bottom-6 right-24 w-28 h-28 rounded-full bg-white/5" />
-
-                <div className="relative flex items-center justify-between gap-4">
-                    <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <TrendingUp size={18} className="text-white/80" />
-                            <h1 className="text-xl font-bold text-white">Analytics</h1>
-                        </div>
-                        <p className="text-sm text-white/60">
-                            Review trends, sentiment analysis, and rating insights
-                        </p>
-                    </div>
-                    {!isFreePlan && (
-                        <div className="flex items-center gap-1.5 bg-white/10 border border-white/20 rounded-xl px-3 py-1.5 shrink-0">
-                            <Sparkles size={12} className="text-violet-200" />
-                            <span className="text-xs font-medium text-white/80">AI-powered insights</span>
-                        </div>
-                    )}
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Analytics</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                        Review trends, sentiment analysis, and rating insights
+                    </p>
                 </div>
+                {!isFreePlan && (
+                    <div className="flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-800 rounded-xl px-3 py-2 shrink-0">
+                        <Sparkles size={12} className="text-indigo-500 dark:text-indigo-400" />
+                        <span className="text-xs font-medium text-indigo-700 dark:text-indigo-300">AI-powered insights</span>
+                    </div>
+                )}
             </div>
 
             {isFreePlan ? <AnalyticsGate /> : <AnalyticsCharts />}

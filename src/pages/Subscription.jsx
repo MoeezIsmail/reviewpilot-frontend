@@ -21,20 +21,26 @@ const Subscription = () => {
     if (pageLoading) return <SubscriptionSkeleton />;
 
     return (
-        <div className="subscription-scroll flex-1 overflow-y-auto bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 p-6 md:p-8">
-            <div className="max-w-5xl mx-auto space-y-8">
+        <>
+            <div className="max-w-5xl mx-auto space-y-6">
+
+                {/* Page header */}
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Subscription</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                        All plans include unlimited review syncing. Only pay for AI replies and automation.
+                    </p>
+                </div>
 
                 {/* Founder Club Banner */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 p-[2px] shadow-lg shadow-amber-200/50">
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 p-[2px] shadow-lg shadow-amber-200/50 dark:shadow-amber-900/30">
                     <div className="relative rounded-2xl bg-gradient-to-r from-amber-950/90 via-orange-950/90 to-yellow-950/90 px-6 py-4 overflow-hidden">
-                        {/* Background shimmer */}
                         <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 via-yellow-300/5 to-amber-400/10 animate-pulse" />
                         <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-amber-400/10 blur-2xl" />
                         <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-orange-400/10 blur-2xl" />
 
                         <div className="relative flex flex-col gap-3">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                                {/* Left: Badge + Text */}
                                 <div className="flex items-center gap-4">
                                     <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-500/40">
                                         <Crown size={20} className="text-white" />
@@ -52,8 +58,6 @@ const Subscription = () => {
                                         </p>
                                     </div>
                                 </div>
-
-                                {/* Right: Spots counter */}
                                 <div className="flex-shrink-0 flex items-center gap-2 bg-white/10 border border-amber-400/20 rounded-xl px-4 py-2.5">
                                     <Users size={15} className="text-amber-300" />
                                     <div className="text-center">
@@ -62,8 +66,6 @@ const Subscription = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* T&C note */}
                             <p className="text-amber-400/60 text-[10px] leading-snug">
                                 *{" "}
                                 <Link to="/terms" className="underline underline-offset-2 hover:text-amber-300 transition-colors">
@@ -75,27 +77,7 @@ const Subscription = () => {
                     </div>
                 </div>
 
-                {/* Header */}
-                <div className="text-center space-y-2">
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
-                        Simple, transparent pricing
-                    </h1>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm max-w-md mx-auto">
-                        All plans include unlimited review syncing. Only pay for AI replies and automation.
-                    </p>
-                </div>
-
-                {/* Billing Toggle */}
-                <BillingToggle
-                    billingPeriod={billingPeriod}
-                    setBillingPeriod={setBillingPeriod}
-                    lifetimeSpotsLeft={plans?.growth?.lifetimeSpotsLeft ?? plans?.pro?.lifetimeSpotsLeft}
-                />
-
-                {/* AI Usage bar */}
-                <AiUsageBar />
-
-                {/* Active Plan Banner */}
+                {/* Current plan status */}
                 <ActivePlanBanner
                     plans={plans}
                     currentPlan={currentPlan}
@@ -103,6 +85,9 @@ const Subscription = () => {
                     portalLoading={portalLoading}
                     onManageBilling={handlePortal}
                 />
+
+                {/* AI usage — relevant to current plan */}
+                <AiUsageBar />
 
                 {/* Offer restriction warning */}
                 {hasUsedDiscountedOffer && (
@@ -115,7 +100,14 @@ const Subscription = () => {
                     </div>
                 )}
 
-                {/* Plan Cards */}
+                {/* Billing period selector */}
+                <BillingToggle
+                    billingPeriod={billingPeriod}
+                    setBillingPeriod={setBillingPeriod}
+                    lifetimeSpotsLeft={plans?.growth?.lifetimeSpotsLeft ?? plans?.pro?.lifetimeSpotsLeft}
+                />
+
+                {/* Plan cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 isolate">
                     {Object.entries(plans).map(([key, plan]) => (
                         <PlanCard
@@ -154,7 +146,7 @@ const Subscription = () => {
                     loading={cancelLoading}
                 />
             )}
-        </div>
+        </>
     );
 };
 
