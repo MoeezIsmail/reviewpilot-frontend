@@ -3,7 +3,7 @@ import usePlanFeatures from "../../hooks/usePlanFeatures.js";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../toast/ToastProvider.jsx";
 
-const ReviewActions = ({ status, hasReply, isPostingAll, onPost, onAiReply }) => {
+const ReviewActions = ({ status, isPostingAll, onPost, onAiReply }) => {
     const { canUseAiReply, remainingAiReplies } = usePlanFeatures();
     const navigate = useNavigate();
     const { addToast } = useToast();

@@ -1,7 +1,7 @@
 import { CheckCircle2, Pencil, X, Check, Sparkles } from "lucide-react";
 import useEditReply from "../../hooks/useEditReply.js";
 
-const ReviewReplyBox = ({ reviewId, replyText, status, isPosted }) => {
+const ReviewReplyBox = ({ reviewId, replyText, isPosted }) => {
     const {
         isEditing,
         editedText,

@@ -3,6 +3,7 @@ import { formatDate, getInitials, getRating, getReviewerName, getReviewText } fr
 import { getAvatarColor, getReviewerProfileImage } from "../../utils/avatarUtils.jsx";
 import ReviewReplyBox from "./ReviewReplyBox.jsx";
 import ReviewActions from "./ReviewActions.jsx";
+import { Sparkles } from "lucide-react";
 
 const STATUS_CONFIG = {
     idle:       { label: "Pending",    bg: "bg-amber-50 dark:bg-amber-950/40",    text: "text-amber-700 dark:text-amber-400",    dot: "bg-amber-400" },
@@ -44,12 +45,29 @@ const StarRating = ({ rating }) => (
     </div>
 );
 
+const AiReplyGeneratingBox = () => (
+    <div className="bg-blue-50 dark:bg-blue-950/30 border-l-[3px] border-blue-400 rounded-xl p-3.5">
+        <div className="flex items-center gap-2 mb-3">
+            <Sparkles size={13} className="text-blue-500 animate-pulse" />
+            <p className="text-xs font-semibold text-blue-700 dark:text-blue-400">
+                AI Reply
+            </p>
+            <span className="text-xs text-blue-500 dark:text-blue-300">Generating...</span>
+        </div>
+        <div className="space-y-2">
+            <div className="h-2.5 bg-blue-100 dark:bg-blue-900/60 rounded-full animate-pulse w-full" />
+            <div className="h-2.5 bg-blue-100 dark:bg-blue-900/60 rounded-full animate-pulse w-10/12" />
+            <div className="h-2.5 bg-blue-100 dark:bg-blue-900/60 rounded-full animate-pulse w-7/12" />
+        </div>
+    </div>
+);
+
 const ReviewCard = ({ review }) => {
     const { aiReplies, generateAiReply, isPostingAll, replyStatus, postSingleReply } = useReviews();
 
     const reviewId      = review.reviewId || review.name;
     const aiData        = aiReplies[reviewId] || {};
-    const status        = replyStatus[reviewId] || "idle";
+    const status        = aiData.loading ? "generating" : (replyStatus[reviewId] || "idle");
     const existingReply = review.reviewReply?.comment || "";
     const replyText     = aiData.reply || existingReply;
     const isPosted      = status === "posted";
@@ -107,16 +125,16 @@ const ReviewCard = ({ review }) => {
                     <ReviewReplyBox
                         reviewId={reviewId}
                         replyText={replyText}
-                        status={status}
                         isPosted={isPosted}
                     />
                 )}
+
+                {aiData.loading && !replyText && <AiReplyGeneratingBox />}
 
                 {/* Actions — always visible, part of the same flow */}
                 <div className="pt-1 border-t border-gray-100 dark:border-gray-700">
                     <ReviewActions
                         status={status}
-                        hasReply={!!replyText}
                         isPostingAll={isPostingAll}
                         onPost={() => postSingleReply(reviewId, replyText)}
                         onAiReply={() => generateAiReply(reviewId, getReviewText(review), rating)}
