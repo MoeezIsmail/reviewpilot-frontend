@@ -29,7 +29,7 @@ export const ReviewsProvider = ({ children }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pagesCache, setPagesCache] = useState({});
 
-    const { user } = useAuth();
+    const { user, updateUser } = useAuth();
     const { addToast } = useToast();
     const navigate = useNavigate();
 
@@ -165,15 +165,21 @@ export const ReviewsProvider = ({ children }) => {
         setReplyStatus(prev => ({ ...prev, [reviewId]: "generating" }));
         setAiReplies(prev => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
         try {
-            const reply = await fetchAiReply(reviewId, reviewText, rating);
-            setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply } }));
+            const data = await fetchAiReply(reviewId, reviewText, rating);
+            setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply: data.reply } }));
             setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
+            if (data.used !== undefined) {
+                updateUser({ subscription: { ...user.subscription, aiRepliesUsed: data.used } });
+            }
             addToast("AI reply generated!", "success");
-            return reply;
-        } catch {
+            return data.reply;
+        } catch (err) {
             setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply: "" } }));
             setReplyStatus(prev => ({ ...prev, [reviewId]: "failed" }));
-            addToast("Failed to generate AI reply", "error");
+            const msg = err?.response?.data?.limitReached
+                ? "AI reply limit reached. Upgrade to generate more."
+                : "Failed to generate AI reply";
+            addToast(msg, "error");
         }
     };
 
@@ -194,7 +200,7 @@ export const ReviewsProvider = ({ children }) => {
         }
 
         setIsGeneratingAll(true);
-        let ok = 0, fail = 0;
+        let ok = 0, fail = 0, lastUsed = undefined;
 
         for (const review of pending) {
             const reviewId = review.reviewId || review.name;
@@ -203,15 +209,20 @@ export const ReviewsProvider = ({ children }) => {
             setReplyStatus(prev => ({ ...prev, [reviewId]: "generating" }));
             setAiReplies(prev => ({ ...prev, [reviewId]: { loading: true, reply: "" } }));
             try {
-                const reply = await fetchAiReply(reviewId, reviewText, rating);
-                setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply } }));
+                const data = await fetchAiReply(reviewId, reviewText, rating);
+                setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply: data.reply } }));
                 setReplyStatus(prev => ({ ...prev, [reviewId]: "ready" }));
+                if (data.used !== undefined) lastUsed = data.used;
                 ok++;
             } catch {
                 setAiReplies(prev => ({ ...prev, [reviewId]: { loading: false, reply: "" } }));
                 setReplyStatus(prev => ({ ...prev, [reviewId]: "failed" }));
                 fail++;
             }
+        }
+
+        if (lastUsed !== undefined) {
+            updateUser({ subscription: { ...user.subscription, aiRepliesUsed: lastUsed } });
         }
 
         setIsGeneratingAll(false);

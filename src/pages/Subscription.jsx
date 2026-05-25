@@ -107,21 +107,27 @@ const Subscription = () => {
                     lifetimeSpotsLeft={plans?.growth?.lifetimeSpotsLeft ?? plans?.pro?.lifetimeSpotsLeft}
                 />
 
-                {/* Plan cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 isolate">
-                    {Object.entries(plans).map(([key, plan]) => (
-                        <PlanCard
-                            key={key}
-                            planKey={key}
-                            plan={plan}
-                            currentPlan={currentPlan}
-                            subscription={subscription}
-                            billingPeriod={billingPeriod}
-                            onUpgrade={handleUpgrade}
-                            onCancel={() => setCancelConfirm(true)}
-                            loadingPlan={loadingPlan}
-                        />
-                    ))}
+                {/* Plan cards — yearly hides Starter (only 2 plans shown) */}
+                <div className={`grid grid-cols-1 gap-5 isolate ${
+                    billingPeriod === 'yearly'
+                        ? 'md:grid-cols-2 max-w-2xl mx-auto w-full'
+                        : 'md:grid-cols-3'
+                }`}>
+                    {Object.entries(plans)
+                        .filter(([key]) => billingPeriod !== 'yearly' || key !== 'starter')
+                        .map(([key, plan]) => (
+                            <PlanCard
+                                key={key}
+                                planKey={key}
+                                plan={plan}
+                                currentPlan={currentPlan}
+                                subscription={subscription}
+                                billingPeriod={billingPeriod}
+                                onUpgrade={handleUpgrade}
+                                onCancel={() => setCancelConfirm(true)}
+                                loadingPlan={loadingPlan}
+                            />
+                        ))}
                 </div>
 
                 {/* Footer */}
