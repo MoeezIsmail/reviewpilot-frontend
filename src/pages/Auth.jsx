@@ -1,10 +1,9 @@
-import { useState, useCallback, createElement } from 'react';
+import { createElement } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { Sun, Moon, CheckCircle2, ShieldCheck, Zap, Star } from 'lucide-react';
 import GoogleAuthButton from "../components/auth/GoogleAuthButton.jsx";
 import AuthBackground from "../components/auth/AuthBackground.jsx";
-import SplashScreen from "../components/auth/SplashScreen.jsx";
 import { useTheme } from '../context/ThemeContext.jsx';
 import lottieAnimation from "../assets/d13a020f-5569-49bd-87bc-f2d9cd2ed8f5.json";
 
@@ -59,37 +58,19 @@ const pageVariants = {
     show: {
         opacity: 1,
         transition: {
-            delayChildren: 0.16,
+            delayChildren: 0.1,
             staggerChildren: 0.08,
         },
     },
 };
 
-const authRevealVariants = {
-    hidden: {
-        opacity: 0,
-        clipPath: 'circle(34px at 50% calc(50% - 118px))',
-        filter: 'brightness(1.18) blur(10px)',
-    },
-    show: {
-        opacity: 1,
-        clipPath: 'circle(150% at 50% calc(50% - 118px))',
-        filter: 'brightness(1) blur(0px)',
-        transition: {
-            opacity: { duration: 0.24, ease: 'easeOut' },
-            clipPath: { duration: 1.05, ease: [0.76, 0, 0.24, 1] },
-            filter: { duration: 0.85, ease: 'easeOut' },
-        },
-    },
-};
-
 const riseIn = {
-    hidden: { opacity: 0, y: 28, filter: 'blur(12px)' },
+    hidden: { opacity: 0, y: 24, filter: 'blur(10px)' },
     show: {
         opacity: 1,
         y: 0,
         filter: 'blur(0px)',
-        transition: { duration: 0.72, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
     },
 };
 
@@ -104,61 +85,50 @@ const Auth = () => {
     const isDark = theme === 'dark';
     const prefersReducedMotion = useReducedMotion();
 
-    const [splashExiting, setSplashExiting] = useState(false);
-    const [splashDone, setSplashDone] = useState(false);
-
-    const handleSplashTrigger = useCallback(() => {
-        if (splashExiting || splashDone) return;
-        setSplashExiting(true);
-        setTimeout(() => setSplashDone(true), 1120);
-    }, [splashExiting, splashDone]);
-
     return (
-        <div className="relative overflow-hidden" style={{ height: '100dvh' }}>
+        <div className="relative" style={{ height: '100dvh', overflow: 'hidden' }}>
 
-            {/* Shared background — visible through splash and auth */}
+            {/* Background */}
             <AuthBackground isDark={isDark} />
 
-            {/* ── Auth page ── revealed from the splash logo mask */}
-            <MotionDiv
-                className="auth-reveal-layer relative z-10 h-full"
-                variants={authRevealVariants}
-                initial="hidden"
-                animate={splashExiting ? 'show' : 'hidden'}
+            {/* Theme toggle */}
+            <MotionButton
+                onClick={toggleTheme}
+                className={`
+                    fixed top-4 right-4 z-20
+                    w-9 h-9 rounded-xl flex items-center justify-center
+                    border transition-all duration-300 shadow-lg backdrop-blur-md
+                    ${isDark
+                        ? 'bg-white/10 border-white/20 text-yellow-300 hover:bg-white/20'
+                        : 'bg-white/70 border-indigo-200 text-indigo-600 hover:bg-white/90'}
+                `}
+                aria-label="Toggle theme"
+                initial={{ opacity: 0, scale: 0.82, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ scale: 1.06, rotate: isDark ? -8 : 8 }}
+                whileTap={{ scale: 0.94 }}
             >
+                {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            </MotionButton>
 
-                {/* Theme toggle */}
-                <MotionButton
-                    onClick={toggleTheme}
-                    className={`
-                        fixed top-4 right-4 z-20
-                        w-9 h-9 rounded-xl flex items-center justify-center
-                        border transition-all duration-300 shadow-lg backdrop-blur-md
-                        ${isDark
-                            ? 'bg-white/10 border-white/20 text-yellow-300 hover:bg-white/20'
-                            : 'bg-white/70 border-indigo-200 text-indigo-600 hover:bg-white/90'}
-                    `}
-                    aria-label="Toggle theme"
-                    initial={{ opacity: 0, scale: 0.82, y: -10 }}
-                    animate={splashExiting ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.82, y: -10 }}
-                    whileHover={{ scale: 1.06, rotate: isDark ? -8 : 8 }}
-                    whileTap={{ scale: 0.94 }}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                >
-                    {isDark ? <Sun size={16} /> : <Moon size={16} />}
-                </MotionButton>
-
-                {/* Page content */}
-                <div className="h-full flex items-center justify-center px-4 sm:px-6 md:px-8 py-4">
+            {/* Scrollable content layer */}
+            <div className="relative z-10 h-full overflow-y-auto">
+                <div className="min-h-full flex items-center justify-center px-4 sm:px-6 md:px-8 py-8 lg:py-6">
                     <MotionDiv
-                        className="w-full max-w-6xl mx-auto flex flex-col items-center gap-4 sm:gap-5 lg:grid lg:grid-cols-2 lg:gap-14 lg:items-center"
+                        className="w-full max-w-6xl mx-auto flex flex-col items-center gap-5 sm:gap-6 lg:grid lg:grid-cols-2 lg:gap-14 lg:items-center"
                         variants={pageVariants}
+                        initial="hidden"
+                        animate="show"
                     >
 
                         {/* ═══════════════════════════════════════
-                            LEFT — Logo + HUGE Lottie + stat cards
+                            LEFT — Logo + Lottie + stat cards
                         ═══════════════════════════════════════ */}
-                        <MotionDiv className="flex flex-col items-center text-center gap-3 w-full lg:items-start lg:text-left lg:gap-4" variants={riseIn}>
+                        <MotionDiv
+                            className="flex flex-col items-center text-center gap-3 w-full lg:items-start lg:text-left lg:gap-4"
+                            variants={riseIn}
+                        >
 
                             {/* Logo */}
                             <MotionDiv className="flex items-center gap-2.5" variants={riseIn}>
@@ -177,10 +147,10 @@ const Auth = () => {
                                 </span>
                             </MotionDiv>
 
-                            {/* Headline — mobile only (desktop: in right panel) */}
+                            {/* Headline — mobile only */}
                             <MotionDiv className="lg:hidden" variants={riseIn}>
                                 <h1
-                                    className={`text-3xl sm:text-4xl font-black leading-[1.04] mb-1.5 ${isDark ? 'text-white' : 'text-indigo-950'}`}
+                                    className={`text-3xl sm:text-4xl font-black leading-[1.04] mb-1 ${isDark ? 'text-white' : 'text-indigo-950'}`}
                                 >
                                     Manage reviews.<br />
                                     <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
@@ -189,21 +159,20 @@ const Auth = () => {
                                 </h1>
                             </MotionDiv>
 
-                            {/* ── Lottie hero — HUGE ── */}
+                            {/* Lottie hero — hidden on small mobile, visible sm+ */}
                             <MotionDiv
-                                className={`relative flex justify-center items-center auth-lottie-wrap${prefersReducedMotion ? '' : ' auth-lottie-float'}`}
+                                className={`hidden sm:relative sm:flex justify-center items-center auth-lottie-wrap${prefersReducedMotion ? '' : ' auth-lottie-float'}`}
                                 variants={riseIn}
                             >
                                 <div className="auth-halo auth-halo-1" />
                                 <div className="auth-halo auth-halo-2" />
                                 <div className="auth-halo auth-halo-3" />
                                 <div className="auth-lottie-ring" />
-                                {/* Responsive Lottie container */}
                                 <MotionDiv
-                                    className="w-[200px] h-[200px] lg:w-[380px] lg:h-[380px] relative z-10"
+                                    className="w-[170px] h-[170px] sm:w-[200px] sm:h-[200px] lg:w-[380px] lg:h-[380px] relative z-10"
                                     initial={{ opacity: 0, scale: 0.76, rotate: -8 }}
-                                    animate={splashExiting ? { opacity: 1, scale: 1, rotate: 0 } : { opacity: 0, scale: 0.76, rotate: -8 }}
-                                    transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                    transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     <Player
                                         autoplay
@@ -262,7 +231,7 @@ const Auth = () => {
                                 </p>
                             </MotionDiv>
 
-                            {/* Gradient border card wrapper */}
+                            {/* Gradient border card */}
                             <MotionDiv
                                 className="w-full"
                                 style={{
@@ -288,7 +257,7 @@ const Auth = () => {
                                     }}
                                 >
                                     <div className="auth-card-sheen" />
-                                    {/* Heading */}
+
                                     <MotionDiv className="mb-5 sm:mb-6 relative z-10" variants={riseIn}>
                                         <h2 className={`text-xl sm:text-2xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                             Welcome back
@@ -302,15 +271,15 @@ const Auth = () => {
                                         <GoogleAuthButton isDark={isDark} />
                                     </MotionDiv>
 
-                                    {/* Divider — tablet+ */}
-                                    <MotionDiv className="hidden sm:flex items-center gap-3 my-5 relative z-10" variants={riseIn}>
+                                    {/* Divider */}
+                                    <MotionDiv className="flex items-center gap-3 my-5 relative z-10" variants={riseIn}>
                                         <div className={`flex-1 h-px ${isDark ? 'bg-white/10' : 'bg-gray-200'}`} />
                                         <span className={`text-xs ${isDark ? 'text-white/28' : 'text-gray-400'}`}>secure sign-in</span>
                                         <div className={`flex-1 h-px ${isDark ? 'bg-white/10' : 'bg-gray-200'}`} />
                                     </MotionDiv>
 
-                                    {/* Trust badges — tablet+ */}
-                                    <MotionDiv className="hidden sm:grid grid-cols-3 gap-2.5 relative z-10" variants={pageVariants}>
+                                    {/* Trust badges */}
+                                    <MotionDiv className="grid grid-cols-3 gap-2.5 relative z-10" variants={pageVariants}>
                                         {trustBadges.map(({ label, Icon }) => (
                                             <MotionDiv
                                                 key={label}
@@ -332,7 +301,10 @@ const Auth = () => {
                                     </MotionDiv>
 
                                     {/* Footer */}
-                                    <MotionP className={`relative z-10 text-center text-[11px] mt-4 sm:mt-5 leading-relaxed ${isDark ? 'text-white/22' : 'text-gray-400'}`} variants={riseIn}>
+                                    <MotionP
+                                        className={`relative z-10 text-center text-[11px] mt-4 sm:mt-5 leading-relaxed ${isDark ? 'text-white/22' : 'text-gray-400'}`}
+                                        variants={riseIn}
+                                    >
                                         By continuing, you agree to our Terms of Service<br />and Privacy Policy.
                                     </MotionP>
                                 </div>
@@ -349,21 +321,11 @@ const Auth = () => {
 
                     </MotionDiv>
                 </div>
-            </MotionDiv>
-
-            {/* ── Splash screen overlay ── */}
-            {!splashDone && (
-                <SplashScreen
-                    isDark={isDark}
-                    exiting={splashExiting}
-                    onTrigger={handleSplashTrigger}
-                />
-            )}
+            </div>
 
             <style>{`
                 html, body { overflow: hidden; height: 100%; }
 
-                /* Lottie glow halos */
                 .auth-lottie-wrap { padding: 4px 0; }
                 .auth-halo { position: absolute; border-radius: 50%; pointer-events: none; }
                 .auth-lottie-float { animation: lottieFloat 5.8s ease-in-out infinite; }
@@ -416,8 +378,8 @@ const Auth = () => {
                     animation: lottieGlow 4s ease-in-out infinite 1.8s;
                 }
 
-                /* Mobile halo sizes */
-                @media (max-width: 1023px) {
+                /* Tablet halo sizes (sm-lg) */
+                @media (min-width: 640px) and (max-width: 1023px) {
                     .auth-halo-1 { width: 280px; height: 280px; filter: blur(22px); }
                     .auth-halo-2 { width: 215px; height: 215px; filter: blur(14px); }
                     .auth-halo-3 { width: 135px; height: 135px; filter: blur(9px);  }
