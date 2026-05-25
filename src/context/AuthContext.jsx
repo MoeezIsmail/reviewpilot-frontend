@@ -39,6 +39,17 @@ export const AuthProvider = ({ children }) => {
         }));
     };
 
+    // Safe subscription updater — preserves aiRepliesUsed when backend doesn't return it
+    const updateSubscription = (freshSub) => {
+        setUser(prev => ({
+            ...prev,
+            subscription: {
+                aiRepliesUsed: prev.subscription?.aiRepliesUsed,
+                ...freshSub,
+            },
+        }));
+    };
+
     useEffect(() => {
         const fetchProfile = async () => {
             if (!token) {
@@ -64,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     return (
-        <AuthContext.Provider value={{ user, setUser, updateUser, updateAiUsage, loading, error, saveToken, signOut, clearAuth }}>
+        <AuthContext.Provider value={{ user, setUser, updateUser, updateAiUsage, updateSubscription, loading, error, saveToken, signOut, clearAuth }}>
             {children}
         </AuthContext.Provider>
     );
