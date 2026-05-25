@@ -91,10 +91,13 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                                 <span className="text-gray-500 dark:text-gray-400 text-sm mb-1.5">/mo</span>
                             </div>
                             <div className="flex flex-col gap-1 mt-1">
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 flex-wrap">
                                     <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${yearlyEquiv?.original}/mo</span>
                                     <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-0.5 rounded-full">
-                                        Save {yearlySavingsPct}%
+                                        {MONTHLY_DISCOUNT_PCT}% off
+                                    </span>
+                                    <span className="text-xs font-semibold text-orange-600 bg-orange-50 dark:bg-orange-900/40 dark:text-orange-400 px-2 py-0.5 rounded-full">
+                                        +3 months free
                                     </span>
                                 </div>
                                 <span className="text-xs text-gray-400 dark:text-gray-500">

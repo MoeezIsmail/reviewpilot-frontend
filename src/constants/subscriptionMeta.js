@@ -5,20 +5,20 @@ export const MONTHLY_DISCOUNT_PCT = 69;
 export const YEARLY_DISCOUNT_PCT = 70;
 
 export const PLAN_PRICING_DISCOUNT = {
-    starter: { monthly: 0,     yearly: 0,   lifetime: 0   },
-    growth:  { monthly: 8.99,  yearly: 171, lifetime: 200  },
-    pro:     { monthly: 18.29, yearly: 441, lifetime: 350  },
+    starter: { monthly: 0,     yearly: 0,      lifetime: 0   },
+    growth:  { monthly: 8.99,  yearly: 80.88,  lifetime: 200 },
+    pro:     { monthly: 18.29, yearly: 164.52, lifetime: 350 },
 };
 
 export const PLAN_PRICING_ORIGINAL = {
-    growth: { monthly: 29, yearly: 276, lifetime: 279 },
-    pro:    { monthly: 79, yearly: 564, lifetime: 499 },
+    growth: { monthly: 29, yearly: 348, lifetime: 279 },
+    pro:    { monthly: 79, yearly: 948, lifetime: 499 },
 };
 
-// Monthly-equivalent prices when billed yearly (total ÷ 12, rounded to 2 dp)
+// Monthly-equivalent prices when billed yearly (yearly_total ÷ 12)
 export const PLAN_PRICING_YEARLY_MONTHLY_EQUIV = {
-    growth: { discounted: 14.25, original: 23 },  // 171/12, 276/12
-    pro:    { discounted: 36.75, original: 47 },  // 441/12, 564/12
+    growth: { discounted: 6.74, original: 29 },
+    pro:    { discounted: 13.71, original: 79 },
 };
 
 export const PLAN_FEATURES = {
