@@ -1,33 +1,20 @@
 import { Sparkles, Zap, Crown } from "lucide-react";
 
+// Fallback only — real value comes from backend getPlans response
 export const LIFETIME_SPOTS_LEFT = 47;
-export const MONTHLY_DISCOUNT_PCT = 69;
-export const YEARLY_DISCOUNT_PCT = 70;
 
-export const PLAN_PRICING_DISCOUNT = {
-    starter: { monthly: 0,     yearly: 0,      lifetime: 0   },
-    growth:  { monthly: 8.99,  yearly: 80.88,  lifetime: 200 },
-    pro:     { monthly: 18.29, yearly: 164.52, lifetime: 350 },
-};
+// Plan & period ranks for upgrade/downgrade detection (mirrors backend combinedRank logic)
+export const PLAN_RANK   = { starter: 0, growth: 1, pro: 2 };
+export const PERIOD_RANK = { monthly: 0, yearly: 1, lifetime: 2 };
 
-export const PLAN_PRICING_ORIGINAL = {
-    growth: { monthly: 29, yearly: 348, lifetime: 279 },
-    pro:    { monthly: 79, yearly: 948, lifetime: 499 },
-};
-
-// Monthly-equivalent prices when billed yearly (yearly_total ÷ 12)
-export const PLAN_PRICING_YEARLY_MONTHLY_EQUIV = {
-    growth: { discounted: 6.74, original: 29 },
-    pro:    { discounted: 13.71, original: 79 },
-};
-
+// Display labels for plan feature lists (UI only — capability limits live on backend)
 export const PLAN_FEATURES = {
     starter: [
         { label: "Unlimited review syncing", included: true  },
         { label: "10 AI replies / month",    included: true  },
         { label: "Bulk AI Generate",         included: false },
         { label: "Bulk Posting",             included: false },
-        { label: "Analytics",               included: false },
+        { label: "Analytics",                included: false },
     ],
     growth: [
         { label: "Unlimited review syncing", included: true },

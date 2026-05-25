@@ -1,24 +1,11 @@
 import { useAuth } from "../context/AuthContext.jsx";
 
+// Fallback limits — kept in sync with backend PLANS.features
+// Used only when user.subscription.features is not yet populated (e.g. before getCurrentPlan fires)
 const PLAN_LIMITS = {
-    starter: {
-        aiRepliesPerMonth: 10,
-        bulkGenerate: false,
-        bulkPosting: false,
-        analytics: false,
-    },
-    growth: {
-        aiRepliesPerMonth: 200,
-        bulkGenerate: true,
-        bulkPosting: true,
-        analytics: true,
-    },
-    pro: {
-        aiRepliesPerMonth: -1,
-        bulkGenerate: true,
-        bulkPosting: true,
-        analytics: true,
-    },
+    starter: { aiRepliesPerMonth: 10,  bulkGenerate: false, bulkPosting: false, analytics: false },
+    growth:  { aiRepliesPerMonth: 200, bulkGenerate: true,  bulkPosting: true,  analytics: true  },
+    pro:     { aiRepliesPerMonth: -1,  bulkGenerate: true,  bulkPosting: true,  analytics: true  },
 };
 
 const isSubscriptionExpired = (subscription) => {
@@ -38,7 +25,12 @@ const usePlanFeatures = () => {
     const isExpired = isSubscriptionExpired(subscription);
     const isDowngraded = status === "past_due" || status === "expired" || status === "cancelled" || isExpired;
     const effectivePlan = isDowngraded ? "starter" : plan;
-    const limits = PLAN_LIMITS[effectivePlan] || PLAN_LIMITS.starter;
+
+    // Use features from backend if available (set after getCurrentPlan), else fall back to local constants
+    const backendFeatures = isDowngraded ? null : subscription?.features;
+    const limits = backendFeatures
+        ? { aiRepliesPerMonth: backendFeatures.aiRepliesPerMonth, bulkGenerate: backendFeatures.bulkGenerate, bulkPosting: backendFeatures.bulkPosting, analytics: backendFeatures.analytics }
+        : (PLAN_LIMITS[effectivePlan] || PLAN_LIMITS.starter);
 
     const canUseAiReply = limits.aiRepliesPerMonth === -1 || aiRepliesUsed < limits.aiRepliesPerMonth;
 

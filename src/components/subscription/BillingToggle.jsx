@@ -1,5 +1,4 @@
 import { Flame } from "lucide-react";
-import { LIFETIME_SPOTS_LEFT } from "../../constants/subscriptionMeta.js";
 
 const buildPeriods = (lifetimeSpotsLeft) => [
     { value: "monthly",  label: "Monthly" },

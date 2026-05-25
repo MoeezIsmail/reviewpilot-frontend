@@ -1,14 +1,14 @@
 import { Loader2, Flame } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
-import { PLAN_META, PLAN_FEATURES, PLAN_PRICING_DISCOUNT, PLAN_PRICING_ORIGINAL, PLAN_PRICING_YEARLY_MONTHLY_EQUIV, LIFETIME_SPOTS_LEFT, MONTHLY_DISCOUNT_PCT } from "../../constants/subscriptionMeta.js";
-
-const PLAN_RANK   = { starter: 0, growth: 1, pro: 2 };
-const PERIOD_RANK = { monthly: 0, yearly: 1, lifetime: 2 };
+import { PLAN_META, PLAN_FEATURES, PLAN_RANK, PERIOD_RANK, LIFETIME_SPOTS_LEFT } from "../../constants/subscriptionMeta.js";
 
 const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
     const isStarter = planKey === "starter";
     const isActive = currentPlan === planKey && (isStarter || subscription?.billingPeriod === billingPeriod);
     const meta = PLAN_META[planKey];
+    const Icon = meta.icon;
+    const isLoadingThis = loadingPlan === planKey;
+    const features = PLAN_FEATURES[planKey] ?? [];
 
     const hasActivePaid = currentPlan && currentPlan !== "starter" && subscription?.status === "active";
     const isDowngrade = !isActive && !isStarter && hasActivePaid && (() => {
@@ -16,17 +16,15 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
         const nr = (PLAN_RANK[planKey] ?? 0) * 10 + (PERIOD_RANK[billingPeriod] ?? 0);
         return nr < cr;
     })();
-    const Icon = meta.icon;
-    const isLoadingThis = loadingPlan === planKey;
-    const features = PLAN_FEATURES[planKey] ?? [];
 
-    const price = PLAN_PRICING_DISCOUNT[planKey]?.[billingPeriod] ?? plan.price;
-    const original = PLAN_PRICING_ORIGINAL[planKey];
-    const yearlyEquiv = PLAN_PRICING_YEARLY_MONTHLY_EQUIV[planKey];
-    const yearlySavingsPct = yearlyEquiv
-        ? Math.round((1 - yearlyEquiv.discounted / yearlyEquiv.original) * 100)
-        : 0;
-    const lifetimeSavings = original ? original.lifetime - PLAN_PRICING_DISCOUNT[planKey].lifetime : 0;
+    // All pricing comes from backend plan.pricing — no hard-coded values
+    const p        = plan.pricing?.[billingPeriod] ?? {};
+    const amount   = p.amount   ?? 0;
+    const original = p.original ?? 0;
+    const discount = p.discountPct ?? 0;
+
+    const lifetimeP       = plan.pricing?.lifetime ?? {};
+    const lifetimeSavings = (lifetimeP.original ?? 0) - (lifetimeP.amount ?? 0);
 
     return (
         <div className={`
@@ -81,12 +79,12 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                         <div>
                             <div className="flex items-end gap-1">
                                 <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
-                                    ${price}
+                                    ${amount}
                                 </span>
                                 <span className="text-gray-500 dark:text-gray-400 text-sm mb-1">one-time</span>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original?.lifetime}</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original}</span>
                                 <span className="text-xs font-semibold text-orange-600 bg-orange-50 dark:bg-orange-900/40 dark:text-orange-400 px-2 py-0.5 rounded-full">
                                     Save ${lifetimeSavings}
                                 </span>
@@ -96,22 +94,24 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                         <div>
                             <div className="flex items-end gap-1">
                                 <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
-                                    ${yearlyEquiv?.discounted ?? price}
+                                    ${p.monthlyEquiv ?? amount}
                                 </span>
                                 <span className="text-gray-500 dark:text-gray-400 text-sm mb-1.5">/mo</span>
                             </div>
                             <div className="flex flex-col gap-1 mt-1">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${yearlyEquiv?.original}/mo</span>
-                                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-0.5 rounded-full">
-                                        {MONTHLY_DISCOUNT_PCT}% off
-                                    </span>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${p.originalMonthly ?? original}/mo</span>
+                                    {discount > 0 && (
+                                        <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 dark:text-emerald-400 px-2 py-0.5 rounded-full">
+                                            {discount}% off
+                                        </span>
+                                    )}
                                     <span className="text-xs font-semibold text-orange-600 bg-orange-50 dark:bg-orange-900/40 dark:text-orange-400 px-2 py-0.5 rounded-full">
                                         +3 months free
                                     </span>
                                 </div>
                                 <span className="text-xs text-gray-400 dark:text-gray-500">
-                                    Billed ${price}/year
+                                    Billed ${amount}/year
                                 </span>
                             </div>
                         </div>
@@ -119,15 +119,17 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                         <div>
                             <div className="flex items-end gap-1">
                                 <span className={`text-4xl font-extrabold bg-gradient-to-r ${meta.gradient} bg-clip-text text-transparent`}>
-                                    ${price}
+                                    ${amount}
                                 </span>
                                 <span className="text-gray-500 dark:text-gray-400 text-sm mb-1">/ month</span>
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original?.monthly}/mo</span>
-                                <span className="text-xs font-semibold text-rose-600 bg-rose-50 dark:bg-rose-900/40 dark:text-rose-400 px-2 py-0.5 rounded-full">
-                                    {MONTHLY_DISCOUNT_PCT}% off · Limited
-                                </span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original}/mo</span>
+                                {discount > 0 && (
+                                    <span className="text-xs font-semibold text-rose-600 bg-rose-50 dark:bg-rose-900/40 dark:text-rose-400 px-2 py-0.5 rounded-full">
+                                        {discount}% off · Limited
+                                    </span>
+                                )}
                             </div>
                         </div>
                     )}
