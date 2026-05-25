@@ -2,10 +2,20 @@ import { Loader2, Flame } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
 import { PLAN_META, PLAN_FEATURES, PLAN_PRICING_DISCOUNT, PLAN_PRICING_ORIGINAL, PLAN_PRICING_YEARLY_MONTHLY_EQUIV, LIFETIME_SPOTS_LEFT, MONTHLY_DISCOUNT_PCT } from "../../constants/subscriptionMeta.js";
 
+const PLAN_RANK   = { starter: 0, growth: 1, pro: 2 };
+const PERIOD_RANK = { monthly: 0, yearly: 1, lifetime: 2 };
+
 const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
     const isStarter = planKey === "starter";
     const isActive = currentPlan === planKey && (isStarter || subscription?.billingPeriod === billingPeriod);
     const meta = PLAN_META[planKey];
+
+    const hasActivePaid = currentPlan && currentPlan !== "starter" && subscription?.status === "active";
+    const isDowngrade = !isActive && !isStarter && hasActivePaid && (() => {
+        const cr = (PLAN_RANK[currentPlan] ?? 0) * 10 + (PERIOD_RANK[subscription?.billingPeriod] ?? 0);
+        const nr = (PLAN_RANK[planKey] ?? 0) * 10 + (PERIOD_RANK[billingPeriod] ?? 0);
+        return nr < cr;
+    })();
     const Icon = meta.icon;
     const isLoadingThis = loadingPlan === planKey;
     const features = PLAN_FEATURES[planKey] ?? [];
@@ -150,6 +160,13 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                             Cancel Plan
                         </button>
                     )
+                ) : isDowngrade ? (
+                    <button
+                        onClick={onCancel}
+                        className="w-full py-3 rounded-2xl text-sm font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-950/60 transition-colors flex items-center justify-center gap-2"
+                    >
+                        Cancel plan to switch
+                    </button>
                 ) : isStarter ? (
                     <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 select-none">
                         Free Forever

@@ -68,7 +68,11 @@ const useSubscription = () => {
             const res = await createCheckoutSession({ plan, gateway, billingPeriod });
             if (res.data.checkoutUrl) window.location.href = res.data.checkoutUrl;
         } catch (err) {
-            showToast(err?.response?.data?.message || "Checkout failed.", "error");
+            const code = err?.response?.data?.code;
+            const msg = code === 'DOWNGRADE_NOT_ALLOWED'
+                ? "Cancel your current plan first before switching to a lower plan."
+                : err?.response?.data?.message || "Checkout failed.";
+            showToast(msg, "error");
             setLoadingPlan(null);
         }
     };
