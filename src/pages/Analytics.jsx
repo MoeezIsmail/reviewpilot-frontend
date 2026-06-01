@@ -5,6 +5,9 @@ import { useReviews } from "../context/ReviewsContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../components/toast/ToastProvider.jsx";
 import AnalyticsCharts from "../components/analytics/AnalyticsCharts.jsx";
+import CacheStatusBar from "../components/common/CacheStatusBar.jsx";
+import PartialDataBanner from "../components/reviews/PartialDataBanner.jsx";
+import AnalyticsSkeleton from "../components/skeletons/AnalyticsSkeleton.jsx";
 
 const AnalyticsGate = () => {
     const navigate = useNavigate();
@@ -39,20 +42,34 @@ const AnalyticsGate = () => {
 };
 
 const Analytics = () => {
-    const { isAnyPlatformConnected, loading } = useReviews();
+    const {
+        isAnyPlatformConnected,
+        analyticsData,
+        isAnalyticsLoading,
+        loadAnalyticsData,
+        refreshAnalyticsCache,
+    } = useReviews();
+
     const { user, loading: authLoading } = useAuth();
-    const navigate = useNavigate();
+    const navigate    = useNavigate();
     const { addToast } = useToast();
 
     const isFreePlan = !user?.subscription?.plan || user?.subscription?.plan === "starter";
 
+    // Trigger analytics load if not already loaded — shared state with Dashboard
     useEffect(() => {
-        if (authLoading || loading) return;
+        if (user && !analyticsData.isLoaded && !isAnalyticsLoading) {
+            loadAnalyticsData();
+        }
+    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (authLoading || isAnalyticsLoading) return;
         if (isAnyPlatformConnected === false) {
             addToast("Please connect a platform first.", "error");
             navigate("/settings");
         }
-    }, [isAnyPlatformConnected, authLoading, loading]);
+    }, [isAnyPlatformConnected, authLoading, isAnalyticsLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="space-y-6">
@@ -72,7 +89,28 @@ const Analytics = () => {
                 )}
             </div>
 
-            {isFreePlan ? <AnalyticsGate /> : <AnalyticsCharts />}
+            {/* Cache sync status — only for paid users */}
+            {!isFreePlan && (
+                <CacheStatusBar analyticsData={analyticsData} onRefresh={refreshAnalyticsCache} />
+            )}
+
+            {/* EC10: Partial data warning — shown prominently before charts */}
+            {!isFreePlan && analyticsData.isPartialCache && !analyticsData.isFetching && (
+                <PartialDataBanner
+                    fetchedPages={analyticsData.fetchedPages}
+                    totalPages={analyticsData.totalPagesEstimate}
+                    fetchError={analyticsData.fetchError}
+                    onRetry={refreshAnalyticsCache}
+                />
+            )}
+
+            {isFreePlan ? (
+                <AnalyticsGate />
+            ) : isAnalyticsLoading && analyticsData.reviews.length === 0 ? (
+                <AnalyticsSkeleton />
+            ) : (
+                <AnalyticsCharts />
+            )}
         </div>
     );
 };

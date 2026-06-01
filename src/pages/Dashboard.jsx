@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Zap, ArrowRight } from "lucide-react";
 import DashboardCards from "../components/dashboard/DashboardCards.jsx";
 import RecentReviews from "../components/dashboard/RecentReviews.jsx";
 import ReplyPerformance from "../components/dashboard/ReplyPerformance.jsx";
 import ReviewsSummary from "../components/dashboard/ReviewsSummary.jsx";
+import CacheStatusBar from "../components/common/CacheStatusBar.jsx";
+import PartialDataBanner from "../components/reviews/PartialDataBanner.jsx";
 import { useReviews } from "../context/ReviewsContext.jsx";
 import calculateStats from "../utils/reviewAnalytics.js";
 import { useNavigate } from "react-router-dom";
@@ -20,40 +22,40 @@ const getGreeting = () => {
 };
 
 const Dashboard = () => {
-    const { reviewsData, allReviews, isAnyPlatformConnected, loading, getReplyPerformanceStats } = useReviews();
+    const {
+        analyticsData,
+        isAnalyticsLoading,
+        loadAnalyticsData,
+        refreshAnalyticsCache,
+        isAnyPlatformConnected,
+        getReplyPerformanceStats,
+    } = useReviews();
+
     const { user, loading: authLoading } = useAuth();
-    const navigate = useNavigate();
+    const navigate    = useNavigate();
     const { addToast } = useToast();
-    const [stats, setStats] = useState({
-        totalReviews: 0,
-        averageRating: 0,
-        positiveReviews: 0,
-        averageReviews: 0,
-        negativeReviews: 0,
-    });
 
+    // Trigger analytics load on first mount — no-op if already loaded or loading
     useEffect(() => {
-        if (reviewsData?.reviews?.length) {
-            setStats(calculateStats({
-                reviews: allReviews,
-                averageRating: reviewsData.averageRating,
-                totalReviewCount: reviewsData.totalReviewCount,
-            }));
+        if (user && !analyticsData.isLoaded && !isAnalyticsLoading) {
+            loadAnalyticsData();
         }
-    }, [allReviews, reviewsData.averageRating, reviewsData.totalReviewCount]);
+    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (authLoading || loading) return;
+        if (authLoading || isAnalyticsLoading) return;
         if (isAnyPlatformConnected === false) {
             addToast("Please connect a platform first.", "error");
             navigate("/settings");
         }
-    }, [isAnyPlatformConnected, authLoading, loading]);
+    }, [isAnyPlatformConnected, authLoading, isAnalyticsLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    if (loading && !allReviews.length) return <DashboardSkeleton />;
+    // Show full-page skeleton while initial load has no data yet
+    if (isAnalyticsLoading && analyticsData.reviews.length === 0) return <DashboardSkeleton />;
 
-    const firstName = user?.name?.split(" ")[0] || "there";
-    const perfStats = getReplyPerformanceStats();
+    const stats       = calculateStats(analyticsData);
+    const firstName   = user?.name?.split(" ")[0] || "there";
+    const perfStats   = getReplyPerformanceStats();
     const actionCount = (perfStats.pendingCount || 0) + (perfStats.readyCount || 0);
 
     return (
@@ -80,16 +82,29 @@ const Dashboard = () => {
                 )}
             </div>
 
+            {/* Cache sync status */}
+            <CacheStatusBar analyticsData={analyticsData} onRefresh={refreshAnalyticsCache} />
+
+            {/* EC10: Partial data warning — shown when fetch was interrupted */}
+            {analyticsData.isPartialCache && !analyticsData.isFetching && (
+                <PartialDataBanner
+                    fetchedPages={analyticsData.fetchedPages}
+                    totalPages={analyticsData.totalPagesEstimate}
+                    fetchError={analyticsData.fetchError}
+                    onRetry={refreshAnalyticsCache}
+                />
+            )}
+
             {/* Stat cards */}
             <DashboardCards stats={stats} />
 
             {/* AI Summary Hero */}
-            <ReviewsSummary reviews={allReviews} stats={stats} />
+            <ReviewsSummary reviews={analyticsData.reviews} stats={stats} />
 
             {/* Bottom grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">
-                    <RecentReviews reviews={allReviews} />
+                    <RecentReviews reviews={analyticsData.reviews} />
                 </div>
                 <ReplyPerformance />
             </div>

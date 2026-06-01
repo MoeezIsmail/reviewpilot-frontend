@@ -10,23 +10,22 @@ import AnalyticsSummaryCards from "../analytics/AnalyticsSummaryCards.jsx";
 import ReviewTrendChart from "../analytics/ReviewTrendChart.jsx";
 import RatingDistributionChart from "../analytics/RatingDistributionChart.jsx";
 import SentimentChart from "../analytics/SentimentChart.jsx";
-import AnalyticsSkeleton from "../skeletons/AnalyticsSkeleton.jsx";
 import { Database } from "lucide-react";
 
 const AnalyticsCharts = () => {
-    const { reviewsData, allReviews, replyStatus, loading } = useReviews();
+    const { analyticsData, replyStatus } = useReviews();
+    const { reviews, totalReviewCount } = analyticsData;
 
-    const monthlyData  = useMemo(() => groupReviewsByMonth(allReviews),            [allReviews]);
-    const ratingDist   = useMemo(() => getRatingDistribution(allReviews),           [allReviews]);
-    const responseRate = useMemo(() => getResponseRate(allReviews, replyStatus),    [allReviews, replyStatus]);
-    const sentiment    = useMemo(() => getSentimentBreakdown(allReviews),           [allReviews]);
+    // All heavy analytics computed here so sub-components receive plain data
+    const monthlyData  = useMemo(() => groupReviewsByMonth(reviews),                    [reviews]);
+    const ratingDist   = useMemo(() => getRatingDistribution(reviews),                  [reviews]);
+    const responseRate = useMemo(() => getResponseRate(reviews, replyStatus),           [reviews, replyStatus]);
+    const sentiment    = useMemo(() => getSentimentBreakdown(reviews),                  [reviews]);
 
-    if (loading && !allReviews.length) return <AnalyticsSkeleton />;
-
-    if (!reviewsData?.reviews?.length) {
+    if (!reviews.length) {
         return (
             <div className="flex items-center justify-center h-64 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
-                <p className="text-gray-500 dark:text-gray-400 text-sm">No reviews data available.</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">No reviews data available yet.</p>
             </div>
         );
     }
@@ -38,9 +37,9 @@ const AnalyticsCharts = () => {
                 <div className="flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-full px-3 py-1">
                     <Database size={11} className="text-indigo-500 dark:text-indigo-400" />
                     <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400">
-                        {allReviews.length} reviews analyzed
-                        {reviewsData.totalReviewCount > allReviews.length
-                            ? ` of ${reviewsData.totalReviewCount} total`
+                        {reviews.length.toLocaleString()} reviews analyzed
+                        {totalReviewCount > reviews.length
+                            ? ` of ${totalReviewCount.toLocaleString()} total`
                             : " · all loaded"
                         }
                     </span>
@@ -49,7 +48,7 @@ const AnalyticsCharts = () => {
 
             {/* Row 1: Summary Cards */}
             <AnalyticsSummaryCards
-                allReviews={allReviews}
+                allReviews={reviews}
                 responseRate={responseRate}
                 sentiment={sentiment}
                 monthlyData={monthlyData}
@@ -59,7 +58,7 @@ const AnalyticsCharts = () => {
             {/* Row 2: Trend — full width */}
             <ReviewTrendChart data={monthlyData} />
 
-            {/* Row 3: Rating Distribution + Sentiment side by side */}
+            {/* Row 3: Rating Distribution + Sentiment */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <div className="lg:col-span-2">
                     <RatingDistributionChart data={ratingDist} />
