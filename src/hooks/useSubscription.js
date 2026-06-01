@@ -22,13 +22,12 @@ const useSubscription = () => {
 
     useEffect(() => {
         const paymentStatus = searchParams.get("payment");
-        const sessionId = searchParams.get("session_id");
+        const sessionId     = searchParams.get("session_id");
 
         const load = async () => {
             setPageLoading(true);
             try {
-                // Handle payment callback FIRST (sequential), so fetchCurrentPlan
-                // runs after verify — backend is guaranteed updated by then
+                // Verify payment session FIRST so fetchCurrentPlan sees the updated state
                 if (paymentStatus === "success" && sessionId) {
                     try {
                         await verifyCheckoutSession(sessionId);
@@ -60,7 +59,7 @@ const useSubscription = () => {
         };
 
         load();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleUpgrade = async (plan) => {
         setLoadingPlan(plan);
@@ -69,9 +68,15 @@ const useSubscription = () => {
             if (res.data.checkoutUrl) window.location.href = res.data.checkoutUrl;
         } catch (err) {
             const code = err?.response?.data?.code;
-            const msg = code === 'DOWNGRADE_NOT_ALLOWED'
-                ? "Cancel your current plan first before switching to a lower plan."
-                : err?.response?.data?.message || "Checkout failed.";
+            const serverMsg = err?.response?.data?.message;
+            let msg = serverMsg || "Checkout failed.";
+            if (code === "DOWNGRADE_NOT_ALLOWED") {
+                msg = "Cancel your current plan first before switching to a lower plan.";
+            } else if (code === "ALREADY_ACTIVE") {
+                msg = "This plan is already active on your account.";
+            } else if (code === "LIFETIME_CANNOT_CHANGE") {
+                msg = "Your lifetime plan cannot be changed.";
+            }
             showToast(msg, "error");
             setLoadingPlan(null);
         }
@@ -92,8 +97,11 @@ const useSubscription = () => {
     const handleCancel = async () => {
         setCancelLoading(true);
         try {
-            await cancelPlan();
-            showToast("Plan cancelled. Downgraded to Starter.", "success");
+            const cancelRes = await cancelPlan();
+            const msg = cancelRes?.data?.message || "Plan cancelled. It will remain active until the end of your billing period.";
+            showToast(msg, "success");
+
+            // Refresh so UI shows 'expiring' status and correct expiry date
             const res = await fetchCurrentPlan();
             const freshSub = res.data.subscription;
             setCurrentPlan(freshSub.plan);
@@ -102,10 +110,10 @@ const useSubscription = () => {
             updateSubscription(freshSub);
         } catch (err) {
             const serverMsg = err?.response?.data?.message;
-            if (serverMsg === "Lifetime plans cannot be cancelled") {
+            if (serverMsg === "Lifetime plans cannot be cancelled.") {
                 showToast(serverMsg, "error");
             } else {
-                showToast("Failed to cancel plan.", "error");
+                showToast(serverMsg || "Failed to cancel plan.", "error");
             }
         } finally {
             setCancelLoading(false);
@@ -117,6 +125,7 @@ const useSubscription = () => {
         plans,
         currentPlan,
         subscription,
+        previousPlan: subscription?.previousPlan || null,
         hasUsedDiscountedOffer,
         gateway,
         setGateway,

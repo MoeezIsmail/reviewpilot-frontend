@@ -1,19 +1,31 @@
-import { Loader2, Flame } from "lucide-react";
+import { Loader2, Flame, CalendarX } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
 import { PLAN_META, PLAN_FEATURES, PLAN_RANK, PERIOD_RANK, LIFETIME_SPOTS_LEFT } from "../../constants/subscriptionMeta.js";
 
-const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
-    const isStarter = planKey === "starter";
-    const isActive = currentPlan === planKey && (isStarter || subscription?.billingPeriod === billingPeriod);
-    const meta = PLAN_META[planKey];
-    const Icon = meta.icon;
-    const isLoadingThis = loadingPlan === planKey;
-    const features = PLAN_FEATURES[planKey] ?? [];
+const fmt = (date) =>
+    new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-    const hasActivePaid = currentPlan && currentPlan !== "starter" && subscription?.status === "active";
+const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
+    const isStarter      = planKey === "starter";
+    const meta           = PLAN_META[planKey];
+    const Icon           = meta.icon;
+    const isLoadingThis  = loadingPlan === planKey;
+    const features       = PLAN_FEATURES[planKey] ?? [];
+
+    const subStatus = subscription?.status;
+
+    // A plan is "active" (matching this card) if plan + period match AND status is active or expiring
+    const statusCountsAsActive = subStatus === "active" || subStatus === "expiring";
+    const isActive = currentPlan === planKey &&
+        (isStarter || (subscription?.billingPeriod === billingPeriod && statusCountsAsActive));
+
+    const isExpiring = isActive && subStatus === "expiring";
+
+    // Downgrade detection — only block when the current plan is fully active (not expiring)
+    const hasActivePaid = currentPlan && currentPlan !== "starter" && subStatus === "active";
     const isDowngrade = !isActive && !isStarter && hasActivePaid && (() => {
         const cr = (PLAN_RANK[currentPlan] ?? 0) * 10 + (PERIOD_RANK[subscription?.billingPeriod] ?? 0);
-        const nr = (PLAN_RANK[planKey] ?? 0) * 10 + (PERIOD_RANK[billingPeriod] ?? 0);
+        const nr = (PLAN_RANK[planKey]    ?? 0) * 10 + (PERIOD_RANK[billingPeriod]                  ?? 0);
         return nr < cr;
     })();
 
@@ -48,8 +60,12 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                         {meta.badge}
                     </span>
                     {isActive && (
-                        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
-                            ✓ Active
+                        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                            isExpiring
+                                ? "bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400"
+                                : "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400"
+                        }`}>
+                            {isExpiring ? "Cancelling" : "✓ Active"}
                         </span>
                     )}
                 </div>
@@ -85,9 +101,11 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                             </div>
                             <div className="flex items-center gap-2 mt-1">
                                 <span className="text-xs text-gray-500 dark:text-gray-400 line-through">${original}</span>
-                                <span className="text-xs font-semibold text-orange-600 bg-orange-50 dark:bg-orange-900/40 dark:text-orange-400 px-2 py-0.5 rounded-full">
-                                    Save ${lifetimeSavings}
-                                </span>
+                                {lifetimeSavings > 0 && (
+                                    <span className="text-xs font-semibold text-orange-600 bg-orange-50 dark:bg-orange-900/40 dark:text-orange-400 px-2 py-0.5 rounded-full">
+                                        Save ${lifetimeSavings}
+                                    </span>
+                                )}
                             </div>
                         </div>
                     ) : billingPeriod === "yearly" ? (
@@ -153,6 +171,12 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                     isStarter ? (
                         <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 select-none">
                             Your Current Plan
+                        </div>
+                    ) : isExpiring ? (
+                        // Plan is cancelling — show expiry date, no further action
+                        <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center gap-2 select-none">
+                            <CalendarX size={14} />
+                            Expires {subscription?.expiresAt ? fmt(subscription.expiresAt) : "soon"}
                         </div>
                     ) : (
                         <button

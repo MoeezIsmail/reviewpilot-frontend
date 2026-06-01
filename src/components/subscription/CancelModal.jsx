@@ -13,7 +13,7 @@ const CancelModal = ({ onConfirm, onClose, loading }) => (
                 </div>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                Your plan will be downgraded to <strong className="text-gray-700 dark:text-gray-200">Starter (Free)</strong> immediately and paid features will be disabled.
+                Your plan will remain <strong className="text-gray-700 dark:text-gray-200">fully active until the end of your current billing period</strong>. No further charges will be made, and you will not be able to repurchase at the promotional price after cancellation.
             </p>
             <div className="flex gap-3">
                 <button
