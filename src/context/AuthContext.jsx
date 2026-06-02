@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { getProfile } from "../api/authApi.js";
 import { authApi } from "../api/axios.js";
 
@@ -44,29 +44,29 @@ export const AuthProvider = ({ children }) => {
         }));
     };
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const res = await getProfile();
-                setUser(res.data.message);
-            } catch (err) {
-                if (err.response?.status === 401) {
-                    setUser(null);
-                } else {
-                    setError("Failed to fetch profile, please try again.");
-                    setUser(null);
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
+    const refreshUser = useCallback(async () => {
         setLoading(true);
-        fetchProfile();
+        try {
+            const res = await getProfile();
+            setUser(res.data.message);
+        } catch (err) {
+            if (err.response?.status === 401) {
+                setUser(null);
+            } else {
+                setError("Failed to fetch profile, please try again.");
+                setUser(null);
+            }
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        refreshUser();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, setUser, updateUser, updateAiUsage, updateSubscription, loading, error, signOut, clearAuth }}>
+        <AuthContext.Provider value={{ user, setUser, updateUser, updateAiUsage, updateSubscription, loading, error, signOut, clearAuth, refreshUser }}>
             {children}
         </AuthContext.Provider>
     );

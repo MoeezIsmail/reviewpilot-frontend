@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useToast } from "../components/toast/ToastProvider.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import { authApi } from "../api/axios.js";
 
 const AuthSuccess = () => {
     const { addToast } = useToast();
+    const { refreshUser } = useAuth();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const hasRun = useRef(false);
@@ -22,8 +24,10 @@ const AuthSuccess = () => {
         }
 
         authApi.post('/exchange-token', { code })
-            .then(({ data }) => {
+            .then(async ({ data }) => {
                 localStorage.setItem("isGoogleUser", "true");
+                // Cookie is now set — re-fetch profile so AuthContext has the user
+                await refreshUser();
 
                 if (data.isNewUser) {
                     addToast("Welcome to ReviewPilot!", 'success');
