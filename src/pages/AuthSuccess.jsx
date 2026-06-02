@@ -26,6 +26,7 @@ const AuthSuccess = () => {
         authApi.post('/exchange-token', { code })
             .then(async ({ data }) => {
                 localStorage.setItem("isGoogleUser", "true");
+                localStorage.setItem("rp_session", "1");
                 // Cookie is now set — re-fetch profile so AuthContext has the user
                 await refreshUser();
 

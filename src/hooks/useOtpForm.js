@@ -57,6 +57,7 @@ const useOtpForm = (addToast) => {
         try {
             const res = await verifyOTPRequest(email, otpValue);
             localStorage.setItem("isGoogleUser", "false");
+            localStorage.setItem("rp_session", "1");
             addToast("Verified successfully!", "success");
 
             if (res.data.isNewUser || !res.data.isAnyPlatformConnected) {
