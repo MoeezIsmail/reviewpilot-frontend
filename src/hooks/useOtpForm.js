@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendOTPRequest, verifyOTPRequest } from "../api/otpApi.js";
-import { useAuth } from "../context/AuthContext.jsx";
 
 const useOtpForm = (addToast) => {
     const navigate = useNavigate();
-    const { saveToken } = useAuth();
 
     const [step, setStep] = useState("auth");   // "auth" | "otp"
     const [email, setEmail] = useState("");
@@ -58,7 +56,6 @@ const useOtpForm = (addToast) => {
         setLoading(true);
         try {
             const res = await verifyOTPRequest(email, otpValue);
-            saveToken(res.data.token);
             localStorage.setItem("isGoogleUser", "false");
             addToast("Verified successfully!", "success");
 

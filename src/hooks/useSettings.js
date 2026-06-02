@@ -3,7 +3,7 @@ import { useToast } from "../components/toast/ToastProvider.jsx";
 import {disconnectPlatform, getConnectionStatus} from "../api/settingsApi.js";
 import { updateBusinessInfo } from "../api/authApi.js";
 import { BACKEND_URL } from "../constants/urls.js";
-import axios from "axios";
+import { authProtectedApi } from "../api/axios.js";
 import {useAuth} from "../context/AuthContext.jsx";
 
 const useSettings = () => {
@@ -62,15 +62,7 @@ const useSettings = () => {
 
     const handleConnectGoogle = async () => {
         try {
-            const token = localStorage.getItem("token");
-            await axios.post(
-                `${BACKEND_URL}/api/auth/google/init`,
-                {from: 'settings'},
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                    withCredentials: true,
-                }
-            );
+            await authProtectedApi.post('/google/init', { from: 'settings' });
             window.location.href = `${BACKEND_URL}/api/auth/google`;
         } catch (err) {
             addToast("Failed to connect Google. Try again.", "error");

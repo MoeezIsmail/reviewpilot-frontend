@@ -1,13 +1,11 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.jsx";
 import { useToast } from "../components/toast/ToastProvider.jsx";
 import { authApi } from "../api/axios.js";
 
 const AuthSuccess = () => {
     const { addToast } = useToast();
     const [searchParams] = useSearchParams();
-    const { saveToken } = useAuth();
     const navigate = useNavigate();
     const hasRun = useRef(false);
 
@@ -25,7 +23,6 @@ const AuthSuccess = () => {
 
         authApi.post('/exchange-token', { code })
             .then(({ data }) => {
-                saveToken(data.token);
                 localStorage.setItem("isGoogleUser", "true");
 
                 if (data.isNewUser) {

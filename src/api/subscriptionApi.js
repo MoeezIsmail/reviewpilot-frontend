@@ -4,19 +4,13 @@ import { BACKEND_URL } from "../constants/urls.js";
 const subscriptionApi = axios.create({
     baseURL: `${BACKEND_URL}/api/subscription`,
     headers: { "Content-Type": "application/json" },
-});
-
-subscriptionApi.interceptors.request.use(config => {
-    const token = localStorage.getItem("token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
+    withCredentials: true,
 });
 
 subscriptionApi.interceptors.response.use(
     r => r,
     error => {
         if (error.response?.status === 401) {
-            localStorage.removeItem("token");
             localStorage.removeItem("isGoogleUser");
             window.location.href = "/auth";
         }
