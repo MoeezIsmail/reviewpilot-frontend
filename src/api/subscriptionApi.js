@@ -25,3 +25,4 @@ export const createPortalSession = () => subscriptionApi.post('/portal');
 export const cancelPlan = () => subscriptionApi.post('/cancel');
 export const upgradePlan = (plan) => subscriptionApi.post('/upgrade', { plan });
 export const verifyCheckoutSession = (sessionId) => subscriptionApi.post('/verify-session', { sessionId });
+export const reactivatePlan = () => subscriptionApi.post('/reactivate');

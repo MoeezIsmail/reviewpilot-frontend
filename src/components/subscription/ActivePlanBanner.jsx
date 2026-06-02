@@ -35,7 +35,10 @@ const ActivePlanBanner = ({ plans, currentPlan, subscription, portalLoading, onM
     const expired     = isExpiredDate(subscription) || subscription?.status === "expired";
     const isExpiring  = subscription?.status === "expiring";
     const isLifetime  = subscription?.billingPeriod === "lifetime";
-    const hasActivePaid = currentPlan !== "starter" && (subscription?.status === "active" || isExpiring) && !expired;
+    // past_due users must also be able to reach the billing portal to update their payment method
+    const hasActivePaid = currentPlan !== "starter" &&
+        (subscription?.status === "active" || isExpiring || subscription?.status === "past_due") &&
+        !expired;
 
     const previousPlan = subscription?.previousPlan;
     const hasPrevPlan  = !!previousPlan?.expiresAt && new Date(previousPlan.expiresAt) > new Date();

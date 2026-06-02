@@ -1,11 +1,11 @@
-import { Loader2, Flame, CalendarX } from "lucide-react";
+import { Loader2, Flame, CalendarX, RotateCcw } from "lucide-react";
 import FeatureRow from "./FeatureRow.jsx";
 import { PLAN_META, PLAN_FEATURES, PLAN_RANK, PERIOD_RANK, LIFETIME_SPOTS_LEFT } from "../../constants/subscriptionMeta.js";
 
 const fmt = (date) =>
     new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, loadingPlan }) => {
+const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onUpgrade, onCancel, onReactivate, reactivateLoading, loadingPlan }) => {
     const isStarter      = planKey === "starter";
     const meta           = PLAN_META[planKey];
     const Icon           = meta.icon;
@@ -173,10 +173,23 @@ const PlanCard = ({ planKey, plan, currentPlan, subscription, billingPeriod, onU
                             Your Current Plan
                         </div>
                     ) : isExpiring ? (
-                        // Plan is cancelling — show expiry date, no further action
-                        <div className="w-full py-3 rounded-2xl text-sm font-semibold text-center text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center gap-2 select-none">
-                            <CalendarX size={14} />
-                            Expires {subscription?.expiresAt ? fmt(subscription.expiresAt) : "soon"}
+                        // Plan is cancelling — let user reactivate or see expiry date
+                        <div className="space-y-2">
+                            <button
+                                onClick={onReactivate}
+                                disabled={reactivateLoading}
+                                className="w-full py-3 rounded-2xl text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                            >
+                                {reactivateLoading
+                                    ? <Loader2 size={14} className="animate-spin" />
+                                    : <RotateCcw size={14} />
+                                }
+                                Reactivate Plan
+                            </button>
+                            <p className="text-center text-xs text-amber-500 dark:text-amber-400 flex items-center justify-center gap-1">
+                                <CalendarX size={11} />
+                                Expires {subscription?.expiresAt ? fmt(subscription.expiresAt) : "soon"}
+                            </p>
                         </div>
                     ) : (
                         <button

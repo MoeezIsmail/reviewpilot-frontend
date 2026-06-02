@@ -5,6 +5,7 @@ import PlanCard from "../components/subscription/PlanCard.jsx";
 import ActivePlanBanner from "../components/subscription/ActivePlanBanner.jsx";
 import BillingToggle from "../components/subscription/BillingToggle.jsx";
 import CancelModal from "../components/subscription/CancelModal.jsx";
+import ReactivateModal from "../components/subscription/ReactivateModal.jsx";
 import AiUsageBar from "../components/subscription/AiUsageBar.jsx";
 import SubscriptionSkeleton from "../components/skeletons/SubscriptionSkeleton.jsx";
 
@@ -14,7 +15,8 @@ const Subscription = () => {
         billingPeriod, setBillingPeriod,
         loadingPlan, portalLoading, pageLoading,
         cancelConfirm, setCancelConfirm, cancelLoading,
-        handleUpgrade, handlePortal, handleCancel,
+        reactivateConfirm, setReactivateConfirm, reactivateLoading,
+        handleUpgrade, handlePortal, handleCancel, handleReactivate,
         hasUsedDiscountedOffer,
     } = useSubscription();
 
@@ -125,6 +127,8 @@ const Subscription = () => {
                                 billingPeriod={billingPeriod}
                                 onUpgrade={handleUpgrade}
                                 onCancel={() => setCancelConfirm(true)}
+                                onReactivate={() => setReactivateConfirm(true)}
+                                reactivateLoading={reactivateLoading}
                                 loadingPlan={loadingPlan}
                             />
                         ))}
@@ -150,6 +154,14 @@ const Subscription = () => {
                     onConfirm={handleCancel}
                     onClose={() => setCancelConfirm(false)}
                     loading={cancelLoading}
+                />
+            )}
+
+            {reactivateConfirm && (
+                <ReactivateModal
+                    onConfirm={handleReactivate}
+                    onClose={() => setReactivateConfirm(false)}
+                    loading={reactivateLoading}
                 />
             )}
         </>
