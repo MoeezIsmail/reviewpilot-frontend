@@ -17,7 +17,9 @@ export const AuthProvider = ({ children }) => {
     const signOut = async () => {
         try {
             await authApi.post('/logout');
-        } catch (_) {}
+        } catch {
+            // Local auth state is cleared even if the server logout endpoint is unavailable.
+        }
         localStorage.removeItem(SESSION_HINT_KEY);
         localStorage.removeItem('isGoogleUser');
         setUser(null);
@@ -34,21 +36,21 @@ export const AuthProvider = ({ children }) => {
     };
 
     const updateAiUsage = (used) => {
-        setUser(prev => ({
+        setUser(prev => prev ? ({
             ...prev,
             subscription: { ...prev.subscription, aiRepliesUsed: used },
-        }));
+        }) : prev);
     };
 
     // Safe subscription updater — preserves aiRepliesUsed when backend doesn't return it
     const updateSubscription = (freshSub) => {
-        setUser(prev => ({
+        setUser(prev => prev ? ({
             ...prev,
             subscription: {
                 aiRepliesUsed: prev.subscription?.aiRepliesUsed,
                 ...freshSub,
             },
-        }));
+        }) : prev);
     };
 
     const refreshUser = useCallback(async () => {
